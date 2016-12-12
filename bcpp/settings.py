@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'edc_base.apps.AppConfig',
     'edc_identifier.apps.AppConfig',
     'edc_subset_manager.apps.AppConfig',
+    'household.apps.AppConfig',
     'plot.apps.AppConfig',
     'survey.apps.AppConfig',
     'bcpp_map.apps.AppConfig',
