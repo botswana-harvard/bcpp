@@ -1,0 +1,46 @@
+{% load survey_tags%}
+{% load crypto_tags %}
+{% load url from future %}
+{% load admin_urls %}
+
+<div class="results">
+      <table cellspacing="0" id="result_list">
+        <thead><tr>
+        <th>Dashboard</th>
+        <th>Survey</th>
+        <th>First Name</th>
+        <th>Last Name</th>        
+        <th>Initials</th>
+        <th>Gender</th>
+        <th>Dob</th>        
+        <th>Age</th>
+        <th>Consent Date</th>
+        <th>HIV Result</th>
+        <th>User Created</th>
+    	<th>Date Created</th>
+    	<th>Host</th>    	
+        
+        </thead>
+        <tbody>
+      {% for subjectconsent in search_result.object_list %}
+            <tr class="{% cycle 'row2' 'row1' %}">
+            <td><A href="{% url subject_dashboard_url dashboard_type='subject' dashboard_model='household_member' dashboard_id=subjectconsent.household_member.pk show='appointments' %}">{{ subjectconsent.subject_identifier }}</A></td>
+            <td>{{subjectconsent.survey.survey_slug|format_survey|safe}}</td>
+            <td>{{subjectconsent.first_name|encrypted}}</td>
+            <td>{{subjectconsent.last_name|encrypted}}</td>            
+            <td>{{subjectconsent.initials|encrypted}}</td>
+            <td>{{subjectconsent.gender}}</td>
+            <td>{{subjectconsent.dob|date:"Y-m-d"}}</td>
+            <td>{{subjectconsent.household_member.age_in_years}}</td>            
+            <td>{{subjectconsent.consent_datetime|date:"d M Y H:i"}}</td>
+            <td>{{ subjectconsent.get_hiv_status|default:'unk' }}</td>
+            <td>{{subjectconsent.household_member.user_created}}</td>
+            <td>{{subjectconsent.household_member.created|date:"d M Y H:i"}}</td>
+            <td>{{subjectconsent.hostname_created}}</td>
+            </tr>
+
+      {% endfor %}
+      <tr><td colspan="9">{{ search_result.object_list.count }} subject consent{{ search_result.object_list|pluralize }} found.</td></tr>                  
+      </tbody>
+      </table>
+      </div>

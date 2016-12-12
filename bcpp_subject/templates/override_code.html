@@ -1,0 +1,86 @@
+{% extends "section.html"%}
+{% load dispatch_tags %}
+{% load admin_urls %}
+{% load url from future %}
+{% load common_tags %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs"><a href="{% url "section_index_url"  %}">Home</a> 
+&rsaquo; <a href="{% url "section_url" 'administration' %}">Administration</a>
+</div>
+{% endblock %}
+
+{% block content %}
+
+<style type="text/css">
+form {
+  font:100% verdana,arial,sans-serif;
+  margin: 0;
+  padding: 0;
+  min-width: 800px;
+  max-width: 1000px;
+  width: 560px; 
+}
+form fieldset {
+  border-width: 1px;
+  border-style: solid;
+  padding: 10px;   
+  margin: 0;
+}
+form fieldset legend {
+	font-size:1.1em; 
+}
+form label { 
+	display: block;
+	float: left; 
+	width: 150px; 
+	padding: 0; 
+	margin: 5px 0 0; 
+	text-align: right; 
+}
+form fieldset label:first-letter {
+	text-decoration:underline;   
+}
+form input, form {
+	width:auto;   
+	margin:5px 0 0 10px; 
+}
+form input#reset {
+	margin-left:0px;
+}
+form small {
+	display: block;
+	margin: 0 0 5px 160px;
+	padding: 1px 3px;
+	font-size: 88%;
+}
+</style>
+
+<form action="#" method="post">
+<div>
+	<fieldset>
+	<legend>Override Code</legend>
+    <label for="override">Override Request Code: </label>
+    <input id="override_request" type="text" name="override_request" value="{{ override_request }}">
+    <input type="submit" value="Generate">
+    <br>
+    </fieldset>
+    <fieldset>
+    <legend>Result </legend>
+	<p>{% if override_code %}
+			<span style="margin-left:auto; margin-right:auto;"> Override Code:<strong style="color:red;">{{override_code}} </strong></span>
+		{%else%}
+			<p>_</p>
+		{%endif%}</p>
+    
+     {% csrf_token %}
+     </fieldset>
+  </div>
+     
+</form>
+
+{% endblock %}
+
+
+{% block section_buttons %}{% endblock section_buttons %}
+{% block section_title %}{% endblock section_title %}

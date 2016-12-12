@@ -1,0 +1,42 @@
+<div class="results">
+      <table  cellspacing="0" id="result_list" border=1>
+    	<thead>
+			<tr>
+    	<th>Household</th>
+    	<th>Subject</th>
+    	<th>First name</th>
+    	<th>Scheduled</th>
+    	<th>Reason</th>
+    	<th>Status</th>
+    	<th>Consent</th>
+    	<th>Absent</th>    	    	    	
+        <th>Refused</th>
+        <th>HTR</th>        
+        <th>Last contact</th>
+        <th>User</th>
+    	<th>Date Created</th>
+    	<th>Date Modified</th>
+   	
+   	</thead>	
+      {% for shv in search_results.object_list %}
+           <tr class="{% cycle 'row1' 'row2' %}">
+              <td><a href="{{ shv.household_structure_member.household_structure.get_absolute_url }}/">{{ shv.household_structure_member.household_structure }}</A></td>
+              <td><a href="/admin{{ shv.household_structure_member.get_absolute_url }}">{{ shv.household_structure_member.gender }} {{ shv.household_structure_member.age_in_years }}</A></td>
+           	  <td>{{ shv.household_structure_member.|encrypted }}</td>
+        	  <td>{{ shv.visit_datetime|date:"Y-m-d" }} at {{ shv.visit_datetime|date:"H:i" }}</td>           	             	  
+          	  <td>{{ shv.visit_reason|truncatewords:2}}</td>
+          	  <td><a href="/admin{{ shv.get_absolute_url }}">{{ shv.visit_status }}</td>
+              <td><a href="/admin{{ shv.household_structure_member.subjectconsent.get_absolute_url }}">{{ shv.household_structure_member.subjectconsent }}</A></td>
+              <td><a href="/admin{{ shv.household_structure_member.subjectabsentee.get_absolute_url }}">{{ shv.household_structure_member.subjectabsentee.subject_absentee_status }}</A></td>              
+              <td><a href="/admin{{ shv.household_structure_member.subjectrefusal.get_absolute_url }}">{{ shv.household_structure_member.subjectrefusal.subject_refusal_status }}</A></td>          	                          	                          	                          	  
+              <td></td>
+              <td>{{ shv.created|timesince:shv.modified }}</td>        	  
+              <td>{{ shv.user_created }}</td>        	                
+              <td>{{ shv.created|date:"Y-m-d" }}</td>        	  
+              <td>{{ shv.modified|date:"Y-m-d" }}</td>        	  
+            </tr>
+      {% endfor %}
+      
+        <tr><td colspan="14">{{ search_results.object_list.count }} subject clinic visit{{ search_results.object_list|pluralize }} found.</td></tr>
+      </table>
+      </div>

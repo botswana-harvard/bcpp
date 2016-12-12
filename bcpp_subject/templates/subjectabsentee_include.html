@@ -1,0 +1,62 @@
+<div class="results">
+      <table cellspacing="0" id="result_list">
+        <thead><tr>
+        <th>Structure</th>
+        <th>Absentee Date</th>        
+        <th>First Name</th>
+        <th>Initials</th>        
+        <th>Gender</th>
+        <th>Age</th>
+        <th>Consent</th>        
+        <th>Clinic</th>
+        <th>Household</th>   
+        <th>Date Created</th>
+        <th>Date Modified</th>    	    	
+        <th>User Created</th>
+        <th>Hostname</th>                      
+
+        </thead>
+        <tbody>
+      {% for subjectabsentee in search_results.object_list %}
+        
+            <tr class="{% cycle 'row2' 'row1' %}">
+            <td><A href="{% url dashboard_url dashboard_type='subject' household_structure_member=subjectabsentee.household_structure_member.pk %}">dashboard</A></td>                        
+            <td><a href="{{ subjectabsentee.household_structure_member.household_structure.get_absolute_url }}">{{subjectabsentee.household_structure_member.household_structure }}</a></td>                        
+            <td>{{subjectabsentee.visit_datetime|date:"Y-m-d"}}</td>
+            <td><a href="/admin{{ subjectabsentee.get_absolute_url }}">{{ subjectabsentee.household_structure_member.first_name|encrypted }}</A></td>
+            <td>{{subjectabsentee.household_structure_member.initials}}</td>
+            <td>{{subjectabsentee.household_structure_member.gender}}</td>
+            <td>{{subjectabsentee.household_structure_member.age_in_years}}</td>
+            <td>{% if subjectabsentee.household_structure_member.subjectconsent %}
+                    <a href="/admin{{ subjectabsentee.household_structure_member.subjectconsent.get_absolute_url }}">{{ subjectabsentee.household_structure_member.subjectconsent }}</A>
+                {% else %}
+                    <a href="/admin{{ subjectabsentee.household_structure_member.subjectrefusal.get_absolute_url }}">{{ subjectabsentee.household_structure_member.subjectrefusal }}</A>                
+                {% endif%}
+            
+            </td>
+            <td>
+                <table>
+                {% for visit in subjectabsentee.household_structure_member.subjectclinicvisitdetail_set.all%}
+                <tr><td>{{ visit.visit_datetime|date:"d-M-Y"}} {{visit.visit_status}}</td></tr>
+                {% endfor%}
+                </table>
+            </td>            
+            <td>
+                <table>
+                {% for visit in subjectabsentee.household_structure_member.subjecthouseholdvisitdetail_set.all%}
+                <tr><td>{{ visit.visit_datetime|date:"d-M-Y"}} {{visit.visit_status}}</td></tr>
+                {% endfor%}
+                </table>
+            </td>      
+            <td>{{ subjectabsentee.created|date:"Y-m-d" }}</td>
+            <td>{{ subjectabsentee.modified|date:"Y-m-d" }}</td>
+            <td>{{ subjectabsentee.user_created|escape }}</td>
+            <td>{{ subjectabsentee.hostname_created|escape }}</td>
+
+            </tr>
+
+      {% endfor %}
+      <tr><td colspan="10">{{ search_results.object_list.count }} subject absentee{{ search_results.object_list|pluralize }} found.</td></tr>                        
+      </tbody>
+      </table>
+      </div>

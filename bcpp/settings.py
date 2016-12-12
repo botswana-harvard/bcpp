@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'household.apps.AppConfig',
     'plot.apps.AppConfig',
     'survey.apps.AppConfig',
+    'member.apps.AppConfig',
     'bcpp_map.apps.AppConfig',
     'bcpp.apps.EdcProtocolAppConfig',
     'bcpp.apps.EdcDeviceAppConfig',

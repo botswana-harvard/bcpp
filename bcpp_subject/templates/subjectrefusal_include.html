@@ -1,0 +1,67 @@
+<div class="results">
+      <table cellspacing="0" id="result_list">
+        <thead><tr>
+        <th>Structure</th>
+        <th>Refusal Date</th>        
+        <th>First Name</th>
+        <th>Initials</th>        
+        <th>Gender</th>
+        <th>Age</th>
+        <th>Consent</th>        
+        <th>Reason</th>        
+        <th>Clinic</th>
+        <th>Household</th>   
+        <th>Date Created</th>
+        <th>Date Modified</th>    	    	
+        <th>User Created</th>
+        <th>Hostname</th>    	    	
+        </thead>
+        <tbody>
+      {% for subjectrefusal in search_results.object_list %}
+        
+            <tr class="{% cycle 'row2' 'row1' %}">
+            <td><a href="{{ subjectrefusal.household_structure_member.household_structure.get_absolute_url }}">{{subjectrefusal.household_structure_member.household_structure }}</a></td>                        
+            <td>{{subjectrefusal.refusal_date|date:"Y-m-d"}}</td>
+            <td><a href="/admin{{ subjectrefusal.get_absolute_url }}">{{ subjectrefusal.household_structure_member.first_name|encrypted }}</A></td>
+            <td>{{subjectrefusal.household_structure_member.initials}}</td>
+            <td>{{subjectrefusal.household_structure_member.gender}}</td>
+            <td>{{subjectrefusal.household_structure_member.age_in_years}}</td>
+            <td>{% if subjectrefusal.household_structure_member.subjectconsent %}
+                    <a href="/admin{{ subjectrefusal.household_structure_member.subjectconsent.get_absolute_url }}">{{ subjectrefusal.household_structure_member.subjectconsent }}</A>
+                {% else %}
+                    No                 
+                {% endif%}
+            
+            </td>
+            <td>
+            {% if subjectrefusal.subject_refusal_reason.name.lower == 'other'%}
+                {{ subjectrefusal.subject_refusal_reason_other.upper }}
+            {% else %}    
+                {{ subjectrefusal.subject_refusal_reason }}
+            {% endif %}                
+            </td>
+            <td>
+                <table>
+                {% for visit in subjectrefusal.household_structure_member.subjectclinicvisitdetail_set.all%}
+                <tr><td>{{ visit.visit_datetime|date:"d-M-Y"}} {{visit.visit_status}}</td></tr>
+                {% endfor%}
+                </table>
+            </td>            
+            <td>
+                <table>
+                {% for visit in subjectrefusal.household_structure_member.subjecthouseholdvisitdetail_set.all%}
+                <tr><td>{{ visit.visit_datetime|date:"d-M-Y"}} {{visit.visit_status}}</td></tr>
+                {% endfor%}
+                </table>
+            </td>      
+            <td>{{ subjectrefusal.created|date:"Y-m-d" }}</td>
+            <td>{{ subjectrefusal.modified|date:"Y-m-d" }}</td>
+            <td>{{ subjectrefusal.user_created|escape }}</td>
+            <td>{{ subjectrefusal.hostname_created|escape }}</td>
+            </tr>
+
+      {% endfor %}
+      <tr><td colspan="10">{{ search_results.object_list.count }} subject refusal{{ search_results.object_list|pluralize }} found.</td></tr>                        
+      </tbody>
+      </table>
+      </div>
