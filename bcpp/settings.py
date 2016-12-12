@@ -37,6 +37,19 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'crispy_forms',
+    'django_crypto_fields.apps.AppConfig',
+    'django_revision.apps.AppConfig',
+    'edc_base.apps.AppConfig',
+    'edc_identifier.apps.AppConfig',
+    'edc_subset_manager.apps.AppConfig',
+    'plot.apps.AppConfig',
+    'survey.apps.AppConfig',
+    'bcpp_map.apps.AppConfig',
+    'bcpp.apps.EdcProtocolAppConfig',
+    'bcpp.apps.EdcDeviceAppConfig',
+    'bcpp.apps.EdcMapAppConfig',
+    'bcpp.apps.AppConfig',
 ]
 
 MIDDLEWARE = [
@@ -118,3 +131,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+DEVICE_ID = '00'
+CURRENT_MAP_AREA = 'bhp'
+
