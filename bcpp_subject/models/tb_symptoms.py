@@ -3,8 +3,6 @@ from django.db import models
 from edc_base.model.models import HistoricalRecords
 from edc_constants.choices import YES_NO
 
-from ..managers import TbSymptomsManager
-
 from .model_mixins import CrfModelMixin
 
 
@@ -51,8 +49,6 @@ class TbSymptoms (CrfModelMixin):
         choices=YES_NO,
         help_text="",
     )
-
-    objects = TbSymptomsManager()
 
     history = HistoricalRecords()
 

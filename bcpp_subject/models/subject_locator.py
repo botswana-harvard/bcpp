@@ -6,16 +6,10 @@ from django_crypto_fields.fields import EncryptedCharField
 from edc_base.bw.validators import BWCellNumber, BWTelephoneNumber
 from edc_base.model.models import HistoricalRecords
 from edc_constants.choices import YES_NO_NA, YES, NO, NOT_APPLICABLE
-from edc_export.managers import ExportHistoryManager
-from edc_export.model_mixins import ExportTrackingFieldsMixin
 from edc_locator.model_mixins import LocatorModelMixin
 
-from ..managers import SubjectLocatorManager
 
-from .model_mixins import CrfModelMixin
-
-
-class SubjectLocator(ExportTrackingFieldsMixin, LocatorModelMixin, CrfModelMixin):
+class SubjectLocator(LocatorModelMixin):
     """A model completed by the user to that captures participant locator information
     and permission to contact."""
 
@@ -79,21 +73,13 @@ class SubjectLocator(ExportTrackingFieldsMixin, LocatorModelMixin, CrfModelMixin
         null=True,
     )
 
-    objects = SubjectLocatorManager()
-
-    export_history = ExportHistoryManager()
-
     history = HistoricalRecords()
 
     def __str__(self):
-        return str(self.subject_visit)
+        return self.subject_identifier
 
     def save(self, *args, **kwargs):
         self.hic_enrollment_checks()
-        # as long as locator is on a visit schedule, need to update self.registered_subject manually
-        if self.subject_visit:
-            if not self.registered_subject:
-                self.registered_subject = self.registered_subject = self.subject_visit.appointment.registered_subject
         super(SubjectLocator, self).save(*args, **kwargs)
 
     def hic_enrollment_checks(self, exception_cls=None):
@@ -103,7 +89,7 @@ class SubjectLocator(ExportTrackingFieldsMixin, LocatorModelMixin, CrfModelMixin
             if not self.subject_cell and not self.subject_cell_alt and not self.subject_phone:
                 try:
                     HicEnrollment.objects.get(
-                        subject_visit__subject_idenifier=self.subject_visit.subject_identifier)
+                        subject_visit__subject_identifier=self.subject_identifier)
                     raise exception_cls(
                         'An HicEnrollment form exists for this subject. At least one of '
                         '\'subject_cell\', \'subject_cell_alt\' or \'subject_phone\' is required.')
@@ -118,7 +104,8 @@ class SubjectLocator(ExportTrackingFieldsMixin, LocatorModelMixin, CrfModelMixin
         ...see_also:: SubjectReferral."""
         try:
             SubjectReferral = django_apps.get_model('bcpp_subject', 'subjectreferral')
-            subject_referral = SubjectReferral.objects.get(subject_visit=self.subject_visit)
+            subject_referral = SubjectReferral.objects.get(
+                subject_visit__appointment__subject_identifier=self.subject_identifier)
             if subject_referral.referral_code:
                 return True
         except SubjectReferral.DoesNotExist:
@@ -167,6 +154,6 @@ class SubjectLocator(ExportTrackingFieldsMixin, LocatorModelMixin, CrfModelMixin
                             info=info, physical_address=self.physical_address)
         return info
 
-    class Meta(CrfModelMixin.Meta):
+    class Meta(LocatorModelMixin.Meta):
         app_label = 'bcpp_subject'
         verbose_name = 'Subject Locator'

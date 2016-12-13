@@ -3,7 +3,7 @@ from datetime import datetime
 
 from django.conf import settings
 
-from bhp066.apps.bcpp_household_member.tests.factories import HouseholdMemberFactory
+from bhp066.apps.member.tests.factories import HouseholdMemberFactory
 
 from bhp066.apps.bcpp_subject.models import CallList
 

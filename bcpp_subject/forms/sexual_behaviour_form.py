@@ -2,12 +2,12 @@ from django import forms
 
 from ..models import SexualBehaviour
 
-from .base_subject_model_form import BaseSubjectModelForm
+from .form_mixins import SubjectModelFormMixin
 
 from ..constants import ANNUAL
 
 
-class SexualBehaviourForm (BaseSubjectModelForm):
+class SexualBehaviourForm (SubjectModelFormMixin):
 
     optional_attrs = {ANNUAL: {
         'label': {

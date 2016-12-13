@@ -4,10 +4,8 @@ from collections import namedtuple
 from django.apps import apps as django_apps
 
 from edc_map.site_mappers import site_mappers
-from edc_constants.constants import CLOSED, POS, NEG
-from edc_metadata.constants import NOT_REQUIRED, KEYED
-from bcpp_household_member.models import EnrollmentChecklist
-from bcpp_household.constants import BASELINE_SURVEY_SLUG
+from edc_constants.constants import POS, NEG
+from member.models import EnrollmentChecklist
 
 from .choices import REFERRAL_CODES
 from .constants import ANNUAL_CODES, BASELINE_CODES, BASELINE, ANNUAL
@@ -35,7 +33,7 @@ class SubjectReferralHelper(object):
         self._subject_referral = None
         self._subject_referral_dict = {}
         self._subject_status_helper = None
-        self.community_code = site_mappers.get_mapper(site_mappers.current_community).map_code
+        self.community_code = site_mappers.get_mapper(site_mappers.current_map_area).map_code
         # self.models dict is also used in the signal
         self.models = copy(SubjectStatusHelper.models)
         self.models[BASELINE].update({
@@ -266,7 +264,7 @@ class SubjectReferralHelper(object):
         """Removes any SMC referral codes if in the ECC during an ANNUAL survey."""
         survey_slug = self.subject_visit.household_member.household_structure.survey.survey_slug
         code = referral_code.replace('SMC-NEG', '').replace('SMC?NEG', '').replace('SMC-UNK', '').replace('SMC?UNK', '')
-        if (not self.intervention and survey_slug != BASELINE_SURVEY_SLUG):
+        if (not self.intervention and survey_slug != 'bcpp-year-1'):
             referral_code = code
         return referral_code
 
@@ -276,7 +274,7 @@ class SubjectReferralHelper(object):
 
     @property
     def intervention(self):
-        return site_mappers.get_mapper(site_mappers.current_community).intervention
+        return site_mappers.get_mapper(site_mappers.current_map_area).intervention
 
     @property
     def arv_clinic(self):

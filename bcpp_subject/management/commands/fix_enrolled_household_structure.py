@@ -7,9 +7,9 @@ from django.db.models import get_model
 
 from edc_constants.constants import YES
 
-from bhp066.apps.bcpp_household_member.constants import BHS, BHS_SCREEN
+from bhp066.apps.member.constants import BHS, BHS_SCREEN
 from bhp066.apps.bcpp_household.models.representative_eligibility import RepresentativeEligibility
-from bhp066.apps.bcpp_household_member.models.enrollment_checklist import EnrollmentChecklist
+from bhp066.apps.member.models.enrollment_checklist import EnrollmentChecklist
 
 
 class Command(BaseCommand):
@@ -44,7 +44,7 @@ class Command(BaseCommand):
             raise CommandError('Valid options are --representative-eligibility OR --enrollment-checklist.')
 
     def household_member(self, subject_consent):
-        HouseholdMember = get_model('bcpp_household_member', 'HouseholdMember')
+        HouseholdMember = get_model('member', 'HouseholdMember')
         try:
             household_member = HouseholdMember.objects.get(
                 relation='head',

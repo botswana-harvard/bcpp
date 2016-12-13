@@ -19,7 +19,7 @@ from bhp066.apps.bcpp.app_configuration.classes import BcppAppConfiguration
 from bhp066.apps.bcpp_household.models import Household, HouseholdStructure
 from bhp066.apps.bcpp_household.tests.factories import PlotFactory
 from bhp066.apps.bcpp_subject.tests.factories.subject_locator_factory import SubjectLocatorFactory
-from bhp066.apps.bcpp_household_member.tests.factories import HouseholdMemberFactory, EnrollmentChecklistFactory
+from bhp066.apps.member.tests.factories import HouseholdMemberFactory, EnrollmentChecklistFactory
 from bhp066.apps.bcpp_lab.lab_profiles import BcppSubjectProfile
 from bhp066.apps.bcpp_subject.tests.factories import SubjectConsentFactory, SubjectVisitFactory
 from bhp066.apps.bcpp_survey.models import Survey
@@ -75,7 +75,7 @@ class BaseScheduledModelTestCase(TestCase):
 #         HouseholdMemberFactory(household_structure=household_structure)
 #         HouseholdMemberFactory(household_structure=household_structure)
 
-        HouseholdMember = get_model('bcpp_household_member', 'HouseholdMember')
+        HouseholdMember = get_model('member', 'HouseholdMember')
 
         self.household_member_female = HouseholdMember.objects.create(household_structure=household_structure,
                                                               first_name='SUE', initials='SW', gender='F',
@@ -152,7 +152,7 @@ class BaseScheduledModelTestCase(TestCase):
 
         HouseholdStructure.objects.add_household_members_from_survey(self.household, self.survey1, self.survey2)
 
-        HouseholdMember = get_model('bcpp_household_member', 'HouseholdMember')
+        HouseholdMember = get_model('member', 'HouseholdMember')
         self.household_member_female_annual = HouseholdMember.objects.get(
             internal_identifier=self.household_member_female.internal_identifier,
             registered_subject=self.household_member_female.registered_subject,

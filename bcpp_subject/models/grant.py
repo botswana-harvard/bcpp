@@ -1,16 +1,15 @@
 from django.db import models
 
-from edc_base.model.models import HistoricalRecords, BaseUuidModel
+from edc_base.model.models import HistoricalRecords
 from edc_base.model.fields import OtherCharField
 
 from ..choices import GRANT_TYPE
-from ..managers import GrantManager
 
 from .model_mixins import CrfModelMixin
 from .labour_market_wages import LabourMarketWages
 
 
-class Grant(CrfModelMixin, BaseUuidModel):
+class Grant(CrfModelMixin):
 
     """Inline for labour_market_wages."""
 
@@ -29,8 +28,6 @@ class Grant(CrfModelMixin, BaseUuidModel):
         blank=True)
 
     other_grant = OtherCharField()
-
-    objects = GrantManager()
 
     history = HistoricalRecords()
 

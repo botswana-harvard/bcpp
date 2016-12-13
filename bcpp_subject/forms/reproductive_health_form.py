@@ -3,10 +3,10 @@ from django import forms
 from ..constants import ANNUAL
 from ..models import ReproductiveHealth
 
-from .base_subject_model_form import BaseSubjectModelForm
+from .form_mixins import SubjectModelFormMixin
 
 
-class ReproductiveHealthForm (BaseSubjectModelForm):
+class ReproductiveHealthForm (SubjectModelFormMixin):
 
     optional_attrs = {ANNUAL: {
         'label': {'family_planning': (

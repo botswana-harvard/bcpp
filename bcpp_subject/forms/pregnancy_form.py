@@ -2,10 +2,10 @@ from django import forms
 
 from ..models import Pregnancy
 
-from .base_subject_model_form import BaseSubjectModelForm
+from .form_mixins import SubjectModelFormMixin
 
 
-class PregnancyForm (BaseSubjectModelForm):
+class PregnancyForm (SubjectModelFormMixin):
     def clean(self):
         cleaned_data = super(PregnancyForm, self).clean()
         # pregnancy and antenatal registration

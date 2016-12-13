@@ -2,10 +2,10 @@ from django import forms
 
 from ..models import Pima
 
-from .base_subject_model_form import BaseSubjectModelForm
+from .form_mixins import SubjectModelFormMixin
 
 
-class PimaForm (BaseSubjectModelForm):
+class PimaForm (SubjectModelFormMixin):
 
     def clean(self):
 

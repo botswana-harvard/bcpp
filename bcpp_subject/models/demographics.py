@@ -1,7 +1,7 @@
 from django.db import models
 
 from edc_base.model.fields import OtherCharField
-from edc_base.model.models import HistoricalRecords, BaseUuidModel
+from edc_base.model.models import HistoricalRecords
 
 
 from ..choices import MARITAL_STATUS_CHOICE
@@ -10,7 +10,7 @@ from .list_models import LiveWith, Religion, EthnicGroups
 from .model_mixins import CrfModelMixin, CrfModelManager
 
 
-class Demographics (CrfModelMixin, BaseUuidModel):
+class Demographics (CrfModelMixin):
 
     """A model completed by the user of the basic demographics of the participant."""
 

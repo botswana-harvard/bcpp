@@ -4,10 +4,10 @@ from edc_constants.constants import NOT_APPLICABLE
 
 from ..models import HivResult
 
-from .base_subject_model_form import BaseSubjectModelForm
+from .form_mixins import SubjectModelFormMixin
 
 
-class HivResultForm (BaseSubjectModelForm):
+class HivResultForm (SubjectModelFormMixin):
 
     def clean(self):
 

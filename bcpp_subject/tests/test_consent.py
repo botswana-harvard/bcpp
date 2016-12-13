@@ -13,8 +13,8 @@
 # from bhp066.apps.bcpp_dashboard.classes import HouseholdDashboard
 # from bhp066.apps.bcpp_dashboard.tests.dashboard_tests import setup_dashboard
 # from bhp066.apps.bcpp_household.models import HouseholdStructure, Household
-# from bhp066.apps.bcpp_household_member.models import HouseholdMember
-# from bhp066.apps.bcpp_household_member.tests.factories import HouseholdMemberFactory
+# from bhp066.apps.member.models import HouseholdMember
+# from bhp066.apps.member.tests.factories import HouseholdMemberFactory
 # from bhp066.apps.bcpp_subject.tests.factories import SubjectConsentFactory
 # from bhp066.apps.bcpp_survey.models import Survey
 # 

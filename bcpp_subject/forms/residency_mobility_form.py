@@ -5,10 +5,10 @@ from edc_constants.constants import NOT_APPLICABLE
 from ..constants import ANNUAL
 from ..models import ResidencyMobility
 
-from .base_subject_model_form import BaseSubjectModelForm
+from .form_mixins import SubjectModelFormMixin
 
 
-class ResidencyMobilityForm (BaseSubjectModelForm):
+class ResidencyMobilityForm (SubjectModelFormMixin):
 
     optional_attrs = {ANNUAL: {
         'help_text': {'permanent_resident': (

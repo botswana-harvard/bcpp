@@ -1,6 +1,6 @@
 from django.db import models
 
-from edc_base.model.models import HistoricalRecords, BaseUuidModel
+from edc_base.model.models import HistoricalRecords
 from edc_base.model.fields import OtherCharField
 from edc_base.model.validators import date_not_future
 from edc_constants.choices import YES_NO_DWTA, YES_NO
@@ -12,7 +12,7 @@ from ..choices import (
 from .model_mixins import CrfModelMixin
 
 
-class HivCareAdherence (CrfModelMixin, BaseUuidModel):
+class HivCareAdherence (CrfModelMixin):
     """A model completed by the user on the participant's access to and adherence to HIV care."""
 
     # filled by is hiv care adherence data already in the system

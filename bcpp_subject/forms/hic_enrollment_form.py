@@ -2,10 +2,10 @@ from django import forms
 
 from ..models import HicEnrollment
 
-from .base_subject_model_form import BaseSubjectModelForm
+from .form_mixins import SubjectModelFormMixin
 
 
-class HicEnrollmentForm (BaseSubjectModelForm):
+class HicEnrollmentForm (SubjectModelFormMixin):
 
     def clean(self):
         instance = None

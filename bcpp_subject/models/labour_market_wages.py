@@ -1,17 +1,16 @@
 from django.db import models
 
-from edc_base.model.models import HistoricalRecords, BaseUuidModel
+from edc_base.model.models import HistoricalRecords
 from edc_base.model.fields import OtherCharField
 from edc_constants.choices import YES_NO_REFUSED
 
 from ..choices import (
-    EMPLOYMENT_INFO, OCCUPATION, MONTHLY_INCOME, SALARY, HOUSEHOLD_INCOME, OTHER_OCCUPATION, GRANT_TYPE)
-from ..managers import GrantManager
+    EMPLOYMENT_INFO, OCCUPATION, MONTHLY_INCOME, SALARY, HOUSEHOLD_INCOME, OTHER_OCCUPATION)
 
 from .model_mixins import CrfModelMixin
 
 
-class LabourMarketWages (CrfModelMixin, BaseUuidModel):
+class LabourMarketWages (CrfModelMixin):
 
     """A model completed by the user to capture information about
     the participants experience in the labour market."""
@@ -127,40 +126,3 @@ class LabourMarketWages (CrfModelMixin, BaseUuidModel):
         app_label = 'bcpp_subject'
         verbose_name = "Labour Market & Lost Wages"
         verbose_name_plural = "Labour Market & Lost Wages"
-
-
-class Grant(CrfModelMixin, BaseUuidModel):
-
-    """Inline for labour_market_wages."""
-
-    labour_market_wages = models.ForeignKey(LabourMarketWages)
-
-    grant_number = models.IntegerField(
-        verbose_name="How many of each type of grant do you receive?",
-        null=True,
-        blank=True,
-    )
-    grant_type = models.CharField(
-        verbose_name="Grant name",
-        choices=GRANT_TYPE,
-        max_length=50,
-        null=True,
-        blank=True)
-
-    other_grant = OtherCharField()
-
-    objects = GrantManager()
-
-    history = HistoricalRecords()
-
-    def __str__(self):
-        return str(self.labour_market_wages.subject_visit)
-
-    def natural_key(self):
-        return (self.report_datetime, ) + self.labour_market_wages.natural_key()
-    natural_key.dependencies = ['bcpp_subject.labourmarketwages', ]
-
-    class Meta(CrfModelMixin.Meta):
-        app_label = 'bcpp_subject'
-        verbose_name = "Grant"
-        verbose_name_plural = "Grants"

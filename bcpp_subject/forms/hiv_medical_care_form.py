@@ -1,9 +1,9 @@
 from ..models import HivMedicalCare
 
-from .base_subject_model_form import BaseSubjectModelForm
+from .form_mixins import SubjectModelFormMixin
 
 
-class HivMedicalCareForm (BaseSubjectModelForm):
+class HivMedicalCareForm (SubjectModelFormMixin):
 
     class Meta:
         model = HivMedicalCare

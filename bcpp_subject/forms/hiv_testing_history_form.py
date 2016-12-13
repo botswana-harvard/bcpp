@@ -5,10 +5,10 @@ from edc_constants.constants import NOT_APPLICABLE
 from ..constants import ANNUAL
 from ..models import HivTestingHistory
 
-from .base_subject_model_form import BaseSubjectModelForm
+from .form_mixins import SubjectModelFormMixin
 
 
-class HivTestingHistoryForm (BaseSubjectModelForm):
+class HivTestingHistoryForm (SubjectModelFormMixin):
 
     optional_attrs = {ANNUAL: {
         'label': {

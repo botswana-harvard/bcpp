@@ -1,6 +1,6 @@
 import factory
 
-from bhp066.apps.bcpp_household_member.tests.factories import HouseholdMemberFactory
+from bhp066.apps.member.tests.factories import HouseholdMemberFactory
 from bhp066.apps.bcpp_survey.tests.factories import SurveyFactory
 
 from bhp066.apps.bcpp_subject.models import CallLog

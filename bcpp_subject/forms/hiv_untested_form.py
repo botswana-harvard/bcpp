@@ -2,10 +2,10 @@ from django import forms
 
 from ..models import HivUntested
 
-from .base_subject_model_form import BaseSubjectModelForm
+from .form_mixins import SubjectModelFormMixin
 
 
-class HivUntestedForm (BaseSubjectModelForm):
+class HivUntestedForm (SubjectModelFormMixin):
 
     def clean(self):
         cleaned_data = super(HivUntestedForm, self).clean()

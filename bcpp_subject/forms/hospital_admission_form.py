@@ -2,10 +2,10 @@ from django import forms
 
 from ..models import HospitalAdmission
 
-from .base_subject_model_form import BaseSubjectModelForm
+from .form_mixins import SubjectModelFormMixin
 
 
-class HospitalAdmissionForm (BaseSubjectModelForm):
+class HospitalAdmissionForm (SubjectModelFormMixin):
 
     def validate_admission_nights_value_eq_zero(self):
         cleaned_data = self.cleaned_data

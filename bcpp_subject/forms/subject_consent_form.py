@@ -1,28 +1,28 @@
 import pytz
 from copy import deepcopy
 
-from django import forms
-from django.forms import ValidationError
-from django.conf import settings
-from django.utils.timezone import is_naive
-from dateutil.relativedelta import relativedelta
 from datetime import datetime
+from dateutil.relativedelta import relativedelta
+from django import forms
+from django.conf import settings
+from django.forms import ValidationError
+from django.forms.utils import ErrorList
+from django.utils import timezone
 
 from edc_constants.constants import YES, NO
 from edc_base.utils import formatted_age
 from edc_map.site_mappers import site_mappers
 from edc_constants.constants import NOT_APPLICABLE
 
-from bcpp_household.constants import BASELINE_SURVEY_SLUG
-from bcpp_household_member.constants import HEAD_OF_HOUSEHOLD
-from bcpp_household_member.models import HouseholdInfo
-from bcpp_household.models import HouseholdLogEntry
-from bcpp_survey.models import Survey
-from bcpp_household_member.models import HouseholdHeadEligibility
 
+from member.constants import HEAD_OF_HOUSEHOLD
+from member.models import HouseholdInfo
+from household.models import HouseholdLogEntry
+from survey.models import Survey
+from member.models import HouseholdHeadEligibility
+
+from ..constants import BASELINE_SURVEY
 from ..models import SubjectConsent
-from django.forms.utils import ErrorList
-from django.utils import timezone
 
 tz = pytz.timezone(settings.TIME_ZONE)
 
@@ -36,7 +36,6 @@ class ConsentFormMixin:
         self.limit_edit_to_current_community()
         self.validate_household_log_entry()
         self.limit_edit_to_current_survey()
-        #self.validate_legal_marriage()
         self.household_info()
         try:
             model = self._meta.model.proxy_for_model
@@ -95,7 +94,7 @@ class ConsentFormMixin:
         citizen = self.cleaned_data.get('citizen')
         legal_marriage = self.cleaned_data.get('legal_marriage')
         marriage_certificate = self.cleaned_data.get('marriage_certificate')
-        marriage_certificate_no = self.cleaned_data.get('marriage_certificate_no');
+        marriage_certificate_no = self.cleaned_data.get('marriage_certificate_no')
         if citizen == NO:
             if legal_marriage == NOT_APPLICABLE:
                 raise forms.ValidationError(
@@ -150,7 +149,7 @@ class ConsentFormMixin:
             except AttributeError:
                 limit = False
             if limit:
-                mapper_community = site_mappers.get_mapper(site_mappers.current_community).map_area
+                mapper_community = site_mappers.get_mapper(site_mappers.current_map_area).map_area
                 community = household_member.household_structure.household.plot.community
                 if community != mapper_community:
                     raise forms.ValidationError(
@@ -162,7 +161,7 @@ class ConsentFormMixin:
         household_member = self.cleaned_data.get('household_member')
         if household_member:
             if (household_member.relation == HEAD_OF_HOUSEHOLD and
-                    household_member.household_structure.survey.survey_slug == BASELINE_SURVEY_SLUG):
+                    household_member.household_structure.survey.survey_slug == BASELINE_SURVEY):
                 try:
                     HouseholdInfo.objects.get(household_member=household_member)
                 except HouseholdInfo.DoesNotExist:

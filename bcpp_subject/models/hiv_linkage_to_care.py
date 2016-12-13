@@ -1,6 +1,6 @@
 from django.db import models
 
-from edc_base.model.models import HistoricalRecords, BaseUuidModel
+from edc_base.model.models import HistoricalRecords
 from edc_base.model.fields import OtherCharField
 
 from ..choices import (
@@ -9,7 +9,7 @@ from ..choices import (
 from .model_mixins import CrfModelMixin
 
 
-class HivLinkageToCare (CrfModelMixin, BaseUuidModel):
+class HivLinkageToCare (CrfModelMixin):
 
     kept_appt = models.CharField(
         verbose_name="We last spoke with you on last_visit_date and scheduled an appointment for you "

@@ -1,14 +1,14 @@
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 
-from edc_base.model.models import HistoricalRecords, BaseUuidModel
+from edc_base.model.models import HistoricalRecords
 from edc_base.model.validators import datetime_not_future
 from edc_constants.choices import YES_NO
 
 from .model_mixins import CrfModelMixin, CrfModelManager
 
 
-class Cd4History (CrfModelMixin, BaseUuidModel):
+class Cd4History (CrfModelMixin):
 
     """CS002 - used to collect participant CD4 History"""
 

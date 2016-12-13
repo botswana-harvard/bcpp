@@ -1,11 +1,9 @@
-from edc_base.model.models import HistoricalRecords, BaseUuidModel
+from edc_base.model.models import HistoricalRecords
 
-from .model_mixins import CrfModelMixin, CrfModelManager, DetailedSexualHistoryMixin
+from .model_mixins import CrfModelMixin, DetailedSexualHistoryMixin
 
 
-class MostRecentPartner (DetailedSexualHistoryMixin, CrfModelMixin, BaseUuidModel):
-
-    objects = CrfModelManager()
+class MostRecentPartner (DetailedSexualHistoryMixin, CrfModelMixin):
 
     history = HistoricalRecords()
 

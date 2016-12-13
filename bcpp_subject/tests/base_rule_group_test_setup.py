@@ -18,9 +18,9 @@ from edc.subject.registration.tests.factories import RegisteredSubjectFactory
 
 from bhp066.apps.bcpp_household.models import HouseholdStructure
 from bhp066.apps.bcpp_household.tests.factories import PlotFactory, RepresentativeEligibilityFactory
-from bhp066.apps.bcpp_household_member.tests.factories import HouseholdMemberFactory, EnrollmentChecklistFactory
-from bhp066.apps.bcpp_household_member.classes import EnumerationHelper
-from bhp066.apps.bcpp_household_member.models import HouseholdMember
+from bhp066.apps.member.tests.factories import HouseholdMemberFactory, EnrollmentChecklistFactory
+from bhp066.apps.member.classes import EnumerationHelper
+from bhp066.apps.member.models import HouseholdMember
 from bhp066.apps.bcpp_survey.models import Survey
 
 from bhp066.apps.bcpp.app_configuration.classes import BcppAppConfiguration

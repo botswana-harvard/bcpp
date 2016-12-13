@@ -1,6 +1,6 @@
 from django.db import models
 
-from edc_base.model.models import HistoricalRecords, BaseUuidModel
+from edc_base.model.models import HistoricalRecords
 from edc_base.model.fields import OtherCharField
 from edc_base.model.validators import date_not_future
 
@@ -8,7 +8,7 @@ from .list_models import HeartDisease
 from .model_mixins import CrfModelMixin
 
 
-class HeartAttack (CrfModelMixin, BaseUuidModel):
+class HeartAttack (CrfModelMixin):
 
     """A model completed by the user to record any heart conditions in the past 12 months."""
 

@@ -2,7 +2,7 @@ from django.db import models
 from django.utils import timezone
 
 from edc_base.model.fields import OtherCharField
-from edc_base.model.models import UrlMixin, HistoricalRecords
+from edc_base.model.models import UrlMixin, HistoricalRecords, BaseUuidModel
 from edc_base.model.validators.date import datetime_not_future
 from edc_consent.model_mixins import RequiresConsentMixin
 from edc_constants.constants import NOT_APPLICABLE, OTHER
@@ -13,12 +13,11 @@ from edc_map.site_mappers import site_mappers
 from edc_metadata.model_mixins import UpdatesCrfMetadataModelMixin
 from edc_offstudy.model_mixins import OffstudyMixin
 from edc_visit_tracking.managers import CrfModelManager as VisitTrackingCrfModelManager
-from edc_visit_tracking.model_mixins import CrfModelMixin as VisitTrackingCrfModelMixin
+from edc_visit_tracking.model_mixins import CrfModelMixin as VisitTrackingCrfModelMixin, PreviousVisitModelMixin
 
 from ..choices import RELATIONSHIP_TYPE, MAIN_PARTNER_RESIDENCY, SEX_REGULARITY, INTERCOURSE_TYPE
 
 from member.models import HouseholdMember
-from bcpp_list.models import PartnerResidency, CircumcisionBenefits
 
 from ..choices import (
     SEXDAYS_CHOICE,
@@ -27,15 +26,19 @@ from ..choices import (
     FIRST_CONDOM_FREQ_CHOICE, AGE_RANGES, FREQ_IN_YEAR, PREG_ARV_CHOICE)
 from ..constants import ECC, CPC
 
+from .list_models import PartnerResidency, CircumcisionBenefits
 from .subject_visit import SubjectVisit
 
 
-class CrfModelManager(VisitTrackingCrfModelManager, models.Manager):
-    pass
+class CrfModelManager(VisitTrackingCrfModelManager):
+
+    def get_by_natural_key(self, subject_visit):
+        return self.get(**{self.model.visit_model_attr(): subject_visit})
 
 
-class CrfModelMixin(VisitTrackingCrfModelMixin, UrlMixin, RequiresConsentMixin,
-                    UpdatesCrfMetadataModelMixin, models.Model):
+class CrfModelMixin(VisitTrackingCrfModelMixin, OffstudyMixin,
+                    RequiresConsentMixin, PreviousVisitModelMixin,
+                    UpdatesCrfMetadataModelMixin, UrlMixin, BaseUuidModel):
 
     """ Base model for all scheduled models (adds key to :class:`SubjectVisit`). """
 
@@ -57,14 +60,7 @@ class CrfModelMixin(VisitTrackingCrfModelMixin, UrlMixin, RequiresConsentMixin,
 
     def natural_key(self):
         return self.subject_visit.natural_key()
-
-    @property
-    def appointment(self):
-        return self.visit.appointment
-
-    @property
-    def subject_identifier(self):
-        return self.get_subject_identifier()
+    natural_key.dependencies = ['bcpp_subject.subjectvisit']
 
     class Meta(VisitTrackingCrfModelMixin.Meta):
         consent_model = 'bcpp_subject.subjectconsent'
@@ -263,13 +259,6 @@ class SexualPartnerMixin (models.Model):
 
     class Meta:
         abstract = True
-
-
-class SubjectOffstudyMixin(OffstudyMixin):
-
-    class Meta:
-        abstract = True
-        offstudy_model = 'bcpp_subject.subjectoffstudy'
 
 
 class PregnancyMixin(models.Model):

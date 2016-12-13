@@ -1,5 +1,4 @@
 from .access_to_care import AccessToCare
-from .appointment import Appointment
 from .cancer import Cancer
 from .cd4_history import Cd4History
 from .cea_enrollment_checklist import CeaEnrollmentChecklist
@@ -55,3 +54,6 @@ from .rbd_demographics import RbdDemographics
 from .viral_load_result import ViralLoadResult
 from .correct_consent import CorrectConsent
 from .hiv_linkage_to_care import HivLinkageToCare
+from .list_models import (
+    CircumcisionBenefits, EthnicGroups, Diagnoses, HeartDisease, FamilyPlanning, MedicalCareAccess,
+    LiveWith, PartnerResidency, NeighbourhoodProblems, Religion, ResidentMostLikely)

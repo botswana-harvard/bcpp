@@ -1,6 +1,6 @@
 from django.db import models
 
-from edc_base.model.models import HistoricalRecords, BaseUuidModel
+from edc_base.model.models import HistoricalRecords
 from edc_base.model.validators import date_not_future
 from edc_constants.choices import POS_NEG_UNKNOWN
 from edc_constants.constants import POS
@@ -10,7 +10,7 @@ from ..choices import HIV_DOC_TYPE
 from .model_mixins import CrfModelMixin
 
 
-class HivResultDocumentation (CrfModelMixin, BaseUuidModel):
+class HivResultDocumentation (CrfModelMixin):
 
     # base on question from hiv test history
     result_date = models.DateField(

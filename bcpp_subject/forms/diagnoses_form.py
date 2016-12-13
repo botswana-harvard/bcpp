@@ -2,31 +2,31 @@ from django import forms
 
 from ..models import HeartAttack, Cancer, Tubercolosis, Sti
 
-from .base_subject_model_form import BaseSubjectModelForm
+from .form_mixins import SubjectModelFormMixin
 
 
-class HeartAttackForm (BaseSubjectModelForm):
+class HeartAttackForm (SubjectModelFormMixin):
 
     class Meta:
         model = HeartAttack
         fields = '__all__'
 
 
-class CancerForm (BaseSubjectModelForm):
+class CancerForm (SubjectModelFormMixin):
 
     class Meta:
         model = Cancer
         fields = '__all__'
 
 
-class TubercolosisForm (BaseSubjectModelForm):
+class TubercolosisForm (SubjectModelFormMixin):
 
     class Meta:
         model = Tubercolosis
         fields = '__all__'
 
 
-class StiForm (BaseSubjectModelForm):
+class StiForm (SubjectModelFormMixin):
 
     def clean(self):
         cleaned_data = super(StiForm, self).clean()

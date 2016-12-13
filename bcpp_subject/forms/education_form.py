@@ -4,10 +4,10 @@ from edc_constants.constants import YES, NO
 
 from ..models import Education, SubjectLocator
 
-from .base_subject_model_form import BaseSubjectModelForm
+from .form_mixins import SubjectModelFormMixin
 
 
-class EducationForm (BaseSubjectModelForm):
+class EducationForm (SubjectModelFormMixin):
 
     def clean(self):
         cleaned_data = super(EducationForm, self).clean()

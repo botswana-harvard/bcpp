@@ -1,14 +1,14 @@
 from django.db import models
 
 from edc_base.model.fields import OtherCharField
-from edc_base.model.models import HistoricalRecords, BaseUuidModel
+from edc_base.model.models import HistoricalRecords
 
 from ..choices import PLACE_CIRC, WHYCIRC_CHOICE, TIME_UNIT_CHOICE
 
 from .model_mixins import CrfModelMixin, CrfModelManager, CircumcisionMixin
 
 
-class Circumcised (CircumcisionMixin, CrfModelMixin, BaseUuidModel):
+class Circumcised (CircumcisionMixin, CrfModelMixin):
 
     circ_date = models.DateField(
         verbose_name='When were you circumcised?',

@@ -4,7 +4,7 @@
 #
 # from django.core.management.base import BaseCommand, CommandError
 #
-# from bhp066.apps.bcpp_household_member.models import HouseholdMember
+# from bhp066.apps.member.models import HouseholdMember
 # from bhp066.apps.bcpp_subject.models.subject_consent import SubjectConsent
 #
 #

@@ -1,12 +1,9 @@
 from django.db import models
 
-from bcpp.models import RegisteredSubject
 from edc_base.model.models import BaseUuidModel, HistoricalRecords
 
-from bcpp_household_member.models import HouseholdMember
-from bcpp_survey.models import Survey
-
-from ..managers import ConsentHistoryManager
+from member.models import HouseholdMember
+from survey.models import Survey
 
 
 class SubjectConsentHistory(BaseUuidModel):
@@ -15,13 +12,10 @@ class SubjectConsentHistory(BaseUuidModel):
 
     household_member = models.ForeignKey(HouseholdMember)
 
-    registered_subject = models.ForeignKey(RegisteredSubject)
     consent_datetime = models.DateTimeField()
     consent_pk = models.CharField(max_length=50)
     consent_app_label = models.CharField(max_length=50)
     consent_model_name = models.CharField(max_length=50)
-
-    objects = ConsentHistoryManager()
 
     history = HistoricalRecords()
 

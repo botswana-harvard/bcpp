@@ -2,10 +2,10 @@ from django import forms
 
 from ..models import ResourceUtilization
 
-from .base_subject_model_form import BaseSubjectModelForm
+from .form_mixins import SubjectModelFormMixin
 
 
-class ResourceUtilizationForm (BaseSubjectModelForm):
+class ResourceUtilizationForm (SubjectModelFormMixin):
 
     def clean(self):
         cleaned_data = super(ResourceUtilizationForm, self).clean()

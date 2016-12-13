@@ -14,7 +14,7 @@ from edc.subject.appointment.models.appointment import Appointment
 
 from bhp066.apps.bcpp_household.models import HouseholdStructure
 from bhp066.apps.bcpp_household.tests.factories import PlotFactory, RepresentativeEligibilityFactory
-from bhp066.apps.bcpp_household_member.tests.factories import HouseholdMemberFactory, EnrollmentChecklistFactory
+from bhp066.apps.member.tests.factories import HouseholdMemberFactory, EnrollmentChecklistFactory
 from bhp066.apps.bcpp_survey.models import Survey
 
 from bhp066.apps.bcpp.app_configuration.classes import BcppAppConfiguration
@@ -24,14 +24,14 @@ from edc.map.classes.controller import site_mappers
 from bhp066.apps.bcpp_subject.tests.factories.subject_consent_factory import SubjectConsentFactory
 from bhp066.apps.bcpp_household.models.household_log import HouseholdLog, HouseholdLogEntry
 from bhp066.apps.bcpp_household.tests.factories.household_log_entry_factory import HouseholdLogEntryFactory
-from bhp066.apps.bcpp_household_member.tests.factories.head_household_factory import HeadHouseholdEligibilityFactory
-from bhp066.apps.bcpp_household_member.tests.factories.household_info_factory import HouseholdInfoFactory
+from bhp066.apps.member.tests.factories.head_household_factory import HeadHouseholdEligibilityFactory
+from bhp066.apps.member.tests.factories.household_info_factory import HouseholdInfoFactory
 from bhp066.apps.bcpp_subject.tests.factories._subject_visit_factory import SubjectVisitFactory
 from bhp066.apps.bcpp_list.models.religion import Religion
 from bhp066.apps.bcpp_list.models.live_with import LiveWith
 from bhp066.apps.bcpp_list.models.ethnic_groups import EthnicGroups
-from bhp066.apps.bcpp_household_member.classes.enumeration_helper import EnumerationHelper
-from bhp066.apps.bcpp_household_member.models.household_member import HouseholdMember
+from bhp066.apps.member.classes.enumeration_helper import EnumerationHelper
+from bhp066.apps.member.models.household_member import HouseholdMember
 
 
 class TestSubjectConsentForm(TestCase):

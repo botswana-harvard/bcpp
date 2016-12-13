@@ -4,10 +4,10 @@ from django import forms
 
 from ..models import HivCareAdherence
 
-from .base_subject_model_form import BaseSubjectModelForm
+from .form_mixins import SubjectModelFormMixin
 
 
-class HivCareAdherenceForm (BaseSubjectModelForm):
+class HivCareAdherenceForm (SubjectModelFormMixin):
 
     def clean(self):
 

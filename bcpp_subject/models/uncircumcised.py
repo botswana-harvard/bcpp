@@ -6,8 +6,7 @@ from edc_constants.choices import YES_NO_DWTA, YES_NO_UNSURE
 
 from ..choices import REASON_CIRC_CHOICE, FUTURE_REASONS_SMC_CHOICE, AWARE_FREE_CHOICE
 
-from .circumcision_mixin import CircumcisionMixin
-from .model_mixins import CrfModelMixin
+from .model_mixins import CircumcisionMixin, CrfModelMixin
 
 
 class Uncircumcised (CircumcisionMixin, CrfModelMixin):

@@ -1,23 +1,23 @@
 from ..models import Stigma, StigmaOpinion, PositiveParticipant
 
-from .base_subject_model_form import BaseSubjectModelForm
+from .form_mixins import SubjectModelFormMixin
 
 
-class StigmaForm (BaseSubjectModelForm):
+class StigmaForm (SubjectModelFormMixin):
 
     class Meta:
         model = Stigma
         fields = '__all__'
 
 
-class StigmaOpinionForm (BaseSubjectModelForm):
+class StigmaOpinionForm (SubjectModelFormMixin):
 
     class Meta:
         model = StigmaOpinion
         fields = '__all__'
 
 
-class PositiveParticipantForm (BaseSubjectModelForm):
+class PositiveParticipantForm (SubjectModelFormMixin):
 
     class Meta:
         model = PositiveParticipant

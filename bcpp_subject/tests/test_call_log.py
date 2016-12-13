@@ -11,11 +11,11 @@ from edc.subject.rule_groups.classes import site_rule_groups
 from edc.core.bhp_variables.models import StudySite
 from edc.subject.registration.models import RegisteredSubject
 
-from bhp066.apps.bcpp_household_member.classes import EnumerationHelper
+from bhp066.apps.member.classes import EnumerationHelper
 from bhp066.apps.bcpp_household.tests.factories import PlotFactory
-from bhp066.apps.bcpp_household_member.tests.factories import HouseholdMemberFactory, EnrollmentChecklistFactory
+from bhp066.apps.member.tests.factories import HouseholdMemberFactory, EnrollmentChecklistFactory
 from bhp066.apps.bcpp_subject.tests.factories import SubjectConsentFactory, CorrectConsentFactory, SubjectVisitFactory
-from bhp066.apps.bcpp_household_member.models import HouseholdMember, EnrollmentChecklist
+from bhp066.apps.member.models import HouseholdMember, EnrollmentChecklist
 from bhp066.apps.bcpp.app_configuration.classes import BcppAppConfiguration
 from bhp066.apps.bcpp_survey.models import Survey
 from bhp066.apps.bcpp_lab.lab_profiles import BcppSubjectProfile

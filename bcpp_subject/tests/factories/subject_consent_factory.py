@@ -3,7 +3,7 @@ from datetime import datetime, date
 from edc.testing.tests.factories.test_consent_factory import BaseConsentFactory
 from edc.subject.registration.tests.factories import RegisteredSubjectFactory
 from bhp066.apps.bcpp_subject.models import SubjectConsent
-from bhp066.apps.bcpp_household_member.tests.factories import HouseholdMemberFactory
+from bhp066.apps.member.tests.factories import HouseholdMemberFactory
 from edc_constants.constants import MALE, YES
 
 

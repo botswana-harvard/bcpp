@@ -1,13 +1,13 @@
 from django.db import models
 
-from edc_base.model.models import HistoricalRecords, BaseUuidModel
+from edc_base.model.models import HistoricalRecords
 
 from ..choices import WHY_NO_HIV_TESTING_CHOICE
 
 from .model_mixins import CrfModelMixin, HivTestingSupplementalMixin
 
 
-class HivUntested (HivTestingSupplementalMixin, CrfModelMixin, BaseUuidModel):
+class HivUntested (HivTestingSupplementalMixin, CrfModelMixin):
 
     """CS002- for those who have NOT tested for HIV. Its
     branch off from Q18 - HIV testing History"""

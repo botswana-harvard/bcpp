@@ -10,16 +10,16 @@ from edc_consent.field_mixins.bw import IdentityFieldsMixin
 from edc_consent.field_mixins import (
     ReviewFieldsMixin, PersonalFieldsMixin, VulnerabilityFieldsMixin,
     SampleCollectionFieldsMixin, CitizenFieldsMixin)
+from edc_consent.managers import ObjectConsentManager
 from edc_consent.model_mixins import ConsentModelMixin
 from edc_constants.constants import YES, NO
+from edc_offstudy.model_mixins import OffstudyMixin
 
-from bcpp_household_member.constants import BHS_ELIGIBLE, BHS
-from bcpp_household_member.exceptions import MemberStatusError
-from bcpp_household_member.models import EnrollmentChecklist
+from member.constants import BHS_ELIGIBLE, BHS
+from member.exceptions import MemberStatusError
+from member.models import EnrollmentChecklist
 
-from ..managers import SubjectConsentManager
-
-from .model_mixins import SubjectConsentMixin as BcppSubjectConsentMixin, SubjectOffstudyMixin
+from .model_mixins import SubjectConsentMixin as BcppSubjectConsentMixin
 
 
 class BaseSubjectConsent(models.Model):
@@ -160,14 +160,14 @@ class BaseSubjectConsent(models.Model):
 
 
 class SubjectConsent(
-        ConsentModelMixin, SubjectOffstudyMixin,
+        ConsentModelMixin, OffstudyMixin,
         BcppSubjectConsentMixin, IdentityFieldsMixin, ReviewFieldsMixin, PersonalFieldsMixin,
         SampleCollectionFieldsMixin, CitizenFieldsMixin, VulnerabilityFieldsMixin,
         BaseUuidModel):
 
     """ A model completed by the user that captures the ICF."""
 
-    objects = SubjectConsentManager()
+    objects = ObjectConsentManager()
 
     history = HistoricalRecords()
 

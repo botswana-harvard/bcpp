@@ -6,10 +6,10 @@ from edc_constants.choices import YES_NO_UNSURE
 from ..choices import FIRST_PARTNER_HIV_CHOICE
 from ..models import RecentPartner, SecondPartner, ThirdPartner, SexualBehaviour
 
-from .base_subject_model_form import BaseSubjectModelForm
+from .form_mixins import SubjectModelFormMixin
 
 
-class BasePartnerForm (BaseSubjectModelForm):
+class BasePartnerForm (SubjectModelFormMixin):
 
     yes_no_unsure_options = ['Yes', 'No', 'not sure', 'Don\'t want to answer']
 

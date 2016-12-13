@@ -4,8 +4,6 @@ from django.db import models
 from edc_base.model.models import HistoricalRecords
 from edc_base.model.fields import InitialsField
 
-from ..managers import ViralLoadResultManager
-
 from .model_mixins import CrfModelMixin
 
 
@@ -78,8 +76,6 @@ class ViralLoadResult(CrfModelMixin):
         unique=True,
         help_text="Validation reference",
     )
-
-    objects = ViralLoadResultManager()
 
     history = HistoricalRecords()
 

@@ -1,16 +1,16 @@
 from ..models import QualityOfLife, SubstanceUse
 
-from .base_subject_model_form import BaseSubjectModelForm
+from .form_mixins import SubjectModelFormMixin
 
 
-class QualityOfLifeForm (BaseSubjectModelForm):
+class QualityOfLifeForm (SubjectModelFormMixin):
 
     class Meta:
         model = QualityOfLife
         fields = '__all__'
 
 
-class SubstanceUseForm (BaseSubjectModelForm):
+class SubstanceUseForm (SubjectModelFormMixin):
 
     class Meta:
         model = SubstanceUse

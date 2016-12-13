@@ -12,7 +12,7 @@
 #
 # from bhp066.apps.bcpp_household.models import HouseholdStructure
 # from bhp066.apps.bcpp_household.tests.factories import PlotFactory
-# from bhp066.apps.bcpp_household_member.tests.factories import HouseholdMemberFactory
+# from bhp066.apps.member.tests.factories import HouseholdMemberFactory
 # from bhp066.apps.bcpp_survey.tests.factories import SurveyFactory
 #
 # from ..forms import SubjectConsentForm

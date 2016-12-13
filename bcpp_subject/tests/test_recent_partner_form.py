@@ -16,11 +16,11 @@ from edc.subject.appointment.models import Appointment
 from edc_constants.choices import YES, NO, NOT_APPLICABLE
 
 from bhp066.apps.bcpp_household.models import HouseholdStructure
-from bhp066.apps.bcpp_household_member.models import HouseholdMember
+from bhp066.apps.member.models import HouseholdMember
 from bhp066.apps.bcpp_household.tests.factories import PlotFactory, RepresentativeEligibilityFactory
-from bhp066.apps.bcpp_household_member.tests.factories import HouseholdMemberFactory, EnrollmentChecklistFactory
+from bhp066.apps.member.tests.factories import HouseholdMemberFactory, EnrollmentChecklistFactory
 from bhp066.apps.bcpp_survey.models import Survey
-from bhp066.apps.bcpp_household_member.classes import EnumerationHelper
+from bhp066.apps.member.classes import EnumerationHelper
 
 from bhp066.apps.bcpp.app_configuration.classes import BcppAppConfiguration
 from bhp066.apps.bcpp_lab.lab_profiles import BcppSubjectProfile
@@ -30,8 +30,8 @@ from bhp066.apps.bcpp_subject.tests.factories.subject_consent_factory import Sub
 from bhp066.apps.bcpp_subject.models import SubjectConsent
 from bhp066.apps.bcpp_household.models.household_log import HouseholdLog, HouseholdLogEntry
 from bhp066.apps.bcpp_household.tests.factories.household_log_entry_factory import HouseholdLogEntryFactory
-from bhp066.apps.bcpp_household_member.tests.factories.head_household_factory import HeadHouseholdEligibilityFactory
-from bhp066.apps.bcpp_household_member.tests.factories.household_info_factory import HouseholdInfoFactory
+from bhp066.apps.member.tests.factories.head_household_factory import HeadHouseholdEligibilityFactory
+from bhp066.apps.member.tests.factories.household_info_factory import HouseholdInfoFactory
 from .factories import (SubjectConsentFactory, SubjectVisitFactory)
 
 

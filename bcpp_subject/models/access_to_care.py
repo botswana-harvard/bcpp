@@ -1,6 +1,6 @@
 from django.db import models
 
-from edc_base.model.models import HistoricalRecords, BaseUuidModel
+from edc_base.model.models import HistoricalRecords
 
 
 from edc_base.model.fields import OtherCharField
@@ -12,7 +12,7 @@ from .list_models import MedicalCareAccess
 from .model_mixins import CrfModelMixin, CrfModelManager
 
 
-class AccessToCare (CrfModelMixin, BaseUuidModel):
+class AccessToCare (CrfModelMixin):
 
     access_care = models.CharField(
         verbose_name="In the past year, where do you MOST OFTEN get"

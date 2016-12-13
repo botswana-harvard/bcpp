@@ -3,10 +3,10 @@ from django import forms
 from ..models import SubjectReferral
 from ..subject_referral_helper import SubjectReferralHelper
 
-from .base_subject_model_form import BaseSubjectModelForm
+from .form_mixins import SubjectModelFormMixin
 
 
-class SubjectReferralForm(BaseSubjectModelForm):
+class SubjectReferralForm(SubjectModelFormMixin):
 
     def clean(self):
         cleaned_data = super(SubjectReferralForm, self).clean()

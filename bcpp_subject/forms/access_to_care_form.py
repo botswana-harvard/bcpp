@@ -1,9 +1,9 @@
 from ..models import AccessToCare
 
-from .base_subject_model_form import BaseSubjectModelForm
+from .form_mixins import SubjectModelFormMixin
 
 
-class AccessToCareForm (BaseSubjectModelForm):
+class AccessToCareForm (SubjectModelFormMixin):
 
     class Meta:
         model = AccessToCare

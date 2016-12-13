@@ -1,6 +1,6 @@
 from django.db import models
 
-from edc_base.model.models import HistoricalRecords, BaseUuidModel
+from edc_base.model.models import HistoricalRecords
 from edc_constants.choices import YES_NO_DWTA, YES_NO
 
 from ..choices import VERBAL_HIVRESULT_CHOICE
@@ -8,7 +8,7 @@ from ..choices import VERBAL_HIVRESULT_CHOICE
 from .model_mixins import CrfModelMixin, CrfModelManager
 
 
-class ClinicQuestionnaire (CrfModelMixin, BaseUuidModel):
+class ClinicQuestionnaire (CrfModelMixin):
 
     know_hiv_status = models.CharField(
         verbose_name="Do you know your current HIV status?",

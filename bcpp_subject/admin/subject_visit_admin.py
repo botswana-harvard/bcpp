@@ -2,8 +2,8 @@ from django.contrib import admin
 
 from edc_visit_tracking.modeladmin_mixins import VisitModelAdminMixin
 
-from bcpp_household_member.models import HouseholdMember
 from bcpp_lab.models import SubjectRequisition
+from member.models import HouseholdMember
 
 from ..admin_site import bcpp_subject_admin
 from ..forms import SubjectVisitForm
@@ -30,13 +30,13 @@ class SubjectVisitAdmin(VisitModelAdminMixin, admin.ModelAdmin):
     list_filter = (
         'report_datetime',
         'reason',
-        'household_member__household_structure__household__community',
+        'household_member__household_structure__household__plot__community',
         'appointment__appt_status',
-        'appointment__visit_definition__code',
+        'appointment__visit_code',
     )
 
     search_fields = (
-        'appointment__registered_subject__subject_identifier',
+        'appointment__subject_identifier',
         'appointment__registered_subject__registration_identifier',
         'appointment__registered_subject__first_name',
         'appointment__registered_subject__identity',

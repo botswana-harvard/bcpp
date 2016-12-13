@@ -14,14 +14,14 @@ from edc_map.site_mappers import site_mappers
 
 from edc_constants.constants import NEG
 
-from bhp066.apps.bcpp_household_member.classes import EnumerationHelper
+from bhp066.apps.member.classes import EnumerationHelper
 from bhp066.apps.bcpp_household.tests.factories import PlotFactory
 from bhp066.apps.bcpp_subject.tests.factories import (HicEnrollmentFactory, ResidencyMobilityFactory,
                                                       SubjectLocatorFactory, HivResultFactory)
 from bhp066.apps.bcpp_subject.models import HicEnrollment
-from bhp066.apps.bcpp_household_member.tests.factories import HouseholdMemberFactory, EnrollmentChecklistFactory
+from bhp066.apps.member.tests.factories import HouseholdMemberFactory, EnrollmentChecklistFactory
 from bhp066.apps.bcpp_subject.tests.factories import SubjectConsentFactory, CorrectConsentFactory, SubjectVisitFactory
-from bhp066.apps.bcpp_household_member.models import HouseholdMember, EnrollmentChecklist
+from bhp066.apps.member.models import HouseholdMember, EnrollmentChecklist
 from bhp066.apps.bcpp.app_configuration.classes import BcppAppConfiguration
 from bhp066.apps.bcpp_survey.models import Survey
 from bhp066.apps.bcpp_lab.tests.factories import SubjectRequisitionFactory

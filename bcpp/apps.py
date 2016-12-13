@@ -1,15 +1,28 @@
+import pytz
+import os
 import sys
 
-from django.apps import AppConfig as DjangoAppConfig
-
-from edc_device.apps import AppConfig as EdcDeviceAppConfigParent
-from edc_map.apps import AppConfig as EdcMapAppConfigParent
-from edc_protocol.apps import AppConfig as EdcProtocolAppConfigParent, SubjectType, Cap
-from django.core.management.color import color_style
-from edc_base.utils import get_utcnow
-from dateutil.relativedelta import relativedelta
 from datetime import datetime
-import pytz
+from dateutil.relativedelta import relativedelta
+
+from django.apps import AppConfig as DjangoAppConfig
+from django.conf import settings
+from django.core.management.color import color_style
+
+from edc_base.utils import get_utcnow
+from edc_consent.apps import AppConfig as EdcConsentAppConfigParent
+from edc_consent.consent_config import ConsentConfig
+from edc_constants.constants import FAILED_ELIGIBILITY, MALE, FEMALE
+from edc_device.apps import AppConfig as EdcDeviceAppConfigParent
+from edc_identifier.apps import AppConfig as EdcIdentifierAppConfigParent
+from edc_label.apps import AppConfig as EdcLabelConfigParent
+from edc_map.apps import AppConfig as EdcMapAppConfigParent
+from edc_metadata.apps import AppConfig as EdcMetadataAppConfigParent
+from edc_protocol.apps import AppConfig as EdcProtocolAppConfigParent, SubjectType, Cap
+from edc_timepoint.apps import AppConfig as EdcTimepointAppConfigParent
+from edc_timepoint.timepoint import Timepoint
+from edc_visit_tracking.apps import AppConfig as EdcVisitTrackingAppConfigParent
+from edc_visit_tracking.constants import SCHEDULED, UNSCHEDULED, LOST_VISIT
 
 style = color_style()
 
@@ -20,6 +33,30 @@ class AppConfig(DjangoAppConfig):
 
 class EdcDeviceAppConfig(EdcDeviceAppConfigParent):
     device_id = '99'
+
+
+class EdcConsentAppConfig(EdcConsentAppConfigParent):
+    if 'test' in sys.argv:
+        sys.stdout.write(
+            style.NOTICE(
+                'WARNING! Overwriting AppConfig maternalconsent.start and end dates for tests only. \n'
+                'See EdcConsentAppConfig\n'))
+        testconsentstart = get_utcnow() - relativedelta(years=6)
+        testconsentend = get_utcnow() - relativedelta(years=1)
+    else:
+        testconsentstart = None
+        testconsentend = None
+    consent_configs = [
+        ConsentConfig(
+            'bcpp_subject.subjectconsent',
+            start=datetime(2013, 10, 18, 0, 0, 0, tzinfo=pytz.utc) if 'test' not in sys.argv else testconsentstart,
+            end=datetime(2022, 12, 1, 0, 0, 0, tzinfo=pytz.utc) if 'test' not in sys.argv else testconsentend,
+            version='1',
+            age_min=16,
+            age_is_adult=18,
+            age_max=64,
+            gender=[MALE, FEMALE]),
+    ]
 
 
 class EdcMapAppConfig(EdcMapAppConfigParent):
@@ -50,5 +87,43 @@ class EdcProtocolAppConfig(EdcProtocolAppConfigParent):
     else:
         teststudyopen = None
         teststudyclose = None
-    study_open_datetime = teststudyopen or datetime(2016, 4, 1, 0, 0, 0, tzinfo=pytz.utc)
+    study_open_datetime = teststudyopen or datetime(2013, 10, 18, 0, 0, 0, tzinfo=pytz.utc)
     study_close_datetime = teststudyclose or datetime(2018, 12, 1, 0, 0, 0, tzinfo=pytz.utc)
+
+
+class EdcVisitTrackingAppConfig(EdcVisitTrackingAppConfigParent):
+    visit_models = {'bcpp_subject': ('subject_visit', 'bcpp_subject.subjectvisit')}
+
+
+class EdcIdentifierAppConfig(EdcIdentifierAppConfigParent):
+    identifier_prefix = '066'
+
+
+class EdcMetadataAppConfig(EdcMetadataAppConfigParent):
+    reason_field = {'bcpp_subject.subjectvisit': 'reason'}
+    create_on_reasons = [SCHEDULED, UNSCHEDULED]
+    delete_on_reasons = [LOST_VISIT, FAILED_ELIGIBILITY]
+
+
+class EdcLabelAppConfig(EdcLabelConfigParent):
+    default_cups_server_ip = '10.113.201.114'
+    default_printer_label = 'leslie_testing'
+    default_template_file = os.path.join(settings.STATIC_ROOT, 'bcpp', 'label_templates', 'aliquot.lbl')
+    default_label_identifier_name = ''
+
+
+class EdcTimepointAppConfig(EdcTimepointAppConfigParent):
+    timepoints = [
+        Timepoint(
+            model='td.appointment',
+            datetime_field='appt_datetime',
+            status_field='appt_status',
+            closed_status='DONE'
+        ),
+        Timepoint(
+            model='td.historicalappointment',
+            datetime_field='appt_datetime',
+            status_field='appt_status',
+            closed_status='DONE'
+        ),
+    ]

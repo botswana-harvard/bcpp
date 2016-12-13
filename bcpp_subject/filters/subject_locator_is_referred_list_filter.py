@@ -16,21 +16,19 @@ class SubjectLocatorIsReferredListFilter(SimpleListFilter):
     def queryset(self, request, queryset):
         locators = []
         if self.value():
-            for qs in queryset:
+            for obj in queryset:
                 refferal = SubjectReferral.objects.filter(
-                    subject_visit__appointment__registered_subject__subject_identifier=qs.get_subject_identifier()
-                ).exclude(referral_code__in=['NOT-REF', 'ERROR'])
+                    subject_visit__appointment__registered_subject__subject_identifier=obj.subject_identifier).exclude(
+                        referral_code__in=['NOT-REF', 'ERROR'])
                 if refferal:
-                    locators.append(qs.get_subject_identifier())
-            queryset = SubjectLocator.objects.filter(
-                subject_visit__appointment__registered_subject__subject_identifier__in=locators)
+                    locators.append(obj.subject_identifier)
+            queryset = SubjectLocator.objects.filter(subject_identifier__in=locators)
         if not self.value():
-            for qs in queryset:
+            for obj in queryset:
                 refferal = SubjectReferral.objects.filter(
-                    subject_visit__appointment__registered_subject__subject_identifier=qs.get_subject_identifier(),
+                    subject_visit__appointment__registered_subject__subject_identifier=obj.subject_identifier,
                     referral_code__in=['NOT-REF', 'ERROR'])
                 if refferal:
-                    locators.append(qs.get_subject_identifier())
-            queryset = SubjectLocator.objects.filter(
-                subject_visit__appointment__registered_subject__subject_identifier__in=locators)
+                    locators.append(obj.subject_identifier)
+            queryset = SubjectLocator.objects.filter(subject_identifier__in=locators)
         return queryset

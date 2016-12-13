@@ -2,7 +2,7 @@ from django.apps import apps as django_apps
 from django.core.exceptions import ValidationError
 from django.db import models
 
-from edc_base.model.models import HistoricalRecords, BaseUuidModel
+from edc_base.model.models import HistoricalRecords
 from edc_base.model.validators import datetime_not_future
 from edc_constants.choices import YES_NO_NA
 from edc_constants.constants import NOT_APPLICABLE
@@ -13,7 +13,7 @@ from .hic_enrollment import HicEnrollment
 from .model_mixins import CrfModelMixin
 
 
-class HivResult (CrfModelMixin, BaseUuidModel):
+class HivResult (CrfModelMixin):
 
     hiv_result = models.CharField(
         verbose_name="Today\'s HIV test result",

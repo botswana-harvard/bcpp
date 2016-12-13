@@ -2,10 +2,10 @@ from django import forms
 
 from ..models import ClinicQuestionnaire
 
-from .base_subject_model_form import BaseSubjectModelForm
+from .form_mixins import SubjectModelFormMixin
 
 
-class ClinicQuestionnaireForm (BaseSubjectModelForm):
+class ClinicQuestionnaireForm (SubjectModelFormMixin):
     def clean(self):
 
         cleaned_data = super(ClinicQuestionnaireForm, self).clean()

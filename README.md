@@ -1,4 +1,4 @@
 # bcpp
 
 
-    python manage.py bcpp plot household member survey
+    python manage.py makemigrations bcpp plot household member bcpp_subject survey

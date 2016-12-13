@@ -3,10 +3,10 @@ from django import forms
 from ..constants import ANNUAL
 from ..models import Circumcision, Uncircumcised, Circumcised
 
-from .base_subject_model_form import BaseSubjectModelForm
+from .form_mixins import SubjectModelFormMixin
 
 
-class CircumcisionForm (BaseSubjectModelForm):
+class CircumcisionForm (SubjectModelFormMixin):
 
     optional_labels = {
         ANNUAL: {'circumcised': (
@@ -19,7 +19,7 @@ class CircumcisionForm (BaseSubjectModelForm):
         fields = '__all__'
 
 
-class CircumcisedForm (BaseSubjectModelForm):
+class CircumcisedForm (SubjectModelFormMixin):
 
     def clean(self):
 
@@ -38,7 +38,7 @@ class CircumcisedForm (BaseSubjectModelForm):
         fields = '__all__'
 
 
-class UncircumcisedForm (BaseSubjectModelForm):
+class UncircumcisedForm (SubjectModelFormMixin):
     def clean(self):
 
         cleaned_data = super(UncircumcisedForm, self).clean()

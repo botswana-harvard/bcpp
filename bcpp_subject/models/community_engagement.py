@@ -1,7 +1,7 @@
 from django.db import models
 
 from edc_base.model.fields import OtherCharField
-from edc_base.model.models import HistoricalRecords, BaseUuidModel
+from edc_base.model.models import HistoricalRecords
 
 from ..choices import COMMUNITY_ENGAGEMENT_CHOICE, VOTE_ENGAGEMENT_CHOICE, SOLVE_ENGAGEMENT_CHOICE
 
@@ -9,7 +9,7 @@ from .list_models import NeighbourhoodProblems
 from .model_mixins import CrfModelMixin, CrfModelManager
 
 
-class CommunityEngagement (CrfModelMixin, BaseUuidModel):
+class CommunityEngagement (CrfModelMixin):
 
     """A model completed by the user on the participant's engagement in the community."""
 

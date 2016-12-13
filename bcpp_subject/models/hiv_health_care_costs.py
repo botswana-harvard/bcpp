@@ -1,6 +1,6 @@
 from django.db import models
 
-from edc_base.model.models import HistoricalRecords, BaseUuidModel
+from edc_base.model.models import HistoricalRecords
 from edc_constants.choices import YES_NO_REFUSED
 
 from ..choices import NO_MEDICALCARE_REASON, HEALTH_CARE_PLACE, CARE_REGULARITY, DOCTOR_VISITS
@@ -8,7 +8,7 @@ from ..choices import NO_MEDICALCARE_REASON, HEALTH_CARE_PLACE, CARE_REGULARITY,
 from .model_mixins import CrfModelMixin
 
 
-class HivHealthCareCosts (CrfModelMixin, BaseUuidModel):
+class HivHealthCareCosts (CrfModelMixin):
 
     """A model completed by the user to capture information from the
     participant about obtaining medical or clinical care related to HIV."""

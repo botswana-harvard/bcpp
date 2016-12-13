@@ -4,8 +4,7 @@ from edc_base.model.models import HistoricalRecords
 from edc_base.model.fields import OtherCharField
 from edc_constants.choices import YES_NO_NA, NOT_APPLICABLE, YES_NO, YES_NO_UNSURE
 
-from bcpp_list.models import FamilyPlanning
-
+from .list_models import FamilyPlanning
 from .model_mixins import CrfModelMixin
 
 

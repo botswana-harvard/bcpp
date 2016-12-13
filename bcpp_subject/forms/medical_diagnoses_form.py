@@ -3,10 +3,10 @@ from django import forms
 from ..constants import ANNUAL
 from ..models import MedicalDiagnoses
 
-from .base_subject_model_form import BaseSubjectModelForm
+from .form_mixins import SubjectModelFormMixin
 
 
-class MedicalDiagnosesForm (BaseSubjectModelForm):
+class MedicalDiagnosesForm (SubjectModelFormMixin):
 
     optional_labels = {
         ANNUAL: {'diagnoses': (

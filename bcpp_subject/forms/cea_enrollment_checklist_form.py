@@ -2,10 +2,10 @@ from django import forms
 
 from ..models import CeaEnrollmentChecklist
 
-from .base_subject_model_form import BaseSubjectModelForm
+from .form_mixins import SubjectModelFormMixin
 
 
-class CeaEnrollmentChecklistForm (BaseSubjectModelForm):
+class CeaEnrollmentChecklistForm (SubjectModelFormMixin):
 
     def clean(self):
         cleaned_data = self.cleaned_data

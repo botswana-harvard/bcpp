@@ -1,9 +1,9 @@
 from ..models import TbSymptoms
 
-from .base_subject_model_form import BaseSubjectModelForm
+from .form_mixins import SubjectModelFormMixin
 
 
-class TbSymptomsForm (BaseSubjectModelForm):
+class TbSymptomsForm (SubjectModelFormMixin):
 
     class Meta:
         model = TbSymptoms

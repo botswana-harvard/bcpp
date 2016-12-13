@@ -1,6 +1,6 @@
 from django.db import models
 
-from edc_base.model.models import HistoricalRecords, BaseUuidModel
+from edc_base.model.models import HistoricalRecords
 from edc_base.model.fields import OtherCharField
 
 from ..choices import WHERE_HIV_TEST_CHOICE, WHY_HIV_TEST_CHOICE
@@ -8,7 +8,7 @@ from ..choices import WHERE_HIV_TEST_CHOICE, WHY_HIV_TEST_CHOICE
 from .model_mixins import CrfModelMixin, HivTestingSupplementalMixin
 
 
-class HivTested (HivTestingSupplementalMixin, CrfModelMixin, BaseUuidModel):
+class HivTested (HivTestingSupplementalMixin, CrfModelMixin):
 
     """CS002- for those who have tested for HIV. Its branch off from Q18 - HIV testing History"""
 

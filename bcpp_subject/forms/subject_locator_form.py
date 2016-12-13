@@ -3,10 +3,10 @@ from edc_constants.choices import NOT_APPLICABLE
 
 from ..models import SubjectLocator
 
-from .base_subject_model_form import BaseSubjectModelForm
+from .form_mixins import SubjectModelFormMixin
 
 
-class SubjectLocatorForm (BaseSubjectModelForm):
+class SubjectLocatorForm (SubjectModelFormMixin):
 
     def clean(self):
         cleaned_data = super(SubjectLocatorForm, self).clean()

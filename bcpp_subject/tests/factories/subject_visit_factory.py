@@ -3,7 +3,7 @@ from datetime import datetime
 from edc.subject.visit_tracking.tests.factories import BaseVisitTrackingFactory
 from edc.subject.appointment.tests.factories import AppointmentFactory
 from bhp066.apps.bcpp_subject.models import SubjectVisit
-from bhp066.apps.bcpp_household_member.tests.factories import HouseholdMemberFactory
+from bhp066.apps.member.tests.factories import HouseholdMemberFactory
 
 
 class SubjectVisitFactory(BaseVisitTrackingFactory):

@@ -2,10 +2,10 @@ from django import forms
 
 from ..models import ElisaHivResult
 
-from .base_subject_model_form import BaseSubjectModelForm
+from .form_mixins import SubjectModelFormMixin
 
 
-class ElisaHivResultForm (BaseSubjectModelForm):
+class ElisaHivResultForm (SubjectModelFormMixin):
 
     def clean(self):
 

@@ -11,8 +11,6 @@ from edc_base.model.validators import datetime_not_future
 from edc_consent.validators import AgeTodayValidator
 from edc_constants.choices import GENDER_UNDETERMINED, YES_NO, YES
 
-from ..managers import CorrectConsentManager
-
 from .hic_enrollment import HicEnrollment
 from .subject_consent import SubjectConsent
 
@@ -322,8 +320,6 @@ class CorrectConsent(BaseCorrectConsent, BaseUuidModel):
     """A model linked to the subject consent to record corrections."""
 
     subject_consent = models.OneToOneField(SubjectConsent)
-
-    objects = CorrectConsentManager()
 
     history = HistoricalRecords()
 

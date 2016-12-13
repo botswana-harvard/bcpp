@@ -4,12 +4,12 @@ from edc_constants.constants import YES, NO
 
 from ..models import PimaVl
 
-from .base_subject_model_form import BaseSubjectModelForm
+from .form_mixins import SubjectModelFormMixin
 
 from ..constants import POC_VIRAL_LOAD
 
 
-class PimaVlForm (BaseSubjectModelForm):
+class PimaVlForm (SubjectModelFormMixin):
 
     def clean(self):
         cleaned_data = super(PimaVlForm, self).clean()

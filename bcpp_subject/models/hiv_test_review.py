@@ -1,6 +1,6 @@
 from django.db import models
 
-from edc_base.model.models import HistoricalRecords, BaseUuidModel
+from edc_base.model.models import HistoricalRecords
 from edc_base.model.validators import date_not_future
 
 from edc_constants.choices import POS_NEG_IND_UNKNOWN
@@ -8,7 +8,7 @@ from edc_constants.choices import POS_NEG_IND_UNKNOWN
 from .model_mixins import CrfModelMixin
 
 
-class HivTestReview (CrfModelMixin, BaseUuidModel):
+class HivTestReview (CrfModelMixin):
 
     """Complete this form if HivTestingHistory.has_record."""
 

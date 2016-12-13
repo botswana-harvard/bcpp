@@ -4,7 +4,7 @@ from django.apps import apps as django_apps
 from django.db import models
 from django.core.exceptions import ValidationError
 
-from edc_base.model.models import HistoricalRecords, BaseUuidModel
+from edc_base.model.models import HistoricalRecords
 from edc_base.model.validators import datetime_not_future
 from edc_consent.validators import AgeTodayValidator
 from edc_constants.choices import YES_NO
@@ -14,7 +14,7 @@ from .model_mixins import CrfModelMixin
 from .subject_consent import SubjectConsent
 
 
-class HicEnrollment (CrfModelMixin, BaseUuidModel):
+class HicEnrollment (CrfModelMixin):
 
     hic_permission = models.CharField(
         verbose_name='Is it okay for the project to visit you every year for '

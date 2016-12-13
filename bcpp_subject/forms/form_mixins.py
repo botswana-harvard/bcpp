@@ -4,17 +4,17 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from edc_map.site_mappers import site_mappers
 
-from bcpp_survey.models import Survey
+from survey.models import Survey
 
 from ..models import SubjectVisit
 
 
-class BaseSubjectModelForm(forms.ModelForm):
+class SubjectModelFormMixin(forms.ModelForm):
 
     visit_model = SubjectVisit
 
     def clean(self):
-        cleaned_data = super(BaseSubjectModelForm, self).clean()
+        cleaned_data = super(SubjectModelFormMixin, self).clean()
         self.limit_edit_to_current_community(cleaned_data)
         self.limit_edit_to_current_survey(cleaned_data)
         try:
@@ -50,7 +50,7 @@ class BaseSubjectModelForm(forms.ModelForm):
         current community OR does nothing,"""
         try:
             if settings.LIMIT_EDIT_TO_CURRENT_COMMUNITY:
-                configured_community = site_mappers.get_mapper(site_mappers.current_community).map_area
+                configured_community = site_mappers.get_mapper(site_mappers.current_map_area).map_area
                 community = cleaned_data.get(
                     'subject_visit').household_member.household_structure.household.plot.community
                 if community != configured_community:

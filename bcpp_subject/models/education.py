@@ -1,6 +1,6 @@
 from django.db import models
 
-from edc_base.model.models import HistoricalRecords, BaseUuidModel
+from edc_base.model.models import HistoricalRecords
 from edc_constants.choices import YES_NO
 
 from ..choices import MONTHLY_INCOME, JOB_TYPE, REASON_UNEMPLOYED, JOB_DESCRIPTION, EDUCATION_CHOICE
@@ -8,7 +8,7 @@ from ..choices import MONTHLY_INCOME, JOB_TYPE, REASON_UNEMPLOYED, JOB_DESCRIPTI
 from .model_mixins import CrfModelMixin
 
 
-class Education (CrfModelMixin, BaseUuidModel):
+class Education (CrfModelMixin):
 
     """A model completed by the user on the particiapnt's level of education and work."""
 

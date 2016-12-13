@@ -1,7 +1,7 @@
 from django.db import models
 
 from edc_base.model.fields import OtherCharField
-from edc_base.model.models import HistoricalRecords, BaseUuidModel
+from edc_base.model.models import HistoricalRecords
 from edc_constants.choices import YES_NO_UNSURE, YES_NO
 
 from ..choices import COMMUNITY_NA
@@ -9,7 +9,7 @@ from ..choices import COMMUNITY_NA
 from .model_mixins import CrfModelMixin, CrfModelManager, CircumcisionMixin
 
 
-class Circumcision (CircumcisionMixin, CrfModelMixin, BaseUuidModel):
+class Circumcision (CircumcisionMixin, CrfModelMixin):
 
     circumcised = models.CharField(
         verbose_name="Are you circumcised?",

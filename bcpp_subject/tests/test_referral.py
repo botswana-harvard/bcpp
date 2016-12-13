@@ -18,11 +18,12 @@ from .factories import (
     HivCareAdherenceFactory, HivResultFactory, CircumcisionFactory,
     PimaFactory, HivTestReviewFactory, HivTestingHistoryFactory, TbSymptomsFactory,
     HivResultDocumentationFactory)
-from edc.entry_meta_data.models.scheduled_entry_meta_data import ScheduledEntryMetaData
-from edc_constants.constants import POS, NEG, NOT_REQUIRED, REQUIRED, YES, NO
+from edc.entry_meta_data.models import CrfMetadata
+from edc_constants.constants import POS, NEG, YES, NO
+from edc_metadata.constants import NOT_REQUIRED, REQUIRED
 from edc.export.models.export_transaction import ExportTransaction
-from bhp066.apps.bcpp_household.constants import BASELINE_SURVEY_SLUG
-from bhp066.apps.bcpp_subject.models import HivCareAdherence, HivTestingHistory, HivTestReview, SubjectReferral, Pima
+from bcpp_subject.constants import BASELINE_SURVEY
+from bcpp_subject.models import HivCareAdherence, HivTestingHistory, HivTestReview, SubjectReferral, Pima
 
 
 class TestReferral(BaseScheduledModelTestCase):
@@ -1430,7 +1431,7 @@ class TestReferral(BaseScheduledModelTestCase):
             report_datetime=report_datetime)
         self.assertTrue(subject_referral.citizen)
 
-        HouseholdMember = get_model('bcpp_household_member', 'HouseholdMember')
+        HouseholdMember = get_model('member', 'HouseholdMember')
 #         non_citizen_household_member_male = HouseholdMember.objects.create(
 #             household_structure=self.household_structure,
 #             first_name='ZEST', initials='ZP', gender='M',

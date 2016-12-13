@@ -24,7 +24,7 @@ from bhp066.apps.bcpp_lab.lab_profiles import BcppSubjectProfile
 from bhp066.apps.bcpp_lab.models import Panel, AliquotType
 from bhp066.apps.bcpp_household.models import Household, HouseholdStructure
 from bhp066.apps.bcpp_household.tests.factories import PlotFactory, RepresentativeEligibilityFactory
-from bhp066.apps.bcpp_household_member.tests.factories import HouseholdMemberFactory, EnrollmentChecklistFactory
+from bhp066.apps.member.tests.factories import HouseholdMemberFactory, EnrollmentChecklistFactory
 from bhp066.apps.bcpp_subject.tests.factories import SubjectConsentFactory
 from bhp066.apps.bcpp_subject.tests.factories import (
     SubjectVisitFactory, SubjectLocatorFactory, CallLogFactory, CallLogEntryFactory,

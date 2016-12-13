@@ -1,9 +1,9 @@
 from ..models import NonPregnancy
 
-from .base_subject_model_form import BaseSubjectModelForm
+from .form_mixins import SubjectModelFormMixin
 
 
-class NonPregnancyForm (BaseSubjectModelForm):
+class NonPregnancyForm (SubjectModelFormMixin):
 
     class Meta:
         model = NonPregnancy

@@ -2,13 +2,13 @@
 # from django.db.models import Q
 # from django.test.utils import override_settings
 # 
-# from bhp066.apps.bcpp_household_member.tests.factories.household_member_factory import HouseholdMemberFactory
+# from bhp066.apps.member.tests.factories.household_member_factory import HouseholdMemberFactory
 # from bhp066.apps.bcpp_household.tests.factories.household_structure_factory import HouseholdStructureFactory
 # from edc.subject.registration.tests.factories.registered_subject_factory import RegisteredSubjectFactory
 # from edc.subject.registration.models.registered_subject import RegisteredSubject
 # from bhp066.apps.bcpp_household.tests.factories.household_factory import HouseholdFactory
 # from bhp066.apps.bcpp_household.tests.factories.plot_factory import PlotFactory
-# from bhp066.apps.bcpp_household_member.models.household_member import HouseholdMember
+# from bhp066.apps.member.models.household_member import HouseholdMember
 # from bhp066.apps.bcpp_clinic.tests.factories.clinic_eligibility_factory import ClinicEligibilityFactory
 # from bhp066.apps.bcpp_subject.classes.clinic_registered_subject_helper import ClinicRegisteredSubjectHelper
 # from bhp066.apps.bcpp_clinic.tests.factories.clinic_consent_factory import ClinicConsentFactory

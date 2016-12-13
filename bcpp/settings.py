@@ -40,18 +40,25 @@ INSTALLED_APPS = [
     'crispy_forms',
     'django_crypto_fields.apps.AppConfig',
     'django_revision.apps.AppConfig',
+    'edc_appointment.apps.AppConfig',
     'edc_base.apps.AppConfig',
-    'edc_identifier.apps.AppConfig',
     'edc_subset_manager.apps.AppConfig',
     'plot.apps.AppConfig',
     'household.apps.AppConfig',
     'member.apps.AppConfig',
     'survey.apps.AppConfig',
-    'bcpp_map.apps.AppConfig',
-    'bcpp.apps.EdcProtocolAppConfig',
-    'bcpp.apps.EdcDeviceAppConfig',
-    'bcpp.apps.EdcMapAppConfig',
     'bcpp.apps.AppConfig',
+    'bcpp.apps.EdcConsentAppConfig',
+    'bcpp.apps.EdcDeviceAppConfig',
+    'bcpp.apps.EdcIdentifierAppConfig',
+    'bcpp.apps.EdcLabelAppConfig',
+    'bcpp.apps.EdcMapAppConfig',
+    'bcpp.apps.EdcMetadataAppConfig',
+    'bcpp.apps.EdcProtocolAppConfig',
+    'bcpp.apps.EdcTimepointAppConfig',
+    'bcpp.apps.EdcVisitTrackingAppConfig',
+    'bcpp_map.apps.AppConfig',
+    'bcpp_subject.apps.AppConfig',
 ]
 
 MIDDLEWARE = [
@@ -136,4 +143,4 @@ STATIC_URL = '/static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DEVICE_ID = '00'
 CURRENT_MAP_AREA = 'bhp'
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')

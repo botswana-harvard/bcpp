@@ -2,14 +2,14 @@ from django.db import models
 
 from edc_base.model.validators import date_not_future
 from edc_base.model.fields import OtherCharField
-from edc_base.model.models import HistoricalRecords, BaseUuidModel
+from edc_base.model.models import HistoricalRecords
 
 from ..choices import DXCANCER_CHOICE
 
 from .model_mixins import CrfModelMixin, CrfModelManager
 
 
-class Cancer (CrfModelMixin, BaseUuidModel):
+class Cancer (CrfModelMixin):
 
     """A model completed by the user to record any diagnosis of cancer in the past 12 months."""
 

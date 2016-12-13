@@ -1,6 +1,6 @@
 from django.db import models
 
-from edc_base.model.models import HistoricalRecords, BaseUuidModel
+from edc_base.model.models import HistoricalRecords
 from edc_base.model.validators import date_not_future
 
 from ..choices import LOWEST_CD4_CHOICE
@@ -8,7 +8,7 @@ from ..choices import LOWEST_CD4_CHOICE
 from .model_mixins import CrfModelMixin
 
 
-class HivMedicalCare (CrfModelMixin, BaseUuidModel):
+class HivMedicalCare (CrfModelMixin):
 
     first_hiv_care_pos = models.DateField(
         verbose_name="When did you first receive HIV-related medical care "

@@ -16,23 +16,23 @@ from edc_constants.constants import NO
 
 from bhp066.apps.bcpp_household.models import HouseholdStructure
 from bhp066.apps.bcpp_household.tests.factories import PlotFactory, RepresentativeEligibilityFactory
-from bhp066.apps.bcpp_household_member.tests.factories import HouseholdMemberFactory, EnrollmentChecklistFactory
-from bhp066.apps.bcpp_household_member.choices import ANNUAL, ABSENT, REFUSED
-from bhp066.apps.bcpp_household_member.models import HouseholdMember
+from bhp066.apps.member.tests.factories import HouseholdMemberFactory, EnrollmentChecklistFactory
+from bhp066.apps.member.choices import ANNUAL, ABSENT, REFUSED
+from bhp066.apps.member.models import HouseholdMember
 from bhp066.apps.bcpp_survey.models import Survey
 
 from bhp066.apps.bcpp.app_configuration.classes import BcppAppConfiguration
 from bhp066.apps.bcpp_lab.lab_profiles import BcppSubjectProfile
 from bhp066.apps.bcpp_subject.visit_schedule import BcppSubjectVisitSchedule
 from bhp066.apps.bcpp_subject.models.call_list import CallList
-from bhp066.apps.bcpp_household_member.tests.factories import SubjectAbsenteeEntryFactory
-from bhp066.apps.bcpp_household_member.models import SubjectAbsentee
-from bhp066.apps.bcpp_household_member.tests.factories import SubjectRefusalFactory
+from bhp066.apps.member.tests.factories import SubjectAbsenteeEntryFactory
+from bhp066.apps.member.models import SubjectAbsentee
+from bhp066.apps.member.tests.factories import SubjectRefusalFactory
 
 from .factories import SubjectConsentFactory, SubjectVisitFactory
 from bhp066.apps.bcpp_subject.tests.factories.subject_locator_factory import SubjectLocatorFactory
-from bhp066.apps.bcpp_household_member.tests.factories import SubjectAbsenteeFactory
-from bhp066.apps.bcpp_household_member.models import SubjectAbsenteeEntry
+from bhp066.apps.member.tests.factories import SubjectAbsenteeFactory
+from bhp066.apps.member.models import SubjectAbsenteeEntry
 
 from ..classes import UpdateCallList
 

@@ -6,7 +6,7 @@ from django.test import TestCase
 from django.utils import timezone
 
 # from bhp066.apps.bcpp_subject.models.signals import update_or_create_registered_subject_on_post_save
-from bhp066.apps.bcpp_household_member.models.enrollment_checklist import BaseEnrollmentChecklist
+from bhp066.apps.member.models.enrollment_checklist import BaseEnrollmentChecklist
 from bhp066.apps.bcpp_subject.models.correct_consent import BaseCorrectConsent
 from django.core.exceptions import ValidationError
 

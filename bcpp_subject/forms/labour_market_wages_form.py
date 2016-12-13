@@ -4,10 +4,10 @@ from django.forms.utils import ErrorList
 from ..choices import MONTHLY_INCOME, HOUSEHOLD_INCOME
 from ..models import LabourMarketWages, Grant, SubjectLocator
 
-from .base_subject_model_form import BaseSubjectModelForm
+from .form_mixins import SubjectModelFormMixin
 
 
-class LabourMarketWagesForm (BaseSubjectModelForm):
+class LabourMarketWagesForm (SubjectModelFormMixin):
 
     def clean(self):
         cleaned_data = super(LabourMarketWagesForm, self).clean()

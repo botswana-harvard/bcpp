@@ -19,6 +19,6 @@ class SubjectConsentAdmin(ModelAdminConsentMixin, admin.ModelAdmin):
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "household_member":
-            HouseholdMember = django_apps.get_model('bcpp_household_member', 'householdmember')
+            HouseholdMember = django_apps.get_model('member', 'householdmember')
             kwargs["queryset"] = HouseholdMember.objects.filter(id__exact=request.GET.get('household_member', 0))
         return super(SubjectConsentAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)

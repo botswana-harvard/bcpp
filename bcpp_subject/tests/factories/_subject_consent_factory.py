@@ -2,7 +2,7 @@ import factory
 from datetime import datetime
 from edc.testing.tests.factories.test_consent_factory import BaseConsentFactory
 from edc.core.bhp_variables.tests.factories import StudySiteFactory
-from bhp066.apps.bcpp_household_member.tests.factories import HouseholdMemberFactory
+from bhp066.apps.member.tests.factories import HouseholdMemberFactory
 from bhp066.apps.bcpp_survey.tests.factories import SurveyFactory
 from bhp066.apps.bcpp_subject.models import SubjectConsent
 
