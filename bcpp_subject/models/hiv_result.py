@@ -75,12 +75,6 @@ class HivResult (CrfModelMixin, BaseUuidModel):
         if not SubjectRequisition.objects.filter(subject_visit=self.subject_visit, panel__name='Microtube').exists():
             raise exception_cls('Today\'s Hiv Result cannot be saved before a Microtube Requisition.')
 
-    def get_test_code(self):
-        return 'HIV'
-
-    def get_result_datetime(self):
-        return self.report_datetime
-
     class Meta(CrfModelMixin.Meta):
         app_label = "bcpp_subject"
         verbose_name = "Today\'s HIV Result"

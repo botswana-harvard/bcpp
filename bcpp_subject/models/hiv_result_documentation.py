@@ -12,8 +12,6 @@ from .model_mixins import CrfModelMixin
 
 class HivResultDocumentation (CrfModelMixin, BaseUuidModel):
 
-    """"""
-
     # base on question from hiv test history
     result_date = models.DateField(
         verbose_name='What is the recorded date of this previous HIV test (or of the '

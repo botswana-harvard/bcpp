@@ -5,10 +5,10 @@ from edc_base.model.models import HistoricalRecords, BaseUuidModel
 
 from edc_base.model.fields import OtherCharField
 
-from bcpp_list.models import MedicalCareAccess
 
 from ..choices import AGREE_STRONGLY, WHEREACCESS_CHOICE
 
+from .list_models import MedicalCareAccess
 from .model_mixins import CrfModelMixin, CrfModelManager
 
 
@@ -87,5 +87,5 @@ class AccessToCare (CrfModelMixin, BaseUuidModel):
 
     class Meta(CrfModelMixin.Meta):
         app_label = 'bcpp_subject'
-        verbose_name = "Access to Care"
-        verbose_name_plural = "Access to Care"
+        verbose_name = "Access to care"
+        verbose_name_plural = "Access to care"

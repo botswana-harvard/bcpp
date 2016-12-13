@@ -5,8 +5,7 @@ from edc_base.model.validators import date_not_future
 
 from ..choices import ANC_REG_CHOICE
 
-from .model_mixins import CrfModelMixin
-from .model_mixins import PregnancyMixin
+from .model_mixins import CrfModelMixin, PregnancyMixin
 
 
 class Pregnancy (PregnancyMixin, CrfModelMixin):

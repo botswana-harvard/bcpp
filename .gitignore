@@ -3,6 +3,8 @@
 .settings/
 db.sqlite*
 test-*
+bcpp/migrations/*
+bcpp_subject/migrations/*
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

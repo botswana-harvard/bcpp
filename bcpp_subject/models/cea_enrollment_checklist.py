@@ -5,7 +5,6 @@ from edc_base.model.models import HistoricalRecords, BaseUuidModel
 from edc_base.model.validators import datetime_not_future, eligible_if_yes
 from edc_constants.choices import YES_NO, YES_NO_REFUSED
 
-
 from ..choices import ENROLMENT_REASON, OPPORTUNISTIC_ILLNESSES
 
 from .model_mixins import CrfModelMixin, CrfModelManager

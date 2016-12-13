@@ -13,13 +13,11 @@ from edc_map.site_mappers import site_mappers
 from edc_metadata.model_mixins import UpdatesCrfMetadataModelMixin
 from edc_offstudy.model_mixins import OffstudyMixin
 from edc_visit_tracking.managers import CrfModelManager as VisitTrackingCrfModelManager
-from edc_visit_tracking.model_mixins import (
-    CrfModelMixin as VisitTrackingCrfModelMixin, CrfInlineModelMixin as VisitTrackingCrfInlineModelMixin)
+from edc_visit_tracking.model_mixins import CrfModelMixin as VisitTrackingCrfModelMixin
 
 from ..choices import RELATIONSHIP_TYPE, MAIN_PARTNER_RESIDENCY, SEX_REGULARITY, INTERCOURSE_TYPE
 
-from bcpp.manager_mixins import CommunitySubsetManagerMixin
-from bcpp_household_member.models import HouseholdMember
+from member.models import HouseholdMember
 from bcpp_list.models import PartnerResidency, CircumcisionBenefits
 
 from ..choices import (
@@ -32,8 +30,8 @@ from ..constants import ECC, CPC
 from .subject_visit import SubjectVisit
 
 
-class CrfModelManager(VisitTrackingCrfModelManager, CommunitySubsetManagerMixin, models.Manager):
-    to_reference_model = ['subject_visit', 'household_member', 'household_structure', 'household', 'plot']
+class CrfModelManager(VisitTrackingCrfModelManager, models.Manager):
+    pass
 
 
 class CrfModelMixin(VisitTrackingCrfModelMixin, UrlMixin, RequiresConsentMixin,

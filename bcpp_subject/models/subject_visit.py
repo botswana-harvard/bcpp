@@ -1,16 +1,15 @@
 from django.db import models
 
+from edc_appointment.models import Appointment
 from edc_base.model.models import BaseUuidModel, HistoricalRecords
 from edc_consent.model_mixins import RequiresConsentMixin
 from edc_metadata.model_mixins import CreatesMetadataModelMixin
 from edc_visit_tracking.managers import VisitModelManager
 from edc_visit_tracking.model_mixins import VisitModelMixin
 
-from bcpp_household_member.models import HouseholdMember
+from member.models import HouseholdMember
 
 from ..choices import VISIT_UNSCHEDULED_REASON
-
-from .appointment import Appointment
 
 
 class SubjectVisit(VisitModelMixin, CreatesMetadataModelMixin, RequiresConsentMixin, BaseUuidModel):
@@ -42,5 +41,4 @@ class SubjectVisit(VisitModelMixin, CreatesMetadataModelMixin, RequiresConsentMi
 
     class Meta:
         app_label = "bcpp_subject"
-        verbose_name = "Subject Visit"
         consent_model = 'bcpp_subject.subjectconsent'

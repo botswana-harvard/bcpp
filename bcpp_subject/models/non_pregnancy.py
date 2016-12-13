@@ -3,8 +3,7 @@ from django.db import models
 from edc_base.model.models import HistoricalRecords
 from edc_constants.choices import YES_NO_UNSURE
 
-from .model_mixins import CrfModelMixin
-from .model_mixins import PregnancyMixin
+from .model_mixins import CrfModelMixin, PregnancyMixin
 
 
 class NonPregnancy (PregnancyMixin, CrfModelMixin):

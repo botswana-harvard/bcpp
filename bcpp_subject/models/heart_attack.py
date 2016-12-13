@@ -4,8 +4,7 @@ from edc_base.model.models import HistoricalRecords, BaseUuidModel
 from edc_base.model.fields import OtherCharField
 from edc_base.model.validators import date_not_future
 
-from bcpp_list.models import HeartDisease
-
+from .list_models import HeartDisease
 from .model_mixins import CrfModelMixin
 
 

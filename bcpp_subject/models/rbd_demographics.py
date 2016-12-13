@@ -3,10 +3,9 @@ from django.db import models
 from edc_base.model.models import HistoricalRecords
 from edc_base.model.fields import OtherCharField
 
-from bcpp_list.models import LiveWith, Religion, EthnicGroups
-
 from ..choices import MARITAL_STATUS_CHOICE
 
+from .list_models import LiveWith, Religion, EthnicGroups
 from .model_mixins import CrfModelMixin
 
 

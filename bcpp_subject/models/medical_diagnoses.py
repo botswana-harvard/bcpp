@@ -3,8 +3,7 @@ from django.db import models
 from edc_base.model.models import HistoricalRecords
 from edc_constants.choices import YES_NO_DWTA
 
-from bcpp_list.models import Diagnoses
-
+from .list_models import Diagnoses
 from .model_mixins import CrfModelMixin
 
 

@@ -7,7 +7,7 @@ from django.utils import timezone
 from edc_appointment.model_mixins import CreateAppointmentsMixin
 from edc_base.model.models import BaseUuidModel, HistoricalRecords
 from edc_base.model.models.url_mixin import UrlMixin
-from edc_base.utils.age import formatted_age
+from edc_base.utils import formatted_age
 
 
 def get_uuid():

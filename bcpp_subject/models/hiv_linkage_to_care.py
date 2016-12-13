@@ -6,9 +6,7 @@ from edc_base.model.fields import OtherCharField
 from ..choices import (
     COMMUNITY_NA, KEPT_APPT, TYPE_OF_EVIDENCE, RECOMMENDED_THERAPY, REASON_RECOMMENDED, STARTERED_THERAPY)
 
-from .appointment import Appointment
 from .model_mixins import CrfModelMixin
-from .subject_visit import SubjectVisit
 
 
 class HivLinkageToCare (CrfModelMixin, BaseUuidModel):
@@ -118,28 +116,6 @@ class HivLinkageToCare (CrfModelMixin, BaseUuidModel):
     evidence_not_refered_other = OtherCharField()
 
     history = HistoricalRecords()
-
-    def previous_appt(self):
-        timepoints = range(0, 0)
-        try:
-            subject_visit = SubjectVisit.objects.get(id=self.query_id)
-        except SubjectVisit.DoesNotExist:
-            subject_visit = None
-        if self.id:
-            registered_subject = self.subject_visit.appointment.registered_subject
-            timepoints = range(0, self.subject_visit.appointment.visit_definition.time_point)
-        elif subject_visit:
-            registered_subject = subject_visit.appointment.registered_subject
-            timepoints = range(0, subject_visit.appointment.visit_definition.time_point)
-        if len(timepoints) > 0:
-            timepoints.reverse()
-        for point in timepoints:
-            try:
-                return Appointment.objects.get(registered_subject=registered_subject,
-                                               visit_definition__time_point=point)
-            except Appointment.DoesNotExist:
-                pass
-        return None
 
     def last_community(self, request):
         return self.subject_visit.household_member.household_structure.household.plot
