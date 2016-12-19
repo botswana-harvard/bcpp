@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
 import os
-
+import sys
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -61,6 +61,37 @@ INSTALLED_APPS = [
     'bcpp_subject.apps.AppConfig',
 ]
 
+if 'test' in sys.argv:  # and 'mysql' not in DATABASES.get('default').get('ENGINE'):
+    MIGRATION_MODULES = {
+        "django_crypto_fields": None,
+        "edc_call_manager": None,
+        "edc_appointment": None,
+        "edc_call_manager": None,
+        "edc_consent": None,
+        "edc_death_report": None,
+        "edc_export": None,
+        "edc_identifier": None,
+        "edc_metadata": None,
+        "edc_rule_groups": None,
+        "edc_registration": None,
+        "edc_sync": None,
+        "bcpp": None,
+        "bcpp_subject": None,
+        "plot": None,
+        "household": None,
+        "member": None,
+        "survey": None,
+        'admin': None,
+        "auth": None,
+        'bcpp_map': None,
+        'contenttypes': None,
+        'sessions': None,
+    }
+if 'test' in sys.argv:
+    PASSWORD_HASHERS = ('django_plainpasswordhasher.PlainPasswordHasher', )
+if 'test' in sys.argv:
+    DEFAULT_FILE_STORAGE = 'inmemorystorage.InMemoryStorage'
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -95,12 +126,25 @@ WSGI_APPLICATION = 'bcpp.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+if 'test' in sys.argv:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'edc',
+            'USER': 'postgres',
+            'PASSWORD': 'postgres',
+            'HOST': '127.0.0.1',
+            'PORT': '5432',
+            'TEST': 'testedcbcpp'
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    }
 
 
 # Password validation
@@ -138,9 +182,11 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-DEVICE_ID = '00'
+
 CURRENT_MAP_AREA = 'bhp'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+if 'test' in sys.argv:
+    DEVICE_ID = '99'
+GIT_DIR = BASE_DIR

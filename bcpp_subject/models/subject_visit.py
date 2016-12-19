@@ -17,9 +17,9 @@ class SubjectVisit(VisitModelMixin, CreatesMetadataModelMixin, RequiresConsentMi
     """A model completed by the user that captures the covering information for the data collected
     for this timepoint/appointment, e.g.report_datetime."""
 
-    appointment = models.OneToOneField(Appointment)
+    appointment = models.OneToOneField(Appointment, on_delete=models.PROTECT)
 
-    household_member = models.ForeignKey(HouseholdMember)
+    household_member = models.ForeignKey(HouseholdMember, on_delete=models.PROTECT)
 
     reason_unscheduled = models.CharField(
         verbose_name="If 'Unscheduled' above, provide reason for the unscheduled visit",

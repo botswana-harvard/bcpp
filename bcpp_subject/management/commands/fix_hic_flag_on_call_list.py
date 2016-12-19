@@ -18,7 +18,7 @@ class Command(BaseCommand):
         HicEnrollment = get_model('bcpp_subject', 'HicEnrollment')
 
         hic_enrollments = HicEnrollment.objects.filter(
-            subject_visit__household_member__household_structure__household__plot__community__in=[
+            subject_visit__household_member__household_structure__household__plot__map_area__in=[
                 'ranaka', 'digawana'],
             hic_permission=YES)
         total = hic_enrollments.count()

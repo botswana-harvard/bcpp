@@ -16,7 +16,7 @@ class Command(BaseCommand):
             raise CommandError('Missing \'community\' parameters.')
         community_name = args[0]
         pre_orders = PreOrder.objects.filter(
-            subject_visit__household_member__household_structure__household__plot__community=community_name,
+            subject_visit__household_member__household_structure__household__plot__map_area=community_name,
             panel__name__in=[POC_VIRAL_LOAD, ABBOTT_VIRAL_LOAD])
         total_pre_oders = len(pre_orders)
         count = 0

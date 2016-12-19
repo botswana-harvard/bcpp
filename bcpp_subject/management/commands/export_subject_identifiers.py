@@ -35,7 +35,7 @@ class Command(BaseCommand):
                     ~Q(household_structure__household__plot__status='bcpp_clinic'),
                     Q(registered_subject__subject_identifier__startswith='066'),
                     ~Q(registered_subject__registration_status='member'),
-                    household_structure__household__plot__community__in=communities).order_by(
+                    household_structure__household__plot__map_area__in=communities).order_by(
                         'registered_subject__subject_identifier'):
                 n += 1
                 try:

@@ -62,7 +62,7 @@ class Command(BaseCommand):
         n = 0
         print 'auto-creating RepresentativeEligibility'
         subject_consents = SubjectConsent.objects.filter(
-            household_member__household_structure__household__plot__community__in=['ranaka', 'digawana']).order_by(
+            household_member__household_structure__household__plot__map_area__in=['ranaka', 'digawana']).order_by(
                 'subject_identifier')
         consent_count = subject_consents.count()
         print 'Found {} consents from ranaka, digawana'.format(consent_count)
@@ -88,7 +88,7 @@ class Command(BaseCommand):
         SubjectConsent = get_model('bcpp_subject', 'SubjectConsent')
         print 'Auto create enrollment checklist if required and save consent to flag household_structure as enrolled'
         subject_consents = SubjectConsent.objects.filter(
-            household_member__household_structure__household__plot__community__in=['ranaka', 'digawana']).order_by(
+            household_member__household_structure__household__plot__map_area__in=['ranaka', 'digawana']).order_by(
                 'subject_identifier')
         consent_count = subject_consents.count()
         consents, enrollments = 0, 0

@@ -15,7 +15,7 @@ class Command(BaseCommand):
             raise CommandError('Missing \'using\' parameters.')
         community_name = args[0]
         subject_requisitions = SubjectRequisition.objects.filter(
-            subject_visit__household_member__household_structure__household__plot__community=community_name)
+            subject_visit__household_member__household_structure__household__plot__map_area=community_name)
         total_subject_requisitions = len(subject_requisitions)
         count = 0
         for subject_requisition in subject_requisitions:

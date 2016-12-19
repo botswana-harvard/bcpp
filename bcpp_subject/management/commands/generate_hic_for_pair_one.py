@@ -79,7 +79,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         if HicEnrollment.objects.filter(
-                subject_visit__household_member__household_structure__household__plot__community__in=[
+                subject_visit__household_member__household_structure__household__plot__map_area__in=[
                     'ranaka', 'digawana']).count() != 0:
             raise CommandError('This command has already been run and cannot be run twice.')
         try:
@@ -87,7 +87,7 @@ class Command(BaseCommand):
         except IndexError:
             verbose = False
         subject_consents = SubjectConsent.objects.filter(
-            household_member__household_structure__household__plot__community__in=['ranaka', 'digawana'],
+            household_member__household_structure__household__plot__map_area__in=['ranaka', 'digawana'],
             household_member__household_structure__survey__survey_slug=BASELINE_SURVEY)
         total_consents = subject_consents.count()
         hic_for_consents(verbose, subject_consents, total_consents)
