@@ -8,6 +8,7 @@ from django.apps import AppConfig as DjangoAppConfig
 from django.core.management.color import color_style
 
 from edc_base.utils import get_utcnow
+from edc_base_test.apps import AppConfig as EdcBaseTestAppConfigParent
 from edc_consent.apps import AppConfig as EdcConsentAppConfigParent
 from edc_consent.consent_config import ConsentConfig
 from edc_constants.constants import FAILED_ELIGIBILITY, MALE, FEMALE
@@ -29,6 +30,11 @@ style = color_style()
 
 class AppConfig(DjangoAppConfig):
     name = 'bcpp'
+
+
+class EdcBaseTestAppConfig(EdcBaseTestAppConfigParent):
+    consent_model = 'bcpp_subject.subjectconsent'
+    survey_group_name = 'bcpp-survey'
 
 
 class EdcDeviceAppConfig(EdcDeviceAppConfigParent):
