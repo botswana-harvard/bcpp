@@ -1,19 +1,17 @@
 import pytz
-import os
 import sys
 
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
 from django.apps import AppConfig as DjangoAppConfig
-from django.conf import settings
 from django.core.management.color import color_style
 
 from edc_base.utils import get_utcnow
 from edc_consent.apps import AppConfig as EdcConsentAppConfigParent
 from edc_consent.consent_config import ConsentConfig
 from edc_constants.constants import FAILED_ELIGIBILITY, MALE, FEMALE
-from edc_device.apps import AppConfig as EdcDeviceAppConfigParent
+from edc_device.apps import AppConfig as EdcDeviceAppConfigParent, DevicePermission
 from edc_identifier.apps import AppConfig as EdcIdentifierAppConfigParent
 # from edc_label.apps import AppConfig as EdcLabelConfigParent
 from edc_map.apps import AppConfig as EdcMapAppConfigParent
@@ -23,6 +21,8 @@ from edc_timepoint.apps import AppConfig as EdcTimepointAppConfigParent
 from edc_timepoint.timepoint import Timepoint
 from edc_visit_tracking.apps import AppConfig as EdcVisitTrackingAppConfigParent
 from edc_visit_tracking.constants import SCHEDULED, UNSCHEDULED, LOST_VISIT
+from edc_device.constants import SERVER, CENTRAL_SERVER, CLIENT
+from survey.apps import CurrentSurveys, CurrentSurvey, AppConfig as SurveyAppConfigParent
 
 style = color_style()
 
@@ -32,7 +32,20 @@ class AppConfig(DjangoAppConfig):
 
 
 class EdcDeviceAppConfig(EdcDeviceAppConfigParent):
-    device_id = '99'
+
+    device_permissions = {
+        'plot.plot': DevicePermission(
+            model='plot.plot',
+            create_roles=[SERVER, CENTRAL_SERVER],
+            change_roles=[SERVER, CENTRAL_SERVER, CLIENT])
+    }
+
+
+class SurveyAppConfig(SurveyAppConfigParent):
+    current_surveys = CurrentSurveys(*[
+        CurrentSurvey('bcpp-survey.bcpp-year-1.bhs.test_community', 0),
+        CurrentSurvey('bcpp-survey.bcpp-year-2.ahs.test_community', 1),
+        CurrentSurvey('bcpp-survey.bcpp-year-3.ahs.test_community', 2)])
 
 
 class EdcConsentAppConfig(EdcConsentAppConfigParent):
