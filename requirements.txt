@@ -1,10 +1,6 @@
-Django
-django-crispy-forms
 git+https://github.com/erikvw/django-crypto-fields.git
 git+https://github.com/erikvw/django-revision.git
 git+https://github.com/botswana-harvard/edc-appointment.git
-python-dateutil
-pytz
 git+https://github.com/botswana-harvard/edc-base.git
 git+https://github.com/botswana-harvard/edc-subset-manager.git
 git+https://github.com/botswana-harvard/edc-device.git
