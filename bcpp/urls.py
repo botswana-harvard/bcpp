@@ -17,10 +17,13 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from bcpp.views import SearchPlotView, SearchBhsSubjectView
 
+from plot.admin_site import plot_admin
+
 from edc_base.views import LogoutView
 
 
 urlpatterns = [
+    url(r'^admin/', plot_admin.urls),
     url('plot/', include('plot.urls')),
     url('household/', include('household.urls')),
     url('member/', include('member.urls')),
