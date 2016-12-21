@@ -9,7 +9,7 @@ class SearchHouseholdView(TemplateView, FormView):
     project_name = 'BCPP'
     form_class = SearchHouseholdForm
     paginate_by = 4
-    subject_dashboard_url_name = 'household_search_url'
+    #subject_dashboard_url_name = 'household_search_url'
     search_url_name = 'search_url'
 
     def get_success_url(self):
