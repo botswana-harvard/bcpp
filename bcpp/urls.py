@@ -28,4 +28,5 @@ urlpatterns = [
     url('subject/', include('bcpp_subject.urls')),
     url(r'^admin/', admin.site.urls),
     url(r'^search/$', SearchPlotView.as_view(), name='search_url'),
+    url(r'^household_search/$', SearchPlotView.as_view(), name='household_search_url'),
 ]

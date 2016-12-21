@@ -24,7 +24,7 @@ class SearchForm(forms.Form):
             FieldWithButtons('search_term', StrictButton('Search', type='submit')))
         
         
-class SearchHouseholdForm(forms.SearchForm):
+class SearchHouseholdForm(SearchForm):
 
     def __init__(self, *args, **kwargs):
         super(SearchForm, self).__init__(*args, **kwargs)
