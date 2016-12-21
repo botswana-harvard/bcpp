@@ -22,9 +22,9 @@ class SearchForm(forms.Form):
         self.helper.html5_required = True
         self.helper.layout = Layout(
             FieldWithButtons('search_term', StrictButton('Search', type='submit')))
-        
-        
-class SearchHouseholdForm(forms.SearchForm):
+
+
+class SearchHouseholdForm(SearchForm):
 
     def __init__(self, *args, **kwargs):
         super(SearchForm, self).__init__(*args, **kwargs)
@@ -36,9 +36,10 @@ class SearchPlotForm(SearchForm):
     def __init__(self, *args, **kwargs):
         super(SearchPlotForm, self).__init__(*args, **kwargs)
         self.helper.form_action = reverse('plot_search_url')
-        
+
 
 class SearchBHSSubjectForm(SearchForm):
+
     def __init__(self, *args, **kwargs):
-        super(SearchPlotForm, self).__init__(*args, **kwargs)
+        super(SearchBHSSubjectForm, self).__init__(*args, **kwargs)
         self.helper.form_action = reverse('bhs_subject_search')
