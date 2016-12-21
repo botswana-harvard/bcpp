@@ -7,7 +7,7 @@ from bcpp.forms import SearchBHSSubjectForm
 
 
 class SearchBhsSubjectView(EdcBaseViewMixin, TemplateView, FormView):
-    template_name = 'bcpp_dashboard/search/search_bhs_subjects.html'
+    template_name = 'search/search_bhs_subjects.html'
     form_class = SearchBHSSubjectForm
     paginate_by = 4
 

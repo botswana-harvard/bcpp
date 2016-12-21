@@ -34,7 +34,7 @@ class QuerysetWrapper:
 
 class SearchPlotView(EdcBaseViewMixin, TemplateView, FormView):
     form_class = SearchPlotForm
-    template_name = 'bcpp_dashboard/search/search_plot.html'
+    template_name = 'search/search_plot.html'
     paginate_by = 10
     subject_dashboard_url_name = 'plot_search_url'
     search_url_name = 'plot_search_url'

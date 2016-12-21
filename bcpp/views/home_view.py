@@ -7,7 +7,7 @@ from edc_base.view_mixins import EdcBaseViewMixin
 
 
 class HomeView(EdcBaseViewMixin, TemplateView):
-    template_name = 'bcpp_dashboard/home.html'
+    template_name = 'home.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
