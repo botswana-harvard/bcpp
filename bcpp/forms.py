@@ -9,7 +9,7 @@ from crispy_forms.layout import Layout
 class SearchForm(forms.Form):
 
     search_term = forms.CharField(
-        label='Search',
+        label='',
         max_length=36)
 
     def __init__(self, *args, **kwargs):
