@@ -7,7 +7,7 @@ from django.views.generic import TemplateView, FormView
 
 from edc_base.view_mixins import EdcBaseViewMixin
 
-from plot.models import Plot
+from plot.models import Plot, PlotLog
 from ..forms import SearchPlotForm
 
 
@@ -22,22 +22,22 @@ class QuerysetWrapper:
             for obj in self.qs:
                 try:
                     plot = Plot.objects.get(plot_identifier=obj.plot_identifier)
-                    obj.subject_identifier = plot.subject_identifier
+                    obj.plot_identifier = plot.plot_identifier
                 except MultipleObjectsReturned:
                     plots = Plot.objects.filter(plot_identifier=obj.plot_identifier)
                     obj.plot_identifier = plots[0].plot_identifier
                 except Plot.DoesNotExist:
-                    obj.subject_identifier = None
+                    obj.plot_identifier = None
                 self._object_list.append(obj)
         return self._object_list
 
 
 class SearchPlotView(EdcBaseViewMixin, TemplateView, FormView):
     form_class = SearchPlotForm
-    template_name = 'bcpp_dashboard/search_plot.html'
+    template_name = 'bcpp_dashboard/search/search_plot.html'
     paginate_by = 10
     subject_dashboard_url_name = 'plot_search_url'
-    search_url_name = 'search_url'
+    search_url_name = 'plot_search_url'
 
     def __init__(self, **kwargs):
         self.maternal_eligibility = None
@@ -73,12 +73,19 @@ class SearchPlotView(EdcBaseViewMixin, TemplateView, FormView):
     def get_context_data(self, **kwargs):
         context = super(SearchPlotView, self).get_context_data(**kwargs)
         qs = Plot.objects.all().order_by('plot_identifier', '-created')
-        results = QuerysetWrapper(qs).object_list
+        paginated_results = QuerysetWrapper(qs).object_list
+        results_log = []
+        for plot in self.paginate(paginated_results):
+            try:
+                plot_log = PlotLog.objects.get(plot=plot)
+                results_log.append([plot, plot_log])
+            except PlotLog.DoesNotExist:
+                results_log.append([plot, None])
         context.update(
             # site_header=admin.site.site_header,
             subject_dashboard_url_name=self.subject_dashboard_url_name,
             search_url_name=self.search_url_name,
-            results=self.paginate(results))
+            results=self.paginate(results_log))
         return context
 
     def paginate(self, qs):

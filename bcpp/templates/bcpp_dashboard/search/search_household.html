@@ -17,12 +17,9 @@
 
    <div class="container">
       <div class="col-md-12">
-        <div class="panel-group">
-          <div class="panel panel-info">
-              <div class="panel-heading"><a title="add maternal eligibility" href="{% url 'td_maternal_admin:td_maternal_maternaleligibility_add' %}?next={{ search_url_name }}" class="btn btn-sm btn-default" role="button"><span class="glyphicon glyphicon-plus"></span> Add Household</a>
-                <span class="pull-right">{% crispy form %}</span></div>
-                <div class="panel-body">
-                  {% if results %}
+        <div class="panel panel-success">
+          <div class="panel-heading"> Household </div>
+            <div class="panel-body">
                     <div class="table-responsive">
                     <table class="table table-condensed table-hover">
                       <thead>
@@ -35,16 +32,26 @@
 	                      <th>User</th>
 	                      <th>Modified</th>
 	                      <th>Host</th>
-
                       </thead>
+                      <tbody>
+						<tr> 
+            				<td>  </td>
+            				<td>  </td>
+            				<td>  </td>  
+            				<td>  </td>  
+            				<td>  </td>  
+            				<td>  </td>  
+            				<td>  </td>  
+            				<td>  </td>  
+            				<td>  </td>  
+            			</tr>						
+                      </tbody>
                   </table>
                   {% include 'bcpp_dashboard/paginator.html' %}
                   </div>
-                {% endif %}
               </div>
             </div>
           </div>
-        </div>
   </div>
 
 {% endblock main %}
