@@ -6,7 +6,7 @@ from edc_base.view_mixins import EdcBaseViewMixin
 from bcpp.forms import SearchHouseholdForm
 
 
-class SearchHouseholdView(TemplateView, FormView):
+class SearchHouseholdView(EdcBaseViewMixin, TemplateView, FormView):
     template_name = 'bcpp_dashboard/search/search_household.html'
     project_name = 'BCPP'
     form_class = SearchHouseholdForm
@@ -23,7 +23,7 @@ class SearchHouseholdView(TemplateView, FormView):
         return self.render_to_response(context)
 
     def get_success_url(self):
-        return reverse('household_search_url')
+        return reverse('household_search')
 
     def get_context_data(self, **kwargs):
         context = super(SearchHouseholdView, self).get_context_data(**kwargs)
