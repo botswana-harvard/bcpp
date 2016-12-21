@@ -1,4 +1,3 @@
-from django.contrib import admin
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import MultipleObjectsReturned
 from django.core.paginator import Paginator, EmptyPage
@@ -22,16 +21,12 @@ class QuerysetWrapper:
         if not self._object_list:
             for obj in self.qs:
                 try:
-                    plot = Plot.objects.get(maternal_eligibility_reference=obj.reference)
-                    obj.maternal_consent_pks = [str(plot.pk)]
+                    plot = Plot.objects.get(plot_identifier=obj.plot_identifier)
                     obj.subject_identifier = plot.subject_identifier
                 except MultipleObjectsReturned:
-                    maternal_consents = Plot.objects.filter(maternal_eligibility_reference=obj.reference)
-                    obj.maternal_consent_pks = [
-                        str(obj.pk) for obj in maternal_consents]
-                    obj.subject_identifier = maternal_consents[0].subject_identifier
+                    plots = Plot.objects.filter(plot_identifier=obj.plot_identifier)
+                    obj.plot_identifier = plots[0].plot_identifier
                 except Plot.DoesNotExist:
-                    obj.maternal_consent_pks = None
                     obj.subject_identifier = None
                 self._object_list.append(obj)
         return self._object_list
@@ -39,7 +34,7 @@ class QuerysetWrapper:
 
 class SearchPlotView(EdcBaseViewMixin, TemplateView, FormView):
     form_class = SearchForm
-    template_name = 'td_dashboard/search_plot.html'
+    template_name = 'bcpp_dashboard/search_plot.html'
     paginate_by = 10
     subject_dashboard_url_name = 'plot_search_url'
     search_url_name = 'search_url'
@@ -56,20 +51,19 @@ class SearchPlotView(EdcBaseViewMixin, TemplateView, FormView):
         if form.is_valid():
             search_term = form.cleaned_data['search_term']
             options = (
-                Q(subject_identifier__icontains=search_term) |
-                Q(reference__icontains=search_term) |
+                Q(plot_identifier__icontains=search_term) |
                 Q(user_created__iexact=search_term) |
                 Q(user_modified__iexact=search_term)
             )
             try:
-                qs = [MaternalEligibility.objects.get(options)]
-            except MaternalEligibility.DoesNotExist:
+                qs = [Plot.objects.get(options)]
+            except Plot.DoesNotExist:
                 qs = None
                 form.add_error(
                     'search_term',
                     'No matching records for \'{}\'.'.format(search_term))
             except MultipleObjectsReturned:
-                qs = MaternalEligibility.objects.filter(options).order_by('subject_identifier', '-created')
+                qs = Plot.objects.filter(options).order_by('plot_identifier', '-created')
             context = self.get_context_data()
             context.update(
                 form=form,
@@ -78,7 +72,7 @@ class SearchPlotView(EdcBaseViewMixin, TemplateView, FormView):
 
     def get_context_data(self, **kwargs):
         context = super(SearchPlotView, self).get_context_data(**kwargs)
-        qs = MaternalEligibility.objects.all().order_by('subject_identifier', '-created')
+        qs = Plot.objects.all().order_by('plot_identifier', '-created')
         results = QuerysetWrapper(qs).object_list
         context.update(
             # site_header=admin.site.site_header,

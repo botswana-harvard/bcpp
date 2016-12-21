@@ -22,4 +22,5 @@ urlpatterns = [
     url('member/', include('member.urls')),
     url('subject/', include('bcpp_subject.urls')),
     url(r'^admin/', admin.site.urls),
+    url(r'^search/$', SearchPlotView.as_view(), name='search_url'),
 ]
