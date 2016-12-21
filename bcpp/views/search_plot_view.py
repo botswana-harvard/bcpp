@@ -8,6 +8,7 @@ from django.views.generic import TemplateView, FormView
 from edc_base.view_mixins import EdcBaseViewMixin
 
 from plot.models import Plot, PlotLog
+
 from ..forms import SearchPlotForm
 
 
