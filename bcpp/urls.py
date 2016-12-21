@@ -16,7 +16,10 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 
+from bcpp.views.search_bhs_subject_view import BHSSubjectSearchView
+
 urlpatterns = [
+    url(r'^', BHSSubjectSearchView.as_view(), name='bhs_subject_search'),
     url('plot/', include('plot.urls')),
     url('household/', include('household.urls')),
     url('member/', include('member.urls')),
