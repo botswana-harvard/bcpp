@@ -1,5 +1,4 @@
 """bcpp URL Configuration
-
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/1.10/topics/http/urls/
 Examples:
@@ -15,7 +14,7 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-from bcpp.views import SearchPlotView, SearchBhsSubjectView, HomeView
+from bcpp.views import SearchPlotView, SearchBhsSubjectView, HomeView, SearchHouseholdView
 
 from edc_base.views import LogoutView
 
@@ -29,7 +28,7 @@ urlpatterns = [
     url(r'^plot_search/(?P<page>\d+)/', SearchPlotView.as_view(), name='plot_search_url'),
     url(r'^plot_search/', SearchPlotView.as_view(), name='plot_search_url'),
     url(r'^bhs_search/$', SearchBhsSubjectView.as_view(), name='bhs_subject_search'),
-    url(r'^household_search/$', SearchPlotView.as_view(), name='household_search'),
+    url(r'^household_search/$', SearchHouseholdView.as_view(), name='household_search'),
     url(r'^edc/', include('edc_base.urls', 'edc-base')),
     url(r'^tz_detect/', include('tz_detect.urls')),
     url(r'logout', LogoutView.as_view(pattern_name='login_url'), name='logout_url'),
