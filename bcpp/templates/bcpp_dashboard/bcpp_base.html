@@ -1,0 +1,38 @@
+  {% extends 'edc_base/base.html' %}
+
+  {% load staticfiles %}
+  {% load crispy_forms_tags %}
+  
+  {% block topbar %}
+  	<nav class="navbar navbar-inverse navbar-fixed-top">
+
+      <div class="container-fluid">
+
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <span class="navbar-brand">{% if protocol %}{{ protocol }}: {% endif %}{{ protocol_name |default:project_name }}</span>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="{% url 'plot_search_url' %}">PLOTS</a></li>
+            <li><a href="{% url 'plot_search_url' %}">HOUSEHOLDS</a></li>
+     		<li><a href="#">MEMBERS</a></li>
+     		<li><a href="{% url 'bhs_subject_search' %}">BHS SUBJECTS</a></li>
+     		<li><a href="#">CLINIC SUBJECTS</a></li>
+            <li id="li-topbar-home"><a class="glyphicon glyphicon-home" title="home" href="{% url 'home_url' %}"></a></li>
+            {% block settings_url %}<li id="li-topbar-settings"><a class="glyphicon glyphicon-wrench" title="settings" href="{% url 'edc-base:settings_url' %}"></a></li>{% endblock settings_url %}
+            <li id="li-topbar-user-profile"><a title="user profile" href="{% url "admin:auth_user_change" user.id %}">{{ user.username }}</a></li>
+            <li id="li-topbar-logout"><a class="glyphicon glyphicon-log-out" title="logout" href="{% url 'logout_url' %}"></a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  {% endblock topbar %}
+  
+
+  
