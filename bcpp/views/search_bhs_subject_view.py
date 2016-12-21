@@ -4,7 +4,7 @@ from django.views.generic import FormView, TemplateView
 from bcpp.forms import SearchBHSSubjectForm
 
 
-class BHSSubjectSearchView(TemplateView, FormView):
+class SearchBhsSubjectView(TemplateView, FormView):
     template_name = 'bcpp_dashboard/bhs_subjects.html'
     project_name = 'BCPP'
     form_class = SearchBHSSubjectForm
@@ -14,5 +14,5 @@ class BHSSubjectSearchView(TemplateView, FormView):
         return reverse('bhs_subject_search')
 
     def get_context_data(self, **kwargs):
-        context = super(BHSSubjectSearchView, self).get_context_data(**kwargs)
+        context = super(SearchBhsSubjectView, self).get_context_data(**kwargs)
         return context

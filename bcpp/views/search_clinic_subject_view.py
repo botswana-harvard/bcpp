@@ -43,9 +43,9 @@ class SearchPlotView(EdcBaseViewMixin, TemplateView, FormView):
         self.maternal_eligibility = None
         super(SearchPlotView, self).__init__(**kwargs)
 
-#     @method_decorator(login_required)
-#     def dispatch(self, *args, **kwargs):
-#         return super(SearchPlotView, self).dispatch(*args, **kwargs)
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(SearchPlotView, self).dispatch(*args, **kwargs)
 
     def form_valid(self, form):
         if form.is_valid():

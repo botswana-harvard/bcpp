@@ -16,7 +16,7 @@ class SearchForm(forms.Form):
         super(SearchForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper(self)
         self.helper = FormHelper()
-        self.helper.form_action = reverse('home_url')
+        self.helper.form_action = reverse('plot_search_url')
         self.helper.form_id = 'form-search'
         self.helper.form_method = 'post'
         self.helper.html5_required = True
@@ -43,3 +43,9 @@ class SearchBHSSubjectForm(SearchForm):
     def __init__(self, *args, **kwargs):
         super(SearchBHSSubjectForm, self).__init__(*args, **kwargs)
         self.helper.form_action = reverse('bhs_subject_search')
+
+
+class SearchClinicSubjectForm(SearchForm):
+    def __init__(self, *args, **kwargs):
+        super(SearchPlotForm, self).__init__(*args, **kwargs)
+        self.helper.form_action = reverse('clinic_subject_search_url')
