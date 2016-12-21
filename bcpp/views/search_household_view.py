@@ -5,7 +5,7 @@ from bcpp.forms import SearchHouseholdForm
 
 
 class SearchHouseholdView(TemplateView, FormView):
-    template_name = 'bcpp_dashboard/search_household.html'
+    template_name = 'bcpp_dashboard/search/search_household.html'
     project_name = 'BCPP'
     form_class = SearchHouseholdForm
     paginate_by = 4
