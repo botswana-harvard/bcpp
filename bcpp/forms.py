@@ -27,7 +27,7 @@ class SearchForm(forms.Form):
 class SearchHouseholdForm(SearchForm):
 
     def __init__(self, *args, **kwargs):
-        super(SearchForm, self).__init__(*args, **kwargs)
+        super(SearchHouseholdForm, self).__init__(*args, **kwargs)
         self.helper.form_action = reverse('household_search_url')
 
 
