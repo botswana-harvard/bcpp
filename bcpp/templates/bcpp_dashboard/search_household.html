@@ -1,0 +1,51 @@
+  {% extends 'edc_base/base.html' %}
+
+  {% load staticfiles %}
+  {% load crispy_forms_tags %}
+
+  {% block extra-scripts %}
+    <script type="text/javascript" src="{% static "" %}"></script>
+  {% endblock extra-scripts %}
+
+
+  {% block settings_url %}
+  <li id="li-topbar-settings"><a class="glyphicon glyphicon-wrench" title="settings" href="#"></a></li>
+  <li id="li-topbar-settings"><a class="fa fa-group" title="settings" href="#"></a></li>
+  {% endblock settings_url %}
+
+  {% block main %}
+
+   <div class="container">
+      <div class="col-md-12">
+        <div class="panel-group">
+          <div class="panel panel-info">
+              <div class="panel-heading"><a title="add maternal eligibility" href="{% url 'td_maternal_admin:td_maternal_maternaleligibility_add' %}?next={{ search_url_name }}" class="btn btn-sm btn-default" role="button"><span class="glyphicon glyphicon-plus"></span> Add Household</a>
+                <span class="pull-right">{% crispy form %}</span></div>
+                <div class="panel-body">
+                  {% if results %}
+                    <div class="table-responsive">
+                    <table class="table table-condensed table-hover">
+                      <thead>
+	                      <th>#</th>
+	                      <th>Household</th>
+	                      <th>Plot</th>
+	                      <th>Composition</th>
+	                      <th>Member</th>
+	                      <th>Community</th>
+	                      <th>User</th>
+	                      <th>Modified</th>
+	                      <th>Host</th>
+
+                      </thead>
+                  </table>
+                  {% include 'bcpp_dashboard/paginator.html' %}
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+  </div>
+
+{% endblock main %}
+                    

@@ -1,0 +1,68 @@
+  {% extends 'edc_base/base.html' %}
+
+  {% load staticfiles %}
+  {% load crispy_forms_tags %}
+
+  {% block extra-scripts %}
+    <script type="text/javascript" src="{% static "" %}"></script>
+  {% endblock extra-scripts %}
+
+
+  {% block settings_url %}
+  <li id="li-topbar-settings"><a class="glyphicon glyphicon-wrench" title="settings" href="#"></a></li>
+  <li id="li-topbar-settings"><a class="fa fa-group" title="settings" href="#"></a></li>
+  {% endblock settings_url %}
+
+  {% block main %}
+
+   <div class="container">
+      <div class="col-md-12">
+        <div class="panel-group">
+          <div class="panel panel-info">
+              <div class="panel-heading"><a title="add plot" href="#" class="btn btn-sm btn-default" role="button"><span class="glyphicon glyphicon-plus"></span> Add Plot</a>
+                <span class="pull-right">{% crispy form %}</span></div>
+                <div class="panel-body">
+                  {% if results %}
+                    <div class="table-responsive">
+                    <table class="table table-condensed table-hover">
+                      <thead>
+                      		<th>#</th>
+                      		<th>Plot</th>
+                      		<th>Action</th>
+                      		<th>Status</th>
+                      		<th>Households</th>
+                      		<th>Members</th>
+                      		<th>Log Report</th>
+                      		<th>Map</th>
+                      		<th>Community</th>
+                      		<th>GPS Radius</th>
+                      		<th>Modified Date</th>
+                      </thead>
+                      <tbody>
+                        {% for obj in results %}
+                          <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ obj.plot_identifier }}</td>
+                            <td></td>
+                            <td>{{ obj.status }}</td>
+                            <td><a role="button" class="btn btn-sm btn-success" href="#"><span class="glyphicon glyphicon-pencil"></span> Household</a></td>
+                            <td><a role="button" class="btn btn-sm btn-success" href="#"><span class="glyphicon glyphicon-pencil"></span> Members</a></td>
+                            <td><a role="button" class="btn btn-sm btn-success" href="#"><span class="glyphicon glyphicon-plus"></span>Add New Entry</a></td>
+                            <td>{{ obj.community }}</td>
+                            <td><a role="button" class="btn btn-sm btn-success" href="#"><span class="glyphicon glyphicon-pencil"></span> View Map</a></td>
+                            <td></td>
+                            <td>{{ obj.modified|date:"Y-m-d H:i" }}</td>
+                          </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                    {% include 'bcpp_dashboard/paginator.html' %}
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+    </div>
+
+{% endblock main %}
