@@ -29,6 +29,7 @@ urlpatterns = [
     url('member/', include('member.urls')),
     url('subject/', include('bcpp_subject.urls')),
     url(r'^admin/', admin.site.urls),
+    url(r'^plot_search/(?P<page>\d+)/', SearchPlotView.as_view(), name='plot_search_url'),
     url(r'^plot_search/', SearchPlotView.as_view(), name='plot_search_url'),
     url(r'^bhs_search/$', SearchBhsSubjectView.as_view(), name='bhs_subject_search'),
     url(r'^household_search/$', SearchPlotView.as_view(), name='home_url'),
