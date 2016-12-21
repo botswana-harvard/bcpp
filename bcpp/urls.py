@@ -19,7 +19,6 @@ from django.contrib import admin
 urlpatterns = [
     url('plot/', include('plot.urls')),
     url('household/', include('household.urls')),
-    url('survey/', include('survey.urls')),
     url('member/', include('member.urls')),
     url('subject/', include('bcpp_subject.urls')),
     url(r'^admin/', admin.site.urls),

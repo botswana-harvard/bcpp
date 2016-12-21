@@ -1,0 +1,37 @@
+    <div class="paginator" style="text-align:center">
+     <span class="step-links">
+     	{% if results %}
+    	 <a href="{% url search_url_name page=1 %}" class="btn btn-sm btn-default"><<</a>
+    	{% else %}
+    	<a class="btn btn-sm disabled btn-default"><<</a>
+    	{% endif %}
+    	
+        {% if results.has_previous %}
+            <a href="{% url search_url_name page=results.previous_page_number %}" class="btn btn-sm btn-default"><</a>
+        {% else %}
+        	<a class="btn btn-sm disabled btn-default"><</a>
+        {% endif %}
+
+		{% if results %}
+        	<span class="text small">
+            	Page {{ results.number }} of {{ results.paginator.num_pages }}
+        	</span>
+        {% else %}
+        	<span class="text small">
+            	Page 1 of 1
+        	</span>        
+        {% endif %}
+        
+        {% if results.has_next %}
+            <a href="{% url search_url_name page=results.next_page_number %}" class="btn btn-sm btn-default">></a>
+        {% else %}
+        	<a class="btn btn-sm disabled btn-default">></a>
+        {% endif %}
+        
+        {% if results %}
+        	<a href="{% url search_url_name page=results.paginator.num_pages %}" class="btn btn-sm btn-default">>></a>
+        {% else %}
+        	<a class="btn btn-sm disabled btn-default">>></a>
+        {% endif %}       
+    </span>
+    </div>

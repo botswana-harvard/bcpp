@@ -1,0 +1,31 @@
+{% extends "edc_dashboard/dashboard.html" %}
+{% load staticfiles %}
+
+
+{% block top_bar %}
+    {% include "bcpp_dashboard/top_bar.html" %}
+{% endblock top_bar %}
+
+{% block left_side_bar %}
+  {% include "bcpp_dashboard/demographics.html" %}
+{% endblock left_side_bar%}
+
+{% block right_side_bar %}{% endblock right_side_bar%}
+
+{% block appointments %}
+  	 {% include "edc_dashboard/appointments.html" %} 
+{% endblock appointments %}
+
+{% block crfs %}
+	{% if crfs %}
+  		{% include "edc_dashboard/crfs.html" %}
+  {% endif %}    
+{% endblock crfs %}
+
+{% block requisitions %}
+  {% if requisitions %}
+  	{% include "edc_dashboard/requisitions.html" %}
+  {% endif %}    
+{% endblock requisitions %}
+
+{% block locator_information %}{% endblock locator_information %}

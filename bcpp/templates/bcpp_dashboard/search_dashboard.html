@@ -1,0 +1,111 @@
+  {% extends 'edc_base/base.html' %}
+
+  {% load staticfiles %}
+  {% load crispy_forms_tags %}
+
+  {% block extra-scripts %}
+    <script type="text/javascript" src="{% static "" %}"></script>
+  {% endblock extra-scripts %}
+
+
+  {% block settings_url %}
+  <li id="li-topbar-settings"><a class="glyphicon glyphicon-wrench" title="settings" href="#"></a></li>
+  <li id="li-topbar-settings"><a class="fa fa-group" title="settings" href="#"></a></li>
+  {% endblock settings_url %}
+
+  {% block main %}
+
+   <div class="container">
+      <div class="col-md-12">
+        <div class="panel-group">
+          <div class="panel panel-info">
+              <div class="panel-heading"><a title="add maternal eligibility" href="{% url 'td_maternal_admin:td_maternal_maternaleligibility_add' %}?next={{ search_url_name }}" class="btn btn-sm btn-default" role="button"><span class="glyphicon glyphicon-plus"></span> Add Maternal Eligibility</a>
+                <span class="pull-right">{% crispy form %}</span></div>
+                <div class="panel-body">
+                  {% if results %}
+                    <div class="table-responsive">
+                    <table class="table table-condensed table-hover">
+                      <thead>
+                      		<th>#</th>
+                      		<th>Subject Identifier</th>
+                      		<th>Dashboard</th>
+                      		<th>Consent</th>
+                      		<th>Eligibility</th>
+                      		<th>Report Date</th>
+                      		<th>Reference</th>
+                      		<th>Eligibility</th>
+                      		<th>Age</th>
+                      		<th>Created by/Modified by</th>
+                      		<th>Modified Date</th>
+                      </thead>
+                      <tbody>
+                        {% for obj in results %}
+                          <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ obj.subject_label }}</td>
+                            {% if obj.subject_identifier %}
+                              <td><a role="button" title="Go to dashboard" class="btn btn-sm btn-success" href="{% url subject_dashboard_url_name subject_identifier=obj.subject_identifier %}"><i class="fa fa-tachometer" aria-hidden="true"></i> Dashboard</a></td>
+                            {% else %}
+                              <td><a role="button" title="" class="btn btn-sm btn-success" disabled >Dashboard</a></td>
+                            {% endif %}
+                            {% if obj.is_eligible and not obj.maternal_consent_pks %}
+                              <td><a role="button" title="Add Maternal Consent" class="btn btn-sm btn-default" href="{% url 'td_maternal_admin:td_maternal_maternalconsent_add' %}?maternal_eligibility_reference={{obj.reference}}&next={{ search_url_name }}"><span class="glyphicon glyphicon-plus"></span> Add Consent</a></td>
+                            {% elif obj.maternal_consent_pks %}
+                              {% for maternal_consent_pk in obj.maternal_consent_pks %}
+                                <td><a role="button" title="Edit Maternal Consent" class="btn btn-sm btn-success" href="{% url 'td_maternal_admin:td_maternal_maternalconsent_change' maternal_consent_pk %}?next={{ search_url_name }}"><span class="glyphicon glyphicon-pencil"></span> Edit Consent</a></td>
+                              {% endfor %}
+                            {% else %}
+                              <td><a role="button" title="" class="btn btn-sm btn-default" disabled >Add Consent</a></td>
+                            {% endif %}
+                            <td><a role="button" class="btn btn-sm btn-success" href="{% url 'td_maternal_admin:td_maternal_maternaleligibility_change' obj.pk %}?next={{ search_url_name }}"><span class="glyphicon glyphicon-pencil"></span> Edit Eligibility</a></td>
+                            <td>{{ obj.report_datetime|date:"Y-m-d" }}</td>
+                            <td>Ref: {{ obj.reference|make_list|slice:"-8:"|join:"" }}</td>
+                            <td>{{ obj.reasons_not_eligible|default:"eligible" }}{% if obj.ga_pending %} (US){% endif %}</td>
+                            <td>{{ obj.age_in_years }}y</td>
+                            <td>{{ obj.user_created }}/{{ obj.user_modified }}</td>
+                            <td>{{ obj.modified|date:"Y-m-d H:i" }}</td>
+                          </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                    {% include 'td_dashboard/paginator.html' %}
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+      <div class="col-md-4">
+        <div class="panel panel-info">
+          <div class="panel-heading">Reports</div>
+            <div class="panel-body">
+            </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="panel panel-success">
+          <div class="panel-heading">Statistics</div>
+            <div class="panel-body">
+            </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="panel panel-warning">
+          <div class="panel-heading">Edc Administration</div>
+            <div class="panel-body">
+              <a role="button" class="btn btn-sm btn-default btn-block" href="#">Clinic Visit List</a>
+              <a role="button" class="btn btn-sm btn-default btn-block" href="#">Visit Schedule</a>
+              <a role="button" class="btn btn-sm btn-default btn-block" href="#">Registration List</a>
+              <a role="button" class="btn btn-sm btn-default btn-block" href="#">Consents</a>
+              <a role="button" class="btn btn-sm btn-default btn-block" href="#">Metadata List</a>
+              <a role="button" class="btn btn-sm btn-default btn-block" href="#">Identifiers</a>
+            </div>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+
+{% endblock main %} s

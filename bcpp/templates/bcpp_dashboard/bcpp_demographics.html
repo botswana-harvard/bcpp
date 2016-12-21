@@ -1,0 +1,12 @@
+  <div class="panel panel-info">
+      <ul class="list-group">
+      <li class="list-group-item"><span class="test small text-default">Born</span>&nbsp<span class="test small text-info">{{ maternal_consent.dob|date:"Y-m-d" }}</span></li>
+      <li class="list-group-item"><span class="test small text-default">Age</span>&nbsp<span class="test small text-info">{% age_in_years maternal_consent.dob %}</span></li>
+      <li class="list-group-item"><span class="test small text-default">Consented</span>&nbsp<span class="test small text-info">{{ maternal_consent.consent_datetime|date:"Y-m-d" }}</span></li>
+      <li class="list-group-item"><span class="test small text-default">HIV status at Enrollment</span>&nbsp<span class="test small text-info">{{ maternal_hiv_status.enrollment_result.result }}</span></li>
+      <li class="list-group-item"><span class="test small text-default">GA by LMP</span>&nbsp<span class="test small text-info">{{ pregnancy.ga_by_lmp }}wks</span></li>
+      <li class="list-group-item"><span class="test small text-default">GA</span>&nbsp<span class="test small text-info">{{ pregnancy.ga.weeks }}wks</span></li>
+      <li class="list-group-item"><span class="test small text-default">EDD</span>&nbsp<span class="test small text-info">{{ pregnancy.edd.edd|date:"Y-m-d" }}</span></li>
+      <li class="list-group-item"><span class="test small text-default">Planned delivery site</span>&nbsp<span class="test small text-info">{% if maternal_lab_del.delivery_hospital == 'OTHER' %}{{ maternal_lab_del.delivery_hospital_other }}{% else %}{{ maternal_lab_del.delivery_hospital|default:"?" }} {% endif %}</span></li>
+      </ul>
+  </div>
