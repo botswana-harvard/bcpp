@@ -98,9 +98,9 @@ class EdcProtocolAppConfig(EdcProtocolAppConfigParent):
     protocol_number = '066'
     protocol_name = 'BCPP'
     protocol_title = ''
-    subject_types = {'subject': 'subject'}
     subject_types = [
-        SubjectType('subject', 'Research Subject', Cap(model_name='bcpp_subject.subjectconsent', max_subjects=9999)),
+        SubjectType('subject', 'Research Subject',
+                    Cap(model_name='bcpp_subject.subjectconsent', max_subjects=9999)),
     ]
     if 'test' in sys.argv:
         sys.stdout.write(
