@@ -44,7 +44,7 @@ class EdcBaseTestAppConfig(EdcBaseTestAppConfigParent):
 
 
 class EdcDeviceAppConfig(EdcDeviceAppConfigParent):
-
+    device_id = 99
     device_permissions = {
         'plot.plot': DevicePermission(
             model='plot.plot',

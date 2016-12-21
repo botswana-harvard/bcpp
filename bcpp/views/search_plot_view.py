@@ -22,12 +22,12 @@ class QuerysetWrapper:
             for obj in self.qs:
                 try:
                     plot = Plot.objects.get(plot_identifier=obj.plot_identifier)
-                    obj.subject_identifier = plot.subject_identifier
+                    obj.plot_identifier = plot.plot_identifier
                 except MultipleObjectsReturned:
                     plots = Plot.objects.filter(plot_identifier=obj.plot_identifier)
                     obj.plot_identifier = plots[0].plot_identifier
                 except Plot.DoesNotExist:
-                    obj.subject_identifier = None
+                    obj.plot_identifier = None
                 self._object_list.append(obj)
         return self._object_list
 
@@ -37,7 +37,7 @@ class SearchPlotView(EdcBaseViewMixin, TemplateView, FormView):
     template_name = 'bcpp_dashboard/search_plot.html'
     paginate_by = 10
     subject_dashboard_url_name = 'plot_search_url'
-    search_url_name = 'search_url'
+    search_url_name = 'plot_search_url'
 
     def __init__(self, **kwargs):
         self.maternal_eligibility = None
