@@ -189,8 +189,7 @@ USE_TZ = True
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+KEY_PATH = os.path.join(BASE_DIR, 'crypto_fields')
 
+DEVICE_ID = '99'
 CURRENT_MAP_AREA = 'test_community'
-if 'test' in sys.argv:
-    DEVICE_ID = '99'
-GIT_DIR = BASE_DIR

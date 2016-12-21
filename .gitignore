@@ -5,6 +5,7 @@ db.sqlite*
 test-*
 bcpp/migrations/*
 bcpp_subject/migrations/*
+crypto_fields/*
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
