@@ -17,18 +17,15 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from bcpp.views import SearchPlotView, SearchBhsSubjectView, HomeView
 
-from plot.admin_site import plot_admin
-
 from edc_base.views import LogoutView
 
 
 urlpatterns = [
-    url(r'^admin/', plot_admin.urls),
+    url(r'^admin/', admin.site.urls),
     url('plot/', include('plot.urls')),
     url('household/', include('household.urls')),
     url('member/', include('member.urls')),
     url('subject/', include('bcpp_subject.urls')),
-    url(r'^admin/', admin.site.urls),
     url(r'^plot_search/(?P<page>\d+)/', SearchPlotView.as_view(), name='plot_search_url'),
     url(r'^plot_search/', SearchPlotView.as_view(), name='plot_search_url'),
     url(r'^bhs_search/$', SearchBhsSubjectView.as_view(), name='bhs_subject_search'),

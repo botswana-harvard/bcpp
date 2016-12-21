@@ -7,7 +7,7 @@ from django.views.generic import TemplateView, FormView
 
 from edc_base.view_mixins import EdcBaseViewMixin
 
-from plot.models import Plot
+from plot.models import Plot, PlotLog
 from ..forms import SearchPlotForm
 
 
@@ -73,12 +73,19 @@ class SearchPlotView(EdcBaseViewMixin, TemplateView, FormView):
     def get_context_data(self, **kwargs):
         context = super(SearchPlotView, self).get_context_data(**kwargs)
         qs = Plot.objects.all().order_by('plot_identifier', '-created')
-        results = QuerysetWrapper(qs).object_list
+        paginated_results = QuerysetWrapper(qs).object_list
+        results_log = []
+        for plot in self.paginate(paginated_results):
+            try:
+                plot_log = PlotLog.objects.get(plot=plot)
+                results_log.append([plot, plot_log])
+            except PlotLog.DoesNotExist:
+                results_log.append([plot, None])
         context.update(
             # site_header=admin.site.site_header,
             subject_dashboard_url_name=self.subject_dashboard_url_name,
             search_url_name=self.search_url_name,
-            results=self.paginate(results))
+            results=self.paginate(results_log))
         return context
 
     def paginate(self, qs):

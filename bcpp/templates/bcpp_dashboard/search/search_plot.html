@@ -40,16 +40,16 @@
                       		<th>Modified Date</th>
                       </thead>
                       <tbody>
-                        {% for obj in results %}
+                        {% for obj, log in results %}
                           <tr>
                             <td>{{ forloop.counter }}</td>
-                            <td>{{ obj.plot_identifier }}</td>
+                            <td><a role="button" class="btn btn-sm btn-success" href="{% url 'plot_admin:plot_plot_change' obj.id %}"><span class="glyphicon glyphicon-pencil"></span>  {{ obj.plot_identifier }}</a></td>
                             <td></td>
                             <td>{{ obj.status }}</td>
-                            <td><a role="button" class="btn btn-sm btn-success" href="#"><span class="glyphicon glyphicon-pencil"></span> Household</a></td>
-                            <td><a role="button" class="btn btn-sm btn-success" href="#"><span class="glyphicon glyphicon-pencil"></span> Members</a></td>
-                            <td><a role="button" class="btn btn-sm btn-success" href="#"><span class="glyphicon glyphicon-plus"></span>Add New Entry</a></td>
-                            <td><a role="button" class="btn btn-sm btn-success" href="#"><span class="glyphicon glyphicon-pencil"></span> View Map</a></td>
+                            <td><a role="button" class="btn btn-sm btn-default" href="#"><span class="badge">2</span> Household</a></td>
+                            <td><a role="button" class="btn btn-sm btn-default" href="#"><span class="badge">15</span> Members</a></td>
+                            <td><a role="button" class="btn btn-sm btn-success" href="{% url 'plot_admin:plot_plotlogentry_add' %}"><span class="glyphicon glyphicon-plus"></span>Add New Entry</a></td>
+                            <td><a role="button" class="btn btn-sm btn-success" href="#"><span class="glyphicon glyphicon-map-marker"></span> View Map</a></td>
                             <td>{{ obj.community }}</td>
                             <td></td>
                             <td>{{ obj.modified|date:"Y-m-d H:i" }}</td>
