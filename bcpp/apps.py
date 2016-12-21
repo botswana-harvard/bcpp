@@ -2,11 +2,13 @@ import pytz
 import sys
 
 from datetime import datetime
-from dateutil.relativedelta import relativedelta
+from dateutil.relativedelta import relativedelta, MO, TU, WE, TH, FR, SA, SU
 
 from django.apps import AppConfig as DjangoAppConfig
 from django.core.management.color import color_style
 
+from edc_appointment.apps import AppConfig as EdcAppointmentAppConfigParent
+from edc_appointment.facility import Facility
 from edc_base.utils import get_utcnow
 from edc_base.apps import AppConfig as EdcBaseAppConfigParent
 from edc_base_test.apps import AppConfig as EdcBaseTestAppConfigParent
@@ -136,17 +138,24 @@ class EdcMetadataAppConfig(EdcMetadataAppConfigParent):
 #     default_template_file = os.path.join(settings.STATIC_ROOT, 'bcpp', 'label_templates', 'aliquot.lbl')
 #     default_label_identifier_name = ''
 
+class EdcAppointmentAppConfig(EdcAppointmentAppConfigParent):
+    app_label = 'edc_appointment'
+    default_appt_type = 'home'
+    facilities = {
+        'home': Facility(name='home', days=[MO, TU, WE, TH, FR, SA, SU],
+                         slots=[99999, 99999, 99999, 99999, 99999, 99999, 99999])}
+
 
 class EdcTimepointAppConfig(EdcTimepointAppConfigParent):
     timepoints = [
         Timepoint(
-            model='td.appointment',
+            model='edc_appointment.appointment',
             datetime_field='appt_datetime',
             status_field='appt_status',
             closed_status='DONE'
         ),
         Timepoint(
-            model='td.historicalappointment',
+            model='edc_appointment.historicalappointment',
             datetime_field='appt_datetime',
             status_field='appt_status',
             closed_status='DONE'
