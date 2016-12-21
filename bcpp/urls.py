@@ -15,12 +15,24 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
+from bcpp.views import SearchPlotView, SearchBhsSubjectView
+
+from plot.admin_site import plot_admin
+
+from edc_base.views import LogoutView
+
 
 urlpatterns = [
+    url(r'^admin/', plot_admin.urls),
     url('plot/', include('plot.urls')),
     url('household/', include('household.urls')),
-    url('survey/', include('survey.urls')),
     url('member/', include('member.urls')),
     url('subject/', include('bcpp_subject.urls')),
     url(r'^admin/', admin.site.urls),
+    url(r'^plot_search/$', SearchPlotView.as_view(), name='plot_search_url'),
+    url(r'^bhs_search/$', SearchBhsSubjectView.as_view(), name='bhs_subject_search'),
+    url(r'^household_search/$', SearchPlotView.as_view(), name='home_url'),
+    url(r'^edc/', include('edc_base.urls', 'edc-base')),
+    url(r'^tz_detect/', include('tz_detect.urls')),
+    url(r'logout', LogoutView.as_view(pattern_name='login_url'), name='logout_url'),
 ]

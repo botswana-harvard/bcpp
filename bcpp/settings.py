@@ -38,15 +38,17 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'crispy_forms',
+    'tz_detect',
     'django_crypto_fields.apps.AppConfig',
     'django_revision.apps.AppConfig',
     'edc_appointment.apps.AppConfig',
     'edc_base.apps.AppConfig',
+    'edc_dashboard.apps.AppConfig',
     'edc_subset_manager.apps.AppConfig',
     'plot.apps.AppConfig',
     'household.apps.AppConfig',
     'member.apps.AppConfig',
-    'survey.apps.AppConfig',
+    'bcpp.apps.SurveyAppConfig',
     'bcpp.apps.AppConfig',
     'bcpp.apps.EdcConsentAppConfig',
     'bcpp.apps.EdcDeviceAppConfig',
@@ -186,7 +188,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-CURRENT_MAP_AREA = 'bhp'
+CURRENT_MAP_AREA = 'test_community'
 if 'test' in sys.argv:
     DEVICE_ID = '99'
 GIT_DIR = BASE_DIR
