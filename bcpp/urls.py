@@ -14,7 +14,7 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-from bcpp.views import SearchPlotView, SearchBhsSubjectView, HomeView, SearchHouseholdView, HouseholdLogView
+from bcpp.views import SearchPlotView, SearchSubjectView, HomeView, SearchHouseholdView, HouseholdLogView
 
 from edc_base.views import LogoutView
 
@@ -28,7 +28,7 @@ urlpatterns = [
     url(r'^household_composition/$', HouseholdLogView.as_view(), name='household_composition'),
     url(r'^plot_search/(?P<page>\d+)/', SearchPlotView.as_view(), name='plot_search_url'),
     url(r'^plot_search/', SearchPlotView.as_view(), name='plot_search_url'),
-    url(r'^bhs_search/$', SearchBhsSubjectView.as_view(), name='bhs_subject_search'),
+    url(r'^subject_search/$', SearchSubjectView.as_view(), name='subject_search'),
     url(r'^household_search/$', SearchHouseholdView.as_view(), name='household_search'),
     url(r'^edc/', include('edc_base.urls', 'edc-base')),
     url(r'^tz_detect/', include('tz_detect.urls')),
