@@ -17,7 +17,7 @@ class TestPlotMapper(Mapper):
 
     center_lat = -25.330451
     center_lon = 25.556502
-    radius = 3.5
+    radius = 100.5
     location_boundary = ()
 
     intervention = True
