@@ -7,7 +7,7 @@ from django.views.generic import TemplateView, FormView
 
 from edc_base.view_mixins import EdcBaseViewMixin
 
-from plot.models import Plot, PlotLog
+from plot.models import Plot, PlotLog, PlotLogEntry
 from ..forms import SearchPlotForm
 
 
@@ -45,7 +45,7 @@ class SearchPlotView(EdcBaseViewMixin, TemplateView, FormView):
 
 #     @method_decorator(login_required)
 #     def dispatch(self, *args, **kwargs):
-#         return super(SearchPlotView, self).dispatch(*args, **kwargs)
+#         return super(S:aqqearchPlotView, self).dispatch(*args, **kwargs)
 
     def form_valid(self, form):
         if form.is_valid():
@@ -77,10 +77,20 @@ class SearchPlotView(EdcBaseViewMixin, TemplateView, FormView):
         results_log = []
         for plot in self.paginate(paginated_results):
             try:
+                required_plot_models = []
+                required_plot_models.append(plot)
                 plot_log = PlotLog.objects.get(plot=plot)
-                results_log.append([plot, plot_log])
+                required_plot_models.append(plot_log)
+                plot_entry = PlotLogEntry.objects.get(plot_log__plot=plot)
+                required_plot_models.append(plot_entry)
             except PlotLog.DoesNotExist:
-                results_log.append([plot, None])
+                required_plot_models.append(PlotLog.objects.none())
+                required_plot_models.append(PlotLogEntry.objects.none())
+            except PlotLogEntry.DoesNotExist:
+                required_plot_models.append(PlotLogEntry.objects.none())
+            except PlotLogEntry.MultipleObjectsReturned:
+                required_plot_models.append(PlotLogEntry.objects.filter(plot_log__plot=plot).latest())
+            results_log.append(required_plot_models)
         context.update(
             # site_header=admin.site.site_header,
             subject_dashboard_url_name=self.subject_dashboard_url_name,
