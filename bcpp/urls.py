@@ -32,6 +32,7 @@ urlpatterns = [
     url(r'^bhs_search/$', SearchHouseholdView.as_view(), name='bhs_subject_search'),
     url(r'^enumeration_dashboard/$', EnumerationDashboardView.as_view(), name='enumeration_dashboard'),
     url(r'^subject_search/$', SearchHouseholdView.as_view(), name='subject_search'),
+    url(r'^household_search/(?P<page>\d+)/', SearchHouseholdView.as_view(), name='household_search'),
     url(r'^household_search/$', SearchHouseholdView.as_view(), name='household_search'),
     url(r'^edc/', include('edc_base.urls', 'edc-base')),
     url(r'^tz_detect/', include('tz_detect.urls')),
