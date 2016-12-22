@@ -22,6 +22,7 @@
 -e /Users/erikvw/source/edc-registration
 -e /Users/erikvw/source/edc-rule-groups
 -e /Users/erikvw/source/edc-subset-manager
+-e /Users/erikvw/source/edc-sync
 -e /Users/erikvw/source/edc-timepoint
 -e /Users/erikvw/source/edc-visit-schedule
 -e /Users/erikvw/source/edc-visit-tracking

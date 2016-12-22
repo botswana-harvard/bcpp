@@ -1,0 +1,94 @@
+  {% extends 'bcpp_base.html' %}
+
+  {% load staticfiles %}
+  {% load crispy_forms_tags %}
+
+  {% block extra-scripts %}
+    <script type="text/javascript" src="{% static "" %}"></script>
+  {% endblock extra-scripts %}
+
+
+  {% block settings_url %}
+  <li id="li-topbar-settings"><a class="glyphicon glyphicon-wrench" title="settings" href="#"></a></li>
+  <li id="li-topbar-settings"><a class="fa fa-group" title="settings" href="#"></a></li>
+  {% endblock settings_url %}
+
+  {% block main %}
+
+   <div class="container">
+      <div class="col-md-12">
+        <div class="panel-group">
+          <div class="panel panel-info">
+              <div class="panel-heading"> <span> Household Log For BCPP </span>
+                </div>
+                  <table class="table table-striped table-responsive">
+        			<thead>
+        				<th> Date </th>
+        				<th> HBC </th>
+        				<th> Next Appointment </th>
+        				<th> Appointment Source </th>
+        				<th> Comment </th>
+        				<th> Updated </th>
+        			</thead>
+        			<tbody>    							
+          				<tr> 
+            				<td>  </td>
+            				<td>  </td>
+            				<td>  </td>  
+            				<td>  </td>  
+            				<td>  </td>  
+            				<td>  </td>  
+            				<td>  </td>                   
+            			</tr>						
+     				<t/body>
+     			</table>
+                <div class="panel-body">
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
+	</div>
+	<div class="container">
+      <div class="col-md-12">
+        <div class="panel-group">
+          <div class="panel panel-info">
+              <div class="panel-heading"> <span> Household Composition For BCPP </span>
+                </div>
+                  <table class="table table-striped table-responsive">
+        			<thead>
+        				<th> First Name </th>
+        				<th> Initials </th>
+        				<th> Sex </th>
+        				<th> Age </th>
+        				<th> Survival Status </th>
+        				<th> Relation </th>
+        				<th> Resident </th>
+        				<th> Attempts </th>
+        				<th> Participation </th>
+        				<th> Report/Action </th>
+        			</thead>
+        			<tbody>    							
+          				<tr> 
+            				<td>  </td>                   
+            				<td>  </td>
+            				<td>  </td>
+            				<td>  </td>  
+            				<td>  </td>  
+            				<td>  </td>  
+            				<td>  </td>  
+            				<td>  </td>                   
+            				<td>  </td>                   
+            				<td>  </td>                   
+            			</tr>						
+     				<t/body>
+     			</table>
+                <div class="panel-body">
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
+    </div>
+
+{% endblock main %}
