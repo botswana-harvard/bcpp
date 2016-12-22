@@ -38,10 +38,10 @@ class SearchPlotForm(SearchForm):
         self.helper.form_action = reverse('plot_search_url')
 
 
-class SearchBHSSubjectForm(SearchForm):
+class SearchSubjectForm(SearchForm):
 
     def __init__(self, *args, **kwargs):
-        super(SearchBHSSubjectForm, self).__init__(*args, **kwargs)
+        super(SearchSubjectForm, self).__init__(*args, **kwargs)
         self.helper.form_action = reverse('subject_search')
 
 

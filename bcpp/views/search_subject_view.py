@@ -3,12 +3,12 @@ from django.views.generic import FormView, TemplateView
 
 from edc_base.view_mixins import EdcBaseViewMixin
 
-from bcpp.forms import SearchBHSSubjectForm
+from bcpp.forms import SearchSubjectForm
 
 
 class SearchSubjectView(EdcBaseViewMixin, TemplateView, FormView):
     template_name = 'search/search_subjects.html'
-    form_class = SearchBHSSubjectForm
+    form_class = SearchSubjectForm
     paginate_by = 4
 
     def __init__(self, **kwargs):
