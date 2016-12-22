@@ -6,13 +6,13 @@ from edc_base.view_mixins import EdcBaseViewMixin
 from bcpp.forms import SearchBHSSubjectForm
 
 
-class SearchBhsSubjectView(EdcBaseViewMixin, TemplateView, FormView):
-    template_name = 'search/search_bhs_subjects.html'
+class SearchSubjectView(EdcBaseViewMixin, TemplateView, FormView):
+    template_name = 'search/search_subjects.html'
     form_class = SearchBHSSubjectForm
     paginate_by = 4
 
     def __init__(self, **kwargs):
-        super(SearchBhsSubjectView, self).__init__(**kwargs)
+        super(SearchSubjectView, self).__init__(**kwargs)
 
     def form_valid(self, form):
         if form.is_valid():
@@ -22,8 +22,8 @@ class SearchBhsSubjectView(EdcBaseViewMixin, TemplateView, FormView):
         return self.render_to_response(context)
 
     def get_success_url(self):
-        return reverse('bhs_subject_search')
+        return reverse('subject_search')
 
     def get_context_data(self, **kwargs):
-        context = super(SearchBhsSubjectView, self).get_context_data(**kwargs)
+        context = super(SearchSubjectView, self).get_context_data(**kwargs)
         return context

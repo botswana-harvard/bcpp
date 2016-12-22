@@ -42,7 +42,7 @@ class SearchBHSSubjectForm(SearchForm):
 
     def __init__(self, *args, **kwargs):
         super(SearchBHSSubjectForm, self).__init__(*args, **kwargs)
-        self.helper.form_action = reverse('bhs_subject_search')
+        self.helper.form_action = reverse('subject_search')
 
 
 class SearchClinicSubjectForm(SearchForm):
