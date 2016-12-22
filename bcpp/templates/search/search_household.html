@@ -17,10 +17,12 @@
 
    <div class="container">
       <div class="col-md-12">
-        <div class="panel panel-success">
-          <div class="panel-heading"> Household </div>
+        <div class="panel panel-info">
+          <div class="panel-heading">
+          	Household 
+          	<span class="pull-right">{% crispy form %}</span>
+          </div>
             <div class="panel-body">
-                    <div class="table-responsive">
                     <table class="table table-condensed table-hover">
                       <thead>
 	                      <th>#</th>
@@ -34,22 +36,29 @@
 	                      <th>Host</th>
                       </thead>
                       <tbody>
+                      	{%  for obj in results %}
 						<tr> 
-            				<td>  </td>
-            				<td>  </td>
+            				<td></td>
+            				<td>
+            					<a role="button" class="btn btn-sm btn-success" href="#"> 0100004-1{{ obj.plot_identifier }}</a>
+            				</td>
+            				<td>
+            					<a role="button" class="btn btn-sm btn-success" href="#"> 0100004-1{{ obj.plot_identifier }}</a>
+            				</td>  
+            				<td> 
+            					<a role="button" class="btn btn-sm btn-default" href="#"><i class="fa fa-tachometer" aria-hidden="true"></i>   Composition</a>
+            				 </td>  
+            				<td> {{ obj.plot_identifier }} </td>  
+            				<td> {{ obj.community }} </td>  
+            				<td> {{ obj.community }}</td>  
             				<td>  </td>  
             				<td>  </td>  
-            				<td>  </td>  
-            				<td>  </td>  
-            				<td>  </td>  
-            				<td>  </td>  
-            				<td>  </td>  
-            			</tr>						
+            			</tr>
+            			{% endfor %}				
                       </tbody>
                   </table>
                   {% include 'paginator.html' %}
                   </div>
-              </div>
             </div>
           </div>
   </div>
