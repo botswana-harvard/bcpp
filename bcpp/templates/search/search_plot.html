@@ -21,7 +21,7 @@
         <div class="panel-group">
           <div class="panel panel-info">
               <div class="panel-heading">
-              	<a title="add plot" href="{% url 'plot_admin:plot_plot_add' %}" class="btn btn-sm btn-default" role="button"><span class="glyphicon glyphicon-plus"></span> Add Plot</a>
+              	<a title="add plot" href="{% url 'plot_admin:plot_plot_add' %}?next=plot_search_url" class="btn btn-sm btn-default" role="button"><span class="glyphicon glyphicon-plus"></span> Add Plot</a>
                 <span class="pull-right">{% crispy form %}</span>
                 </div>
                 <div class="panel-body">
@@ -45,7 +45,7 @@
                         {% for obj, log, entry in results %}
                           <tr>
                             <td>{{ forloop.counter }}</td>
-                            <td><a role="button" class="btn btn-sm btn-success" href="{% url 'plot_admin:plot_plot_change' obj.id %}"><span class="glyphicon glyphicon-pencil"></span>  {{ obj.plot_identifier }}</a></td>
+                            <td><a role="button" class="btn btn-sm btn-success" href="{% url 'plot_admin:plot_plot_change' obj.id %}?next=plot_search_url"><span class="glyphicon glyphicon-pencil"></span>  {{ obj.plot_identifier }}</a></td>
                             <td>
                             	{% if obj.confirmed %}
                             		<span class="text-primary">confirmed</span>
@@ -58,9 +58,9 @@
                             <td><a role="button" class="btn btn-sm btn-default" href="#"><span class="badge">{{ obj.eligible_members }}</span> Members</a></td>
                             <td>
                             	{% if entry %}
-                            		<a role="button" class="btn btn-sm btn-success" href="{% url 'plot_admin:plot_plotlogentry_change' entry.pk %}?plot_log={{log.pk}}"><span class="glyphicon glyphicon-pencil"></span>Edit Entry</a>
+                            		<a role="button" class="btn btn-sm btn-success" href="{% url 'plot_admin:plot_plotlogentry_change' entry.pk %}?plot_log={{log.pk}}next=plot_search_url"><span class="glyphicon glyphicon-pencil"></span>Edit Entry</a>
                             	{% else %}
-                            		<a role="button" class="btn btn-sm btn-success" href="{% url 'plot_admin:plot_plotlogentry_add' %}?plot_log={{log.pk}}"><span class="glyphicon glyphicon-plus"></span>Add New Entry</a>
+                            		<a role="button" class="btn btn-sm btn-success" href="{% url 'plot_admin:plot_plotlogentry_add' %}?plot_log={{log.pk}}&next=plot_search_url"><span class="glyphicon glyphicon-plus"></span>Add New Entry</a>
                             	{% endif %}
                             </td>
                             <td>
