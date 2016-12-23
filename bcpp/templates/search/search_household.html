@@ -46,7 +46,7 @@
             					<a role="button" class="btn btn-sm btn-success" href="#"> {{ obj.plot.plot_identifier }}</a>
             				</td>  
             				<td> 
-            					<a role="button" class="btn btn-sm btn-default" href="{% url 'enumeration_dashboard_url' %}"><i class="fa fa-tachometer" aria-hidden="true"></i>   Composition</a>
+            					<a role="button" class="btn btn-sm btn-default" href="{% url 'enumeration_dashboard_url' obj.household_identifier %}"><i class="fa fa-tachometer" aria-hidden="true"></i>   Composition</a>
             				 </td>  
             				<td> {{ obj.plot_identifier }} </td>  
             				<td> {{ obj.plot.community }} </td>  
