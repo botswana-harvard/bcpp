@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '9-%tjc_ov-=t6-fefrys4n@izkj4y8oewah6uf2p9q%*!ub%)^'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
@@ -42,23 +42,23 @@ INSTALLED_APPS = [
     'django_crypto_fields.apps.AppConfig',
     'django_revision.apps.AppConfig',
     'edc_base.apps.AppConfig',
+    'edc_consent.apps.AppConfig',
     'edc_dashboard.apps.AppConfig',
     'edc_subset_manager.apps.AppConfig',
     'edc_sync.apps.AppConfig',
     'edc_registration.apps.AppConfig',
-    'edc_visit_tracking.apps.AppConfig',
     'edc_visit_schedule.apps.AppConfig',
     'bcpp.apps.AppConfig',
     'bcpp.apps.EdcMetadataAppConfig',
     'bcpp.apps.EdcIdentifierAppConfig',
     'bcpp.apps.EdcProtocolAppConfig',
-    'bcpp.apps.EdcConsentAppConfig',
     'bcpp.apps.SurveyAppConfig',
     'bcpp.apps.EdcMapAppConfig',
     'bcpp.apps.EdcDeviceAppConfig',
     'bcpp.apps.EdcBaseTestAppConfig',
     'bcpp.apps.EdcTimepointAppConfig',
     'bcpp.apps.EdcAppointmentAppConfig',
+    'bcpp.apps.EdcVisitTrackingAppConfig',
     'household.apps.AppConfig',
     'member.apps.AppConfig',
     'plot.apps.AppConfig',

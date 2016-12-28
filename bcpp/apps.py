@@ -12,9 +12,7 @@ from edc_appointment.facility import Facility
 from edc_base.utils import get_utcnow
 from edc_base.apps import AppConfig as EdcBaseAppConfigParent
 from edc_base_test.apps import AppConfig as EdcBaseTestAppConfigParent
-from edc_consent.apps import AppConfig as EdcConsentAppConfigParent
-from edc_consent.consent_config import ConsentConfig
-from edc_constants.constants import FAILED_ELIGIBILITY, MALE, FEMALE
+from edc_constants.constants import FAILED_ELIGIBILITY
 from edc_device.apps import AppConfig as EdcDeviceAppConfigParent, DevicePermission
 from edc_identifier.apps import AppConfig as EdcIdentifierAppConfigParent
 # from edc_label.apps import AppConfig as EdcLabelConfigParent
@@ -60,30 +58,6 @@ class SurveyAppConfig(SurveyAppConfigParent):
         CurrentSurvey('bcpp-survey.bcpp-year-1.bhs.test_community', 0),
         CurrentSurvey('bcpp-survey.bcpp-year-2.ahs.test_community', 1),
         CurrentSurvey('bcpp-survey.bcpp-year-3.ahs.test_community', 2)])
-
-
-class EdcConsentAppConfig(EdcConsentAppConfigParent):
-    if 'test' in sys.argv:
-        sys.stdout.write(
-            style.NOTICE(
-                'WARNING! Overwriting AppConfig maternalconsent.start and end dates for tests only. \n'
-                'See EdcConsentAppConfig\n'))
-        testconsentstart = get_utcnow() - relativedelta(years=6)
-        testconsentend = get_utcnow() - relativedelta(years=1)
-    else:
-        testconsentstart = None
-        testconsentend = None
-    consent_configs = [
-        ConsentConfig(
-            'bcpp_subject.subjectconsent',
-            start=datetime(2013, 10, 18, 0, 0, 0, tzinfo=pytz.utc) if 'test' not in sys.argv else testconsentstart,
-            end=datetime(2022, 12, 1, 0, 0, 0, tzinfo=pytz.utc) if 'test' not in sys.argv else testconsentend,
-            version='1',
-            age_min=16,
-            age_is_adult=18,
-            age_max=64,
-            gender=[MALE, FEMALE]),
-    ]
 
 
 class EdcMapAppConfig(EdcMapAppConfigParent):
