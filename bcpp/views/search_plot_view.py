@@ -64,7 +64,7 @@ class SearchPlotView(EdcBaseViewMixin, TemplateView, FormView):
                     'search_term',
                     'No matching records for \'{}\'.'.format(search_term))
             except MultipleObjectsReturned:
-                qs = Plot.objects.filter(options).order_by('plot_identifier', '-created')
+                qs = Plot.objects.filter(options).order_by('-created')
             context = self.get_context_data()
             context.update(
                 form=form,
@@ -73,7 +73,7 @@ class SearchPlotView(EdcBaseViewMixin, TemplateView, FormView):
 
     def get_context_data(self, **kwargs):
         context = super(SearchPlotView, self).get_context_data(**kwargs)
-        qs = Plot.objects.all().order_by('plot_identifier', '-created')
+        qs = Plot.objects.all().order_by('-created')
         paginated_results = QuerysetWrapper(qs).object_list
         results_log = []
         for plot in self.paginate(paginated_results):

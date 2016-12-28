@@ -4,6 +4,17 @@
   {% load crispy_forms_tags %}
   
   {% block topbar %}
+ <style>
+	.navbar-inverse .navbar-nav > li > a:hover
+	{
+		background-color: #555;
+	    color: white;
+	}
+	.navbar-inverse .navbar-nav > ul {
+    	background-color: #333;
+	}
+	
+</style>
   	<nav class="navbar navbar-inverse navbar-fixed-top">
 
       <div class="container-fluid">
@@ -21,7 +32,6 @@
           <ul class="nav navbar-nav navbar-right">
             <li><a href="{% url 'plot_search_url' %}">Plots</a></li>
             <li><a href="{% url 'household_search' %}">Households</a></li>
-     		<li><a href="#">Enumeration</a></li>
      		<li><a href="{% url 'subject_search' %}">Subjects</a></li>
      		<li><a href="#">Clinic Subjects</a></li>
             <li id="li-topbar-home"><a class="glyphicon glyphicon-home" title="home" href="{% url 'home_url' %}"></a></li>
