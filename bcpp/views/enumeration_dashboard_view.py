@@ -6,10 +6,13 @@ from django.views.generic import TemplateView
 
 from edc_base.view_mixins import EdcBaseViewMixin
 from member.models.household_member.household_member import HouseholdMember
+from member.models import RepresentativeEligibility
 from household.models.household import Household
 from household.models.household_structure.household_structure import HouseholdStructure
 from household.models.household_log_entry import HouseholdLogEntry
 from household.models.household_log import HouseholdLog
+from member.models.household_head_eligibility import HouseholdHeadEligibility
+from member.constants import HEAD_OF_HOUSEHOLD
 
 
 class EnumerationDashboardView(EdcBaseViewMixin, TemplateView):
@@ -22,7 +25,13 @@ class EnumerationDashboardView(EdcBaseViewMixin, TemplateView):
         self.context.update(
             site_header=admin.site.site_header,
             household_log_entries=self.household_log_entries(),
-            household_members=self.household_members()
+            household_members=self.household_members(),
+            household_log=self.household_log,
+            household_identifier=self.household_identifier,
+            household_structure=self.household_structure(),
+            representative_eligibility=self.representative_eligibility,
+            head_of_household=self.head_of_household,
+            head_of_household_eligibility=self.head_of_household_eligibility
         )
         return self.context
 
@@ -45,6 +54,31 @@ class EnumerationDashboardView(EdcBaseViewMixin, TemplateView):
     def household_members(self):
         return HouseholdMember.objects.filter(household_structure=self.household_structure())
 
+    @property
+    def head_of_household(self):
+        members = HouseholdMember.objects.filter(household_structure=self.household_structure())
+        head_of_household = None
+        for member in members:
+            if member.relation == HEAD_OF_HOUSEHOLD:
+                head_of_household = member
+        return head_of_household
+
+    @property
+    def head_of_household_eligibility(self):
+        try:
+            head_of_household_eligibility = HouseholdHeadEligibility.objects.get(household_member=self.head_of_household)
+        except HouseholdHeadEligibility.DoesNotExist:
+            head_of_household_eligibility = None
+        return head_of_household_eligibility
+
+    @property
+    def representative_eligibility(self):
+        try:
+            representative_eligibility = RepresentativeEligibility.objects.get(household_structure=self.household_structure())
+        except RepresentativeEligibility.DoesNotExist:
+            representative_eligibility = None
+        return representative_eligibility
+
     def survey(self, survey=None):
         return self.context.get('survey')
 
@@ -53,8 +87,7 @@ class EnumerationDashboardView(EdcBaseViewMixin, TemplateView):
         return self.context.get('household_identifier')
 
     def household_structure(self):
-        for h in HouseholdStructure.objects.all():
-            print(h.survey)
+        # survey bcpp-survey.bcpp-year-1.bhs.test_community
         try:
             household_structure = HouseholdStructure.objects.get(household=self.household, survey='bcpp-survey.bcpp-year-1.bhs.test_community')
         except HouseholdStructure.DoesNotExist:
