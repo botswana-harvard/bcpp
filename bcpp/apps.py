@@ -12,10 +12,7 @@ from edc_appointment.facility import Facility
 from edc_base.utils import get_utcnow
 from edc_base.apps import AppConfig as EdcBaseAppConfigParent
 from edc_base_test.apps import AppConfig as EdcBaseTestAppConfigParent
-<<<<<<< HEAD
 from edc_consent.apps import AppConfig as EdcConsentAppConfigParent
-=======
->>>>>>> 49034e3755c09ed61f10dd7ea4c605d944ed68dc
 from edc_constants.constants import FAILED_ELIGIBILITY
 from edc_device.apps import AppConfig as EdcDeviceAppConfigParent, DevicePermission
 from edc_identifier.apps import AppConfig as EdcIdentifierAppConfigParent
