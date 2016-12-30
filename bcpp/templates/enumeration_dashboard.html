@@ -63,17 +63,21 @@
               <div class="panel-heading clearfix">
               <strong>Household:</strong><span style="margin-left:5px;">123123123-12 | <strong>Household Status</strong>: {% if household_structure.enrolled %} Enrolled {% else %}Not Enrolled{% endif %}</span>
                 <span class="pull-right">
-                <a title="add household member" href="{% url 'member_admin:member_householdmember_add' %}?household_structure={{household_structure.id}}&next={% url 'enumeration_dashboard_url' household_identifier %}" class="btn btn-sm btn-default" role="button">
-              	<span class="glyphicon glyphicon-plus"></span> Add a household member</a>
-              	{% if not representative_eligibility %}
-	              	<a title="add representative eligibility" href="{% url 'member_admin:member_representativeeligibility_add' %}?household_structure={{household_structure.id}}" class="btn btn-sm btn-default" role="button">
-	              	<span class="glyphicon glyphicon-plus"></span> Add a Representative Eligibility</a>
-              	{% endif %}
-              	{% if not head_of_household_eligibility %}
-	              	<a title="add head of household eligibility" href="{% url 'member_admin:member_householdheadeligibility_add' %}?household_member={{head_of_household.id}}&next={% url 'enumeration_dashboard_url' household_identifier %}" class="btn btn-sm btn-default" role="button">
-	              	<span class="glyphicon glyphicon-plus"></span> Add Head of Household Eligibility</a>
+                {% if todays_household_log_entry %}
+	                <a title="add household member" href="{% url 'member_admin:member_householdmember_add' %}?household_structure={{household_structure.id}}&next={% url 'enumeration_dashboard_url' household_identifier %}" class="btn btn-sm btn-default" role="button">
+	              	<span class="glyphicon glyphicon-plus"></span> Add a household member</a>
+	              	{% if not representative_eligibility %}
+		              	<a title="add representative eligibility" href="{% url 'member_admin:member_representativeeligibility_add' %}?household_structure={{household_structure.id}}" class="btn btn-sm btn-default" role="button">
+		              	<span class="glyphicon glyphicon-plus"></span> Add a Representative Eligibility</a>
+	              	{% endif %}
+	              	{% if not head_of_household_eligibility %}
+		              	<a title="add head of household eligibility" href="{% url 'member_admin:member_householdheadeligibility_add' %}?household_member={{head_of_household.id}}&next={% url 'enumeration_dashboard_url' household_identifier %}" class="btn btn-sm btn-default" role="button">
+		              	<span class="glyphicon glyphicon-plus"></span> Add Head of Household Eligibility</a>
+	              	{% else %}
+	              		<a role="button" class="btn btn-sm btn-success" href="{% url 'member_admin:member_householdheadeligibility_change' head_of_household_eligibility.id %}?next={% url 'enumeration_dashboard_url' household_identifier %}"><span class="glyphicon glyphicon-pencil"></span>Edit Head of Household Eligibility</a>
+	              	{% endif %}
               	{% else %}
-              		<a role="button" class="btn btn-sm btn-success" href="{% url 'member_admin:member_householdheadeligibility_change' head_of_household_eligibility.id %}?next={% url 'enumeration_dashboard_url' household_identifier %}"><span class="glyphicon glyphicon-pencil"></span>Edit Head of Household Eligibility</a>
+              		<p style="color:red;">Add todays log entry first</p>
               	{% endif %}
                 </span>
                 </div>
@@ -97,7 +101,11 @@
                           {% for household_member in household_members %}
                             <tr>
                             <td>
-                            <a role="button" class="btn btn-sm btn-success" href="{% url 'member_admin:member_householdmember_change' household_member.id %}?next={% url 'enumeration_dashboard_url' household_identifier %}"><span class="glyphicon glyphicon-pencil"></span> {{ household_member.first_name }}</a>
+                            {% if todays_household_log_entry %}
+                            	<a role="button" class="btn btn-sm btn-success" href="{% url 'member_admin:member_householdmember_change' household_member.id %}?next={% url 'enumeration_dashboard_url' household_identifier %}"><span class="glyphicon glyphicon-pencil"></span> {{ household_member.first_name }}</a>
+                            {% else %}
+                            	<a role="button" class="btn btn-sm btn-success disabled" href="{% url 'member_admin:member_householdmember_change' household_member.id %}?next={% url 'enumeration_dashboard_url' household_identifier %}"><span class="glyphicon glyphicon-pencil"></span> {{ household_member.first_name }}</a>
+                            {% endif %}
                             </td>
                             <td>{{ household_member.initials }}</td>
                             <td>{{ household_member.gender }}</td>
@@ -108,12 +116,22 @@
                             <td>{{ household_member.visit_attempts }}</td>
                             <td>{{ household_member.member_status }}</td>
                             <td>
-                            {% if not household_member.enrollment_eligibility %}
-				              	<a title="add enrollment eligibility" href="{% url 'member_admin:member_enrollmentchecklist_add' %}?household_member={{household_member.id}}&next={% url 'enumeration_dashboard_url' household_identifier %}" class="btn btn-sm btn-default" role="button">
-				              	<span class="glyphicon glyphicon-plus"></span> Add Head of Household Eligibility</a>
+                            {% if todays_household_log_entry %}
+	                            {% if not household_member.enrollment_eligibility %}
+					              	<a title="add enrollment eligibility" href="{% url 'member_admin:member_enrollmentchecklist_add' %}?household_member={{household_member.id}}&next={% url 'enumeration_dashboard_url' household_identifier %}" class="btn btn-sm btn-default" role="button">
+					              	<span class="glyphicon glyphicon-plus"></span> Add Head of Household Eligibility</a>
+				              	{% else %}
+				              		<a role="button" class="btn btn-sm btn-success" href="{% url 'member_admin:member_enrollmentchecklist_change' household_member.id %}?next={% url 'enumeration_dashboard_url' household_identifier %}"><span class="glyphicon glyphicon-pencil"></span>Edit Enrolment Eligibility</a>
+				              		{% comment %} TODO: if eligible allow to consent {% endcomment %}
+				              	{% endif %}
 			              	{% else %}
-			              		<a role="button" class="btn btn-sm btn-success" href="{% url 'member_admin:member_enrollmentchecklist_change' household_member.id %}?next={% url 'enumeration_dashboard_url' household_identifier %}"><span class="glyphicon glyphicon-pencil"></span>Edit Enrolment Eligibility</a>
-			              		{% comment %} TODO: if eligible allow to consent {% endcomment %}
+			              		{% if not household_member.enrollment_eligibility %}
+					              	<a  title="add enrollment eligibility" href="{% url 'member_admin:member_enrollmentchecklist_add' %}?household_member={{household_member.id}}&next={% url 'enumeration_dashboard_url' household_identifier %}" class="btn btn-sm btn-default disabled" role="button">
+					              	<span class="glyphicon glyphicon-plus"></span> Add Head of Household Eligibility</a>
+				              	{% else %}
+				              		<a role="button" class="btn btn-sm btn-success disabled" href="{% url 'member_admin:member_enrollmentchecklist_change' household_member.id %}?next={% url 'enumeration_dashboard_url' household_identifier %}"><span class="glyphicon glyphicon-pencil"></span>Edit Enrolment Eligibility</a>
+				              		{% comment %} TODO: if eligible allow to consent {% endcomment %}
+				              	{% endif %}
 			              	{% endif %}
                             </td>
                            </tr>
