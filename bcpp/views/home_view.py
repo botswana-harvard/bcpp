@@ -16,6 +16,6 @@ class HomeView(EdcBaseViewMixin, TemplateView):
         )
         return context
 
-#     @method_decorator(login_required)
-#     def dispatch(self, *args, **kwargs):
-#         return super(HomeView, self).dispatch(*args, **kwargs)
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(HomeView, self).dispatch(*args, **kwargs)

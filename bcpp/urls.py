@@ -15,22 +15,26 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 
-from bcpp.views import SearchPlotView, HomeView, SearchHouseholdView, EnumerationDashboardView
+from bcpp.views import PlotsView, HomeView, SearchHouseholdView, EnumerationDashboardView
 
-from edc_base.views import LogoutView
+from edc_base.views import LogoutView, LoginView
 
 
 urlpatterns = [
+    url(r'login', LoginView.as_view(), name='login_url'),
+    url(r'logout', LogoutView.as_view(pattern_name='login_url'), name='logout_url'),
     url(r'^admin/', admin.site.urls),
     url('plot/', include('plot.urls')),
     url('household/', include('household.urls')),
     url('member/', include('member.urls')),
     url('subject/', include('bcpp_subject.urls')),
-    url(r'^plot_search/(?P<page>\d+)/', SearchPlotView.as_view(), name='plot_search_url'),
-    url(r'^plot_search/', SearchPlotView.as_view(), name='plot_search_url'),
+    url(r'^plots/(?P<page>\d+)/', PlotsView.as_view(), name='plots_url'),
+    url(r'^plots/', PlotsView.as_view(), name='plots_url'),
     url(r'^bhs_search/$', SearchHouseholdView.as_view(), name='bhs_subject_search'),
-    url(r'^enumeration_dashboard/(?P<household_identifier>[0-9A-Z-]+)/$', EnumerationDashboardView.as_view(), name='enumeration_dashboard_url'),
-    url(r'^enumeration_dashboard/(?P<household_identifier>[0-9A-Z-]+)/(?P<survey>[-\w]+)/$', EnumerationDashboardView.as_view(), name='enumeration_dashboard_url'),
+    url(r'^enumeration_dashboard/(?P<household_identifier>[0-9A-Z-]+)/$',
+        EnumerationDashboardView.as_view(), name='enumeration_dashboard_url'),
+    url(r'^enumeration_dashboard/(?P<household_identifier>[0-9A-Z-]+)/(?P<survey>[-\w]+)/$',
+        EnumerationDashboardView.as_view(), name='enumeration_dashboard_url'),
     url(r'^subject_search/$', SearchHouseholdView.as_view(), name='subject_search'),
     url(r'^household_search/(?P<page>\d+)/', SearchHouseholdView.as_view(), name='household_search'),
     url(r'^household_search/$', SearchHouseholdView.as_view(), name='household_search'),

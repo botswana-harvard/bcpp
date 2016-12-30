@@ -186,3 +186,4 @@ KEY_PATH = os.path.join(BASE_DIR, 'crypto_fields')
 
 DEVICE_ID = '99'
 CURRENT_MAP_AREA = 'test_community'
+CRISPY_TEMPLATE_PACK = 'bootstrap3'

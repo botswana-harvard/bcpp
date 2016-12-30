@@ -14,69 +14,47 @@ from plot.models import Plot, PlotLog, PlotLogEntry
 from ..forms import SearchPlotForm
 
 
-class QuerysetWrapper:
-    def __init__(self, qs):
-        self.qs = qs or []
-        self._object_list = []
-
-    @property
-    def object_list(self):
-        if not self._object_list:
-            for obj in self.qs:
-                try:
-                    plot = Plot.objects.get(plot_identifier=obj.plot_identifier)
-                    obj.plot_identifier = plot.plot_identifier
-                except MultipleObjectsReturned:
-                    plots = Plot.objects.filter(plot_identifier=obj.plot_identifier)
-                    obj.plot_identifier = plots[0].plot_identifier
-                except Plot.DoesNotExist:
-                    obj.plot_identifier = None
-                self._object_list.append(obj)
-        return self._object_list
-
-
-class SearchPlotView(EdcBaseViewMixin, TemplateView, FormView):
+class PlotsView(EdcBaseViewMixin, TemplateView, FormView):
     form_class = SearchPlotForm
-    template_name = 'search/search_plot.html'
+    template_name = 'plots.html'
     paginate_by = 10
-    subject_dashboard_url_name = 'plot_search_url'
-    search_url_name = 'plot_search_url'
-
-    def __init__(self, **kwargs):
-        self.maternal_eligibility = None
-        super(SearchPlotView, self).__init__(**kwargs)
+    search_url_name = 'plots_url'
+    search_model = Plot
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
-        return super(SearchPlotView, self).dispatch(*args, **kwargs)
+        return super().dispatch(*args, **kwargs)
+
+    def search_options(self, search_term):
+        return (
+            Q(plot_identifier__icontains=search_term) |
+            Q(user_created__iexact=search_term) |
+            Q(user_modified__iexact=search_term))
+
+    def queryset(self, *options):
+        try:
+            qs = [self.search_model.objects.get(options)]
+        except self.search_model.DoesNotExist:
+            qs = None
+        except MultipleObjectsReturned:
+            qs = self.search_model.objects.filter(options).order_by('-created')
+        return qs
 
     def form_valid(self, form):
         if form.is_valid():
             search_term = form.cleaned_data['search_term']
-            options = (
-                Q(plot_identifier__icontains=search_term) |
-                Q(user_created__iexact=search_term) |
-                Q(user_modified__iexact=search_term)
-            )
-            try:
-                qs = [Plot.objects.get(options)]
-            except Plot.DoesNotExist:
-                qs = None
-                form.add_error(
-                    'search_term',
-                    'No matching records for \'{}\'.'.format(search_term))
-            except MultipleObjectsReturned:
-                qs = Plot.objects.filter(options).order_by('-created')
+            options = self.search_options(search_term)
+            qs = self.queryset(**options)
+            if not qs:
+                form.add_error('search_term', 'No matching records for \'{}\'.'.format(search_term))
             context = self.get_context_data()
-            context.update(
-                form=form,
-                results=self.paginate(QuerysetWrapper(qs).object_list))
+            context.update(form=form, results=self.paginate(qs))
         return self.render_to_response(context)
 
     def get_context_data(self, **kwargs):
-        context = super(SearchPlotView, self).get_context_data(**kwargs)
-        qs = Plot.objects.all().order_by('-created')
-        plot_results = QuerysetWrapper(qs).object_list
+        context = super().get_context_data(**kwargs)
+        print('hello')
+        plot_results = Plot.objects.all().order_by('-created')
         results = []
         for plot in self.paginate(plot_results):
             try:
@@ -101,8 +79,6 @@ class SearchPlotView(EdcBaseViewMixin, TemplateView, FormView):
             required_plot_models.append(plot_log_entry_link_html_class)
             results.append(required_plot_models)
         context.update(
-            # site_header=admin.site.site_header,
-            subject_dashboard_url_name=self.subject_dashboard_url_name,
             search_url_name=self.search_url_name,
             results=self.paginate(results))
         return context
