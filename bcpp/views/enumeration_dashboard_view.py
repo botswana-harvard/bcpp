@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.decorators import login_required
+from django.db.models import Max
 from django.utils.decorators import method_decorator
 
 from django.views.generic import TemplateView
@@ -13,11 +14,12 @@ from household.models.household_log_entry import HouseholdLogEntry
 from household.models.household_log import HouseholdLog
 from member.models.household_head_eligibility import HouseholdHeadEligibility
 from member.constants import HEAD_OF_HOUSEHOLD
+import arrow
 
 
 class EnumerationDashboardView(EdcBaseViewMixin, TemplateView):
 
-    template_name = 'bcpp_dashboard/enumeration_dashboard.html'
+    template_name = 'enumeration_dashboard.html'
     paginate_by = 4
 
     def get_context_data(self, **kwargs):
@@ -31,7 +33,8 @@ class EnumerationDashboardView(EdcBaseViewMixin, TemplateView):
             household_structure=self.household_structure(),
             representative_eligibility=self.representative_eligibility,
             head_of_household=self.head_of_household,
-            head_of_household_eligibility=self.head_of_household_eligibility
+            head_of_household_eligibility=self.head_of_household_eligibility,
+            todays_household_log_entry=self.todays_household_log_entry(self.household_structure())
         )
         return self.context
 
@@ -50,6 +53,19 @@ class EnumerationDashboardView(EdcBaseViewMixin, TemplateView):
     def household_log_entries(self):
         household_log_entries = HouseholdLogEntry.objects.filter(household_log=self.household_log)
         return household_log_entries
+
+    def todays_household_log_entry(self, household_structure):
+        todays_household_log_entry = None
+        report_datetime = HouseholdLogEntry.objects.filter(
+            household_log__household_structure=household_structure).aggregate(
+                Max('report_datetime')).get('report_datetime__max')
+        if report_datetime:
+            r = arrow.Arrow.fromdatetime(report_datetime, report_datetime.tzinfo).to('utc')
+            if r.date() == arrow.utcnow().date():
+                todays_household_log_entry = HouseholdLogEntry.objects.get(
+                    household_log__household_structure=household_structure,
+                    report_datetime=report_datetime)
+        return todays_household_log_entry
 
     def household_members(self):
         return HouseholdMember.objects.filter(household_structure=self.household_structure())
