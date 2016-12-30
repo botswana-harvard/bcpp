@@ -121,7 +121,7 @@ class EnumerationDashboardView(EdcBaseViewMixin, TemplateView):
 
     @property
     def household(self):
-        """Returns a household."""
+        """Return  a household."""
         try:
             household = Household.objects.get(household_identifier=self.household_identifier)
         except Household.DoesNotExist:
