@@ -41,7 +41,7 @@
                       		<th>Modified Date</th>
                       </thead>
                       <tbody>
-                        {% for obj, log, entry, confirmed_status in results %}
+                        {% for obj, log, plot_log_entry, plot_log_entry_link_html_class in results %}
                           <tr>
                             <td>{{ forloop.counter }}</td>
                             <td><a role="button" class="btn btn-sm btn-success" href="{% url 'plot_admin:plot_plot_change' obj.id %}?next=plot_search_url"><span class="glyphicon glyphicon-pencil"></span>  {{ obj.plot_identifier }}</a></td>
@@ -56,8 +56,8 @@
                             <td><a role="button" class="btn btn-sm btn-default" href="#"><span class="badge">{{ obj.household_count }}</span> Household</a></td>
                             <td><a role="button" class="btn btn-sm btn-default" href="#"><span class="badge">{{ obj.eligible_members }}</span> Members</a></td>
                             <td>
-                            	{% if entry %}
-                            		<a role="button" class="btn btn-sm btn-success {{confirmed_status}}" href="{% url 'plot_admin:plot_plotlogentry_change' entry.pk %}?plot_log={{log.pk}}&next=plot_search_url"><span class="glyphicon glyphicon-pencil"></span>Edit Entry</a>
+                            	{% if plot_log_entry %}
+                            		<a role="button" class="btn btn-sm btn-success {{plot_log_entry_link_html_class}}" href="{% url 'plot_admin:plot_plotlogentry_change' entry.pk %}?plot_log={{log.pk}}&next=plot_search_url"><span class="glyphicon glyphicon-pencil"></span>Edit Entry</a>
                             	{% else %}
                             		<a role="button" class="btn btn-sm btn-default" href="{% url 'plot_admin:plot_plotlogentry_add' %}?plot_log={{log.pk}}&next=plot_search_url">
                             		<span class="glyphicon glyphicon-plus"></span>Add New Entry</a>

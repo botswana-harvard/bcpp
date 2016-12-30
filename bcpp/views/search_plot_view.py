@@ -1,11 +1,11 @@
+import arrow
+
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import MultipleObjectsReturned
 from django.core.paginator import Paginator, EmptyPage
 from django.db.models import Q
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView, FormView
-
-from datetime import datetime
 
 from edc_base.view_mixins import EdcBaseViewMixin
 
@@ -46,9 +46,9 @@ class SearchPlotView(EdcBaseViewMixin, TemplateView, FormView):
         self.maternal_eligibility = None
         super(SearchPlotView, self).__init__(**kwargs)
 
-#     @method_decorator(login_required)
-#     def dispatch(self, *args, **kwargs):
-#         return super(S:aqqearchPlotView, self).dispatch(*args, **kwargs)
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(SearchPlotView, self).dispatch(*args, **kwargs)
 
     def form_valid(self, form):
         if form.is_valid():
@@ -76,16 +76,20 @@ class SearchPlotView(EdcBaseViewMixin, TemplateView, FormView):
     def get_context_data(self, **kwargs):
         context = super(SearchPlotView, self).get_context_data(**kwargs)
         qs = Plot.objects.all().order_by('-created')
-        paginated_results = QuerysetWrapper(qs).object_list
-        results_log = []
-        for plot in self.paginate(paginated_results):
+        plot_results = QuerysetWrapper(qs).object_list
+        results = []
+        for plot in self.paginate(plot_results):
             try:
                 required_plot_models = []
                 required_plot_models.append(plot)
                 plot_log = PlotLog.objects.get(plot=plot)
                 required_plot_models.append(plot_log)
-                plot_entry = PlotLogEntry.objects.get(plot_log__plot=plot)
-                required_plot_models.append(plot_entry)
+                plot_log_entry = PlotLogEntry.objects.get(
+                    plot_log__plot=plot,
+                    report_datetime__year=arrow.utcnow().year,
+                    report_datetime__month=arrow.utcnow().month,
+                    report_datetime__day=arrow.utcnow().day)
+                required_plot_models.append(plot_log_entry)
             except PlotLog.DoesNotExist:
                 required_plot_models.append(PlotLog.objects.none())
                 required_plot_models.append(PlotLogEntry.objects.none())
@@ -93,14 +97,14 @@ class SearchPlotView(EdcBaseViewMixin, TemplateView, FormView):
                 required_plot_models.append(PlotLogEntry.objects.none())
             except PlotLogEntry.MultipleObjectsReturned:
                 required_plot_models.append(PlotLogEntry.objects.filter(plot_log__plot=plot).latest())
-            confirmed_status = "disabled" if plot.confirmed else "active"
-            required_plot_models.append(confirmed_status)
-            results_log.append(required_plot_models)
+            plot_log_entry_link_html_class = "disabled" if plot.confirmed else "active"
+            required_plot_models.append(plot_log_entry_link_html_class)
+            results.append(required_plot_models)
         context.update(
             # site_header=admin.site.site_header,
             subject_dashboard_url_name=self.subject_dashboard_url_name,
             search_url_name=self.search_url_name,
-            results=self.paginate(results_log))
+            results=self.paginate(results))
         return context
 
     def paginate(self, qs):
