@@ -44,6 +44,7 @@ class EnumerationDashboardView(EdcBaseViewMixin, TemplateView):
 
     @property
     def household_log(self):
+        """Return household log."""
         try:
             household_log = HouseholdLog.objects.get(household_structure=self.household_structure())
         except HouseholdLog.DoesNotExist:
@@ -51,10 +52,12 @@ class EnumerationDashboardView(EdcBaseViewMixin, TemplateView):
         return household_log
 
     def household_log_entries(self):
+        """Return household log entries."""
         household_log_entries = HouseholdLogEntry.objects.filter(household_log=self.household_log)
         return household_log_entries
 
     def todays_household_log_entry(self, household_structure):
+        """Return today's household log entry."""
         todays_household_log_entry = None
         report_datetime = HouseholdLogEntry.objects.filter(
             household_log__household_structure=household_structure).aggregate(
@@ -68,10 +71,12 @@ class EnumerationDashboardView(EdcBaseViewMixin, TemplateView):
         return todays_household_log_entry
 
     def household_members(self):
+        """Return household member of a  particular household structure."""
         return HouseholdMember.objects.filter(household_structure=self.household_structure())
 
     @property
     def head_of_household(self):
+        """Return the head of household of a household."""
         members = HouseholdMember.objects.filter(household_structure=self.household_structure())
         head_of_household = None
         for member in members:
@@ -81,6 +86,7 @@ class EnumerationDashboardView(EdcBaseViewMixin, TemplateView):
 
     @property
     def head_of_household_eligibility(self):
+        """Return the head of household eligibility."""
         try:
             head_of_household_eligibility = HouseholdHeadEligibility.objects.get(household_member=self.head_of_household)
         except HouseholdHeadEligibility.DoesNotExist:
@@ -89,6 +95,7 @@ class EnumerationDashboardView(EdcBaseViewMixin, TemplateView):
 
     @property
     def representative_eligibility(self):
+        """Return the representative eligibility."""
         try:
             representative_eligibility = RepresentativeEligibility.objects.get(household_structure=self.household_structure())
         except RepresentativeEligibility.DoesNotExist:
@@ -96,6 +103,7 @@ class EnumerationDashboardView(EdcBaseViewMixin, TemplateView):
         return representative_eligibility
 
     def survey(self, survey=None):
+        """Return a survey."""
         return self.context.get('survey')
 
     @property
@@ -103,6 +111,7 @@ class EnumerationDashboardView(EdcBaseViewMixin, TemplateView):
         return self.context.get('household_identifier')
 
     def household_structure(self):
+        """Return household structure."""
         # survey bcpp-survey.bcpp-year-1.bhs.test_community
         try:
             household_structure = HouseholdStructure.objects.get(household=self.household, survey='bcpp-survey.bcpp-year-1.bhs.test_community')
