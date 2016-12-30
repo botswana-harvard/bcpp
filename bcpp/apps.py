@@ -21,6 +21,10 @@ from edc_timepoint.timepoint import Timepoint
 from edc_visit_tracking.apps import AppConfig as EdcVisitTrackingAppConfigParent
 from edc_visit_tracking.constants import SCHEDULED, UNSCHEDULED, LOST_VISIT
 from edc_device.constants import SERVER, CENTRAL_SERVER, CLIENT
+from plot.apps import AppConfig as PlotAppConfigParent
+from household.apps import AppConfig as HouseholdAppConfigParent
+from member.apps import AppConfig as MemberAppConfigParent
+from bcpp_subject.apps import AppConfig as BcppSubjectAppConfigParent
 from survey.apps import CurrentSurveys, CurrentSurvey, AppConfig as SurveyAppConfigParent
 
 style = color_style()
@@ -28,6 +32,22 @@ style = color_style()
 
 class AppConfig(DjangoAppConfig):
     name = 'bcpp'
+
+
+class PlotAppConfig(PlotAppConfigParent):
+    list_template_name = 'bcpp/plot_list.html'
+
+
+class HouseholdAppConfig(HouseholdAppConfigParent):
+    list_template_name = 'bcpp/household_list.html'
+
+
+class MemberAppConfig(MemberAppConfigParent):
+    list_template_name = 'bcpp/member_list.html'
+
+
+class BcppSubjectAppConfig(BcppSubjectAppConfigParent):
+    list_template_name = 'bcpp/bcpp_subject_list.html'
 
 
 class EdcBaseAppConfig(EdcBaseAppConfigParent):

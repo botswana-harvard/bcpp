@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django_crypto_fields.apps.AppConfig',
     'django_revision.apps.AppConfig',
     'edc_base.apps.AppConfig',
+    'edc_search.apps.AppConfig',
     'edc_consent.apps.AppConfig',
     'edc_dashboard.apps.AppConfig',
     'edc_subset_manager.apps.AppConfig',
@@ -59,11 +60,11 @@ INSTALLED_APPS = [
     'bcpp.apps.EdcTimepointAppConfig',
     'bcpp.apps.EdcAppointmentAppConfig',
     'bcpp.apps.EdcVisitTrackingAppConfig',
-    'household.apps.AppConfig',
-    'member.apps.AppConfig',
-    'plot.apps.AppConfig',
+    'bcpp.apps.HouseholdAppConfig',
+    'bcpp.apps.MemberAppConfig',
+    'bcpp.apps.BcppSubjectAppConfig',
+    'bcpp.apps.PlotAppConfig',
     'bcpp_lab.apps.AppConfig',
-    'bcpp_subject.apps.AppConfig',
 ]
 
 if 'test' in sys.argv:

@@ -1,0 +1,34 @@
+{% extends "bcpp/base.html" %}
+{% load staticfiles %}
+
+{% block main %}
+<div class="container">
+   <div class="row">
+      <div class="col-md-4">
+        <div class="panel panel-info">
+          <div class="panel-heading">Reports</div>
+            <div class="panel-body">
+            </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="panel panel-success">
+          <div class="panel-heading">Statistics</div>
+            <div class="panel-body">
+            </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="panel panel-warning">
+          <div class="panel-heading">Edc Administration</div>
+            <div class="panel-body">
+              <a role="button" class="btn btn-sm btn-default btn-block" href="{% url 'plot:plot_admin:index' %}">Plots</a>
+              <a role="button" class="btn btn-sm btn-default btn-block" href="{% url 'household:household_admin:index' %}">Households</a>
+              <a role="button" class="btn btn-sm btn-default btn-block" href="{% url 'member:member_admin:index' %}">Member</a>
+              <a role="button" class="btn btn-sm btn-default btn-block" href="{% url 'bcpp-subject:bcpp_subject_admin:index' %}">Subjects</a>
+            </div>
+        </div>
+        </div>
+      </div>
+    </div>
+{% endblock main %}

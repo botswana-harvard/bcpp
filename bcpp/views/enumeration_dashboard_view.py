@@ -19,7 +19,7 @@ from member.models.household_member.household_member import HouseholdMember
 
 class EnumerationDashboardView(EdcBaseViewMixin, TemplateView):
 
-    template_name = 'enumeration_dashboard.html'
+    template_name = 'bcpp/enumeration_dashboard.html'
     paginate_by = 4
 
     def __init__(self, **kwargs):
