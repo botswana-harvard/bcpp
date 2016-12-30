@@ -12,6 +12,9 @@ class TestEnumerationDashboard(MemberMixin, TestCase):
         """Assert today's log entry is returned."""
         household_structure = self.make_household_ready_for_enumeration(make_hoh=False)
         enumeration_dashboard = EnumerationDashboardView()
+        enumeration_dashboard.get_context_data(
+            household_identifier=household_structure.household.household_identifier,
+            survey=household_structure.survey)
         todays_household_log_entry = enumeration_dashboard.todays_household_log_entry(household_structure)
         r = arrow.Arrow.fromdatetime(todays_household_log_entry.report_datetime, todays_household_log_entry.report_datetime.tzinfo).to('utc')
         self.assertEqual(r.date(), arrow.utcnow().date())

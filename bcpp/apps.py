@@ -1,15 +1,12 @@
-import pytz
-import sys
-
 from datetime import datetime
-from dateutil.relativedelta import relativedelta, MO, TU, WE, TH, FR, SA, SU
+from dateutil.relativedelta import MO, TU, WE, TH, FR, SA, SU
+from dateutil.tz import gettz
 
 from django.apps import AppConfig as DjangoAppConfig
 from django.core.management.color import color_style
 
 from edc_appointment.apps import AppConfig as EdcAppointmentAppConfigParent
 from edc_appointment.facility import Facility
-from edc_base.utils import get_utcnow
 from edc_base.apps import AppConfig as EdcBaseAppConfigParent
 from edc_base_test.apps import AppConfig as EdcBaseTestAppConfigParent
 from edc_constants.constants import FAILED_ELIGIBILITY
@@ -78,18 +75,8 @@ class EdcProtocolAppConfig(EdcProtocolAppConfigParent):
         SubjectType('subject', 'Research Subject',
                     Cap(model_name='bcpp_subject.subjectconsent', max_subjects=9999)),
     ]
-    if 'test' in sys.argv:
-        sys.stdout.write(
-            style.NOTICE(
-                'WARNING! Overwriting AppConfig study_open_datetime and study_close_datetime for tests only. \n'
-                'See EdcProtocolAppConfig\n'))
-        teststudyopen = get_utcnow() - relativedelta(years=3)
-        teststudyclose = get_utcnow() + relativedelta(years=2)
-    else:
-        teststudyopen = None
-        teststudyclose = None
-    study_open_datetime = teststudyopen or datetime(2013, 10, 18, 0, 0, 0, tzinfo=pytz.utc)
-    study_close_datetime = teststudyclose or datetime(2018, 12, 1, 0, 0, 0, tzinfo=pytz.utc)
+    study_open_datetime = datetime(2013, 10, 18, 0, 0, 0, tzinfo=gettz('UTC'))
+    study_close_datetime = datetime(2018, 12, 1, 0, 0, 0, tzinfo=gettz('UTC'))
 
 
 class EdcVisitTrackingAppConfig(EdcVisitTrackingAppConfigParent):
