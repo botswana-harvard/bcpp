@@ -31,26 +31,25 @@
                       <thead>
                       		<th>#</th>
                       		<th>Plot</th>
-                      		<th>Action</th>
+                      		<th>Confirmed</th>
                       		<th>Status</th>
                       		<th>Households</th>
                       		<th>Members</th>
                       		<th>Log Report</th>
                       		<th>Map</th>
-                      		<th>Community</th>
                       		<th>GPS Radius</th>
                       		<th>Modified Date</th>
                       </thead>
                       <tbody>
-                        {% for obj, log, entry in results %}
+                        {% for obj, log, entry, confirmed_status in results %}
                           <tr>
                             <td>{{ forloop.counter }}</td>
                             <td><a role="button" class="btn btn-sm btn-success" href="{% url 'plot_admin:plot_plot_change' obj.id %}?next=plot_search_url"><span class="glyphicon glyphicon-pencil"></span>  {{ obj.plot_identifier }}</a></td>
                             <td>
                             	{% if obj.confirmed %}
-                            		<span class="text-primary">confirmed</span>
+                            		<i class="fa fa-check fa-lg" aria-hidden="true"></i>
                             	{% else %}
-                            		<span class="text-warning">unconfirmed</span>
+                            		<i class="fa fa-times fa-lg" aria-hidden="true"></i>
                             	{% endif %}
                             </td>
                             <td>{{ obj.status }}</td>
@@ -58,19 +57,19 @@
                             <td><a role="button" class="btn btn-sm btn-default" href="#"><span class="badge">{{ obj.eligible_members }}</span> Members</a></td>
                             <td>
                             	{% if entry %}
-                            		<a role="button" class="btn btn-sm btn-success" href="{% url 'plot_admin:plot_plotlogentry_change' entry.pk %}?plot_log={{log.pk}}&next=plot_search_url"><span class="glyphicon glyphicon-pencil"></span>Edit Entry</a>
+                            		<a role="button" class="btn btn-sm btn-success {{confirmed_status}}" href="{% url 'plot_admin:plot_plotlogentry_change' entry.pk %}?plot_log={{log.pk}}&next=plot_search_url"><span class="glyphicon glyphicon-pencil"></span>Edit Entry</a>
                             	{% else %}
-                            		<a role="button" class="btn btn-sm btn-success" href="{% url 'plot_admin:plot_plotlogentry_add' %}?plot_log={{log.pk}}&next=plot_search_url"><span class="glyphicon glyphicon-plus"></span>Add New Entry</a>
+                            		<a role="button" class="btn btn-sm btn-default" href="{% url 'plot_admin:plot_plotlogentry_add' %}?plot_log={{log.pk}}&next=plot_search_url">
+                            		<span class="glyphicon glyphicon-plus"></span>Add New Entry</a>
                             	{% endif %}
                             </td>
                             <td>
                             	{% if obj.confirmed %}
-                            		<a role="button" class="btn btn-sm btn-success" href="#"><span class="glyphicon glyphicon-map-marker"></span> View Map</a>
+                            		<a role="button" class="btn btn-sm btn-success" href="#"><span class="glyphicon glyphicon-map-marker"></span> {{obj.community}}</a>
                             	{% else %}
                             		<span class="glyphicon glyphicon-map-marker"><small><span class="text-danger">missing lat/lon</span></small></span>
                             	{% endif %}
                             </td>
-                            <td>{{ obj.community }}</td>
                             <td></td>
                             <td>{{ obj.modified|date:"Y-m-d H:i" }}</td>
                           </tr>

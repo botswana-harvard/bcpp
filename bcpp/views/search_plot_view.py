@@ -5,6 +5,8 @@ from django.db.models import Q
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView, FormView
 
+from datetime import datetime
+
 from edc_base.view_mixins import EdcBaseViewMixin
 
 from plot.models import Plot, PlotLog, PlotLogEntry
@@ -91,6 +93,8 @@ class SearchPlotView(EdcBaseViewMixin, TemplateView, FormView):
                 required_plot_models.append(PlotLogEntry.objects.none())
             except PlotLogEntry.MultipleObjectsReturned:
                 required_plot_models.append(PlotLogEntry.objects.filter(plot_log__plot=plot).latest())
+            confirmed_status = "disabled" if plot.confirmed else "active"
+            required_plot_models.append(confirmed_status)
             results_log.append(required_plot_models)
         context.update(
             # site_header=admin.site.site_header,
