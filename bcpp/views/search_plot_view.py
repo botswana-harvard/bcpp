@@ -14,25 +14,25 @@ from plot.models import Plot, PlotLog, PlotLogEntry
 from ..forms import SearchPlotForm
 
 
-class QuerysetWrapper:
-    def __init__(self, qs):
-        self.qs = qs or []
-        self._object_list = []
-
-    @property
-    def object_list(self):
-        if not self._object_list:
-            for obj in self.qs:
-                try:
-                    plot = Plot.objects.get(plot_identifier=obj.plot_identifier)
-                    obj.plot_identifier = plot.plot_identifier
-                except MultipleObjectsReturned:
-                    plots = Plot.objects.filter(plot_identifier=obj.plot_identifier)
-                    obj.plot_identifier = plots[0].plot_identifier
-                except Plot.DoesNotExist:
-                    obj.plot_identifier = None
-                self._object_list.append(obj)
-        return self._object_list
+# class QuerysetWrapper:
+#     def __init__(self, qs):
+#         self.qs = qs or []
+#         self._object_list = []
+# 
+#     @property
+#     def object_list(self):
+#         if not self._object_list:
+#             for obj in self.qs:
+#                 try:
+#                     plot = Plot.objects.get(plot_identifier=obj.plot_identifier)
+#                     obj.plot_identifier = plot.plot_identifier
+#                 except MultipleObjectsReturned:
+#                     plots = Plot.objects.filter(plot_identifier=obj.plot_identifier)
+#                     obj.plot_identifier = plots[0].plot_identifier
+#                 except Plot.DoesNotExist:
+#                     obj.plot_identifier = None
+#                 self._object_list.append(obj)
+#         return self._object_list
 
 
 class SearchPlotView(EdcBaseViewMixin, TemplateView, FormView):
@@ -58,25 +58,25 @@ class SearchPlotView(EdcBaseViewMixin, TemplateView, FormView):
                 Q(user_created__iexact=search_term) |
                 Q(user_modified__iexact=search_term)
             )
+            plot_results = []
             try:
-                qs = [Plot.objects.get(options)]
+                plot_results = [Plot.objects.get(options)]
             except Plot.DoesNotExist:
-                qs = None
                 form.add_error(
                     'search_term',
                     'No matching records for \'{}\'.'.format(search_term))
             except MultipleObjectsReturned:
-                qs = Plot.objects.filter(options).order_by('-created')
+                plot_results = Plot.objects.filter(options).order_by('-created')
             context = self.get_context_data()
             context.update(
                 form=form,
-                results=self.paginate(QuerysetWrapper(qs).object_list))
+                results=self.paginate(plot_results))
         return self.render_to_response(context)
 
     def get_context_data(self, **kwargs):
         context = super(SearchPlotView, self).get_context_data(**kwargs)
         qs = Plot.objects.all().order_by('-created')
-        plot_results = QuerysetWrapper(qs).object_list
+        plot_results = [plot for plot in qs]
         results = []
         for plot in self.paginate(plot_results):
             try:

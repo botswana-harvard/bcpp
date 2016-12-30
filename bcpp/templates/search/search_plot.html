@@ -59,8 +59,10 @@
                             	{% if plot_log_entry %}
                             		<a role="button" class="btn btn-sm btn-success {{plot_log_entry_link_html_class}}" href="{% url 'plot_admin:plot_plotlogentry_change' entry.pk %}?plot_log={{log.pk}}&next=plot_search_url"><span class="glyphicon glyphicon-pencil"></span>Edit Entry</a>
                             	{% else %}
-                            		<a role="button" class="btn btn-sm btn-default" href="{% url 'plot_admin:plot_plotlogentry_add' %}?plot_log={{log.pk}}&next=plot_search_url">
-                            		<span class="glyphicon glyphicon-plus"></span>Add New Entry</a>
+                            		{% if not obj.confirmed %}
+	                            		<a role="button" class="btn btn-sm btn-default" href="{% url 'plot_admin:plot_plotlogentry_add' %}?plot_log={{log.pk}}&next=plot_search_url">
+	                            		<span class="glyphicon glyphicon-plus"></span>Add New Entry</a>
+                            		{% endif %}
                             	{% endif %}
                             </td>
                             <td>
