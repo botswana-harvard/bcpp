@@ -15,13 +15,15 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 
-from bcpp.views import HomeView, EnumerationDashboardView
 
 from edc_base.views import LogoutView, LoginView
+
 from plot.admin_site import plot_admin
 from household.admin_site import household_admin
 from member.admin_site import member_admin
 from bcpp_subject.admin_site import bcpp_subject_admin
+
+from .views import HomeView, EnumerationDashboardView
 
 
 urlpatterns = [
