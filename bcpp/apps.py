@@ -24,6 +24,7 @@ from edc_device.constants import SERVER, CENTRAL_SERVER, CLIENT
 from plot.apps import AppConfig as PlotAppConfigParent
 from household.apps import AppConfig as HouseholdAppConfigParent
 from member.apps import AppConfig as MemberAppConfigParent
+from enumeration.apps import AppConfig as EnumerationAppConfigParent
 from bcpp_subject.apps import AppConfig as BcppSubjectAppConfigParent
 from survey.apps import CurrentSurveys, CurrentSurvey, AppConfig as SurveyAppConfigParent
 
@@ -44,6 +45,11 @@ class HouseholdAppConfig(HouseholdAppConfigParent):
 
 class MemberAppConfig(MemberAppConfigParent):
     list_template_name = 'bcpp/member_list.html'
+
+
+class EnumerationAppConfig(EnumerationAppConfigParent):
+    list_template_name = 'bcpp/enumeration_list.html'
+    enumeration_dashboard_base_html = 'bcpp/base.html'
 
 
 class BcppSubjectAppConfig(BcppSubjectAppConfigParent):

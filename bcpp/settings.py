@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     'bcpp.apps.EdcVisitTrackingAppConfig',
     'bcpp.apps.HouseholdAppConfig',
     'bcpp.apps.MemberAppConfig',
+    'bcpp.apps.EnumerationAppConfig',
     'bcpp.apps.BcppSubjectAppConfig',
     'bcpp.apps.PlotAppConfig',
     'bcpp_lab.apps.AppConfig',

@@ -15,7 +15,6 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 
-
 from edc_base.views import LogoutView, LoginView
 
 from plot.admin_site import plot_admin
@@ -23,7 +22,7 @@ from household.admin_site import household_admin
 from member.admin_site import member_admin
 from bcpp_subject.admin_site import bcpp_subject_admin
 
-from .views import HomeView, EnumerationDashboardView
+from .views import HomeView
 
 
 urlpatterns = [
@@ -37,11 +36,8 @@ urlpatterns = [
     url('plot/', include('plot.urls', namespace='plot')),
     url('household/', include('household.urls', namespace='household')),
     url('member/', include('member.urls', namespace='member')),
+    url('enumeration/', include('enumeration.urls', namespace='enumeration')),
     url('subject/', include('bcpp_subject.urls', namespace='bcpp-subject')),
-    url(r'^enumeration_dashboard/(?P<household_identifier>[0-9A-Z-]+)/$',
-        EnumerationDashboardView.as_view(), name='enumeration_dashboard_url'),
-    url(r'^enumeration_dashboard/(?P<household_identifier>[0-9A-Z-]+)/(?P<survey>[-\w]+)/$',
-        EnumerationDashboardView.as_view(), name='enumeration_dashboard_url'),
     url(r'^edc/', include('edc_base.urls', 'edc-base')),
     url(r'^tz_detect/', include('tz_detect.urls')),
     url(r'', HomeView.as_view(), name='home_url'),
