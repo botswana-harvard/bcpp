@@ -6,7 +6,7 @@ from django.test.client import RequestFactory
 
 from django.urls.base import reverse
 
-from enumeration.views import DashboardView
+from enumeration.views import DashboardView, EnumerationView
 
 
 class TestEnumeration(MemberMixin, TestCase):
@@ -32,4 +32,42 @@ class TestEnumeration(MemberMixin, TestCase):
         self.client.force_login(self.user)
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        print(response.context_data)
+
+    def test_list_view1(self):
+        url = reverse('enumeration:list_url')
+        request = self.factory.get(url)
+        request.user = self.user
+        response = EnumerationView.as_view()(request)
+        self.assertEqual(response.status_code, 200)
+
+    def test_list_view2(self):
+        url = reverse('enumeration:list_url', kwargs=dict(page=1))
+        request = self.factory.get(url)
+        request.user = self.user
+        response = EnumerationView.as_view()(request)
+        self.assertEqual(response.status_code, 200)
+
+    def test_list_view3(self):
+        url = reverse('enumeration:list_url', kwargs=dict(
+            household_identifier=self.household_structure.household.household_identifier))
+        request = self.factory.get(url)
+        request.user = self.user
+        response = EnumerationView.as_view()(request)
+        self.assertEqual(response.status_code, 200)
+
+    def test_list_view4(self):
+        url = reverse('enumeration:list_url', kwargs=dict(
+            household_identifier=self.household_structure.household.household_identifier,
+            survey=self.household_structure.survey))
+        request = self.factory.get(url)
+        request.user = self.user
+        response = EnumerationView.as_view()(request)
+        self.assertEqual(response.status_code, 200)
+
+    def test_list_view5(self):
+        url = reverse('enumeration:list_url', kwargs=dict(
+            plot_identifier=self.household_structure.household.plot.plot_identifier))
+        request = self.factory.get(url)
+        request.user = self.user
+        response = EnumerationView.as_view()(request)
+        self.assertEqual(response.status_code, 200)
