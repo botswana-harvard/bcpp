@@ -5,14 +5,15 @@ from dateutil.tz import gettz
 from django.apps import AppConfig as DjangoAppConfig
 from django.core.management.color import color_style
 
+# from edc_label.apps import AppConfig as EdcLabelConfigParent
 from edc_appointment.apps import AppConfig as EdcAppointmentAppConfigParent
 from edc_appointment.facility import Facility
 from edc_base.apps import AppConfig as EdcBaseAppConfigParent
 from edc_base_test.apps import AppConfig as EdcBaseTestAppConfigParent
 from edc_constants.constants import FAILED_ELIGIBILITY
 from edc_device.apps import AppConfig as EdcDeviceAppConfigParent, DevicePermission
+from edc_device.constants import SERVER, CENTRAL_SERVER, CLIENT
 from edc_identifier.apps import AppConfig as EdcIdentifierAppConfigParent
-# from edc_label.apps import AppConfig as EdcLabelConfigParent
 from edc_map.apps import AppConfig as EdcMapAppConfigParent
 from edc_metadata.apps import AppConfig as EdcMetadataAppConfigParent
 from edc_protocol.apps import AppConfig as EdcProtocolAppConfigParent, SubjectType, Cap
@@ -20,12 +21,12 @@ from edc_timepoint.apps import AppConfig as EdcTimepointAppConfigParent
 from edc_timepoint.timepoint import Timepoint
 from edc_visit_tracking.apps import AppConfig as EdcVisitTrackingAppConfigParent
 from edc_visit_tracking.constants import SCHEDULED, UNSCHEDULED, LOST_VISIT
-from edc_device.constants import SERVER, CENTRAL_SERVER, CLIENT
-from plot.apps import AppConfig as PlotAppConfigParent
+
+from bcpp_subject.apps import AppConfig as BcppSubjectAppConfigParent
+from enumeration.apps import AppConfig as EnumerationAppConfigParent
 from household.apps import AppConfig as HouseholdAppConfigParent
 from member.apps import AppConfig as MemberAppConfigParent
-from enumeration.apps import AppConfig as EnumerationAppConfigParent
-from bcpp_subject.apps import AppConfig as BcppSubjectAppConfigParent
+from plot.apps import AppConfig as PlotAppConfigParent
 from survey.apps import CurrentSurveys, CurrentSurvey, AppConfig as SurveyAppConfigParent
 
 style = color_style()
@@ -79,8 +80,11 @@ class EdcDeviceAppConfig(EdcDeviceAppConfigParent):
 class SurveyAppConfig(SurveyAppConfigParent):
     current_surveys = CurrentSurveys(*[
         CurrentSurvey('bcpp-survey.bcpp-year-1.bhs.test_community', 0),
-        CurrentSurvey('bcpp-survey.bcpp-year-2.ahs.test_community', 1),
-        CurrentSurvey('bcpp-survey.bcpp-year-3.ahs.test_community', 2)])
+        CurrentSurvey('bcpp-survey.bcpp-year-2.bhs.test_community', 1),
+        CurrentSurvey('bcpp-survey.bcpp-year-2.ahs.test_community', 2),
+        CurrentSurvey('bcpp-survey.bcpp-year-3.ahs.test_community', 3),
+        CurrentSurvey('bcpp-survey.bcpp-year-3.ess.test_community', 4),
+    ])
 
 
 class EdcMapAppConfig(EdcMapAppConfigParent):
