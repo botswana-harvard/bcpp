@@ -18,7 +18,7 @@ v1 = Consent(
     'bcpp_subject.subjectconsent',
     version='1',
     start=arrow.get(
-        datetime(2013, 10, 30, 0, 0, 0), tzinfo=tzinfo).to('UTC').datetime,
+        datetime(2013, 10, 18, 0, 0, 0), tzinfo=tzinfo).to('UTC').datetime,
     end=arrow.get(
         datetime(2014, 4, 9, 23, 59, 59), tzinfo=tzinfo).to('UTC').datetime,
     age_min=16,

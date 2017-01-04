@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django_revision.apps.AppConfig',
     'edc_search.apps.AppConfig',
     'edc_consent.apps.AppConfig',
+    'edc_lab.apps.AppConfig',
     'edc_dashboard.apps.AppConfig',
     'edc_subset_manager.apps.AppConfig',
     'edc_sync.apps.AppConfig',
@@ -65,7 +66,6 @@ INSTALLED_APPS = [
     'bcpp.apps.EnumerationAppConfig',
     'bcpp.apps.BcppSubjectAppConfig',
     'bcpp.apps.PlotAppConfig',
-    'bcpp_lab.apps.AppConfig',
 ]
 
 if 'test' in sys.argv:
