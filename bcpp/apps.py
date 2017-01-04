@@ -28,6 +28,7 @@ from household.apps import AppConfig as HouseholdAppConfigParent
 from member.apps import AppConfig as MemberAppConfigParent
 from plot.apps import AppConfig as PlotAppConfigParent
 from survey.apps import CurrentSurveys, CurrentSurvey, AppConfig as SurveyAppConfigParent
+from edc_base.utils import get_utcnow
 
 style = color_style()
 
@@ -58,8 +59,10 @@ class BcppSubjectAppConfig(BcppSubjectAppConfigParent):
 
 
 class EdcBaseAppConfig(EdcBaseAppConfigParent):
-    project_name = 'Edc Pharmacy'
+    project_name = 'BCPP'
     institution = 'Botswana-Harvard AIDS Institute'
+    copyright = '2013-{}'.format(get_utcnow().year)
+    license = None
 
 
 class EdcBaseTestAppConfig(EdcBaseTestAppConfigParent):
