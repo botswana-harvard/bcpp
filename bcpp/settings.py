@@ -170,6 +170,11 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
+LANGUAGES = (
+    ('tn', 'Setswana'),
+    ('en', 'English'))
+
+
 TIME_ZONE = 'Africa/Gaborone'
 
 USE_I18N = True

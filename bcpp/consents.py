@@ -29,7 +29,7 @@ v1 = Consent(
 v2 = Consent(
     'bcpp_subject.subjectconsent',
     version='2',
-    updates_versions=['1'],
+    # updates_versions=['1'],
     start=arrow.get(
         datetime(2014, 4, 10, 0, 0, 0), tzinfo=tzinfo).to('UTC').datetime,
     end=arrow.get(
@@ -42,7 +42,7 @@ v2 = Consent(
 v3 = Consent(
     'bcpp_subject.subjectconsent',
     version='3',
-    updates_versions=['2'],
+    # updates_versions=['2'],
     start=arrow.get(
         datetime(2015, 5, 1, 0, 0, 0), tzinfo=tzinfo).to('UTC').datetime,
     end=arrow.get(
@@ -55,7 +55,7 @@ v3 = Consent(
 v4 = Consent(
     'bcpp_subject.subjectconsent',
     version='4',
-    updates_versions=['3'],
+    # updates_versions=['3'],
     start=arrow.get(
         datetime(2015, 9, 16, 0, 0, 0), tzinfo=tzinfo).to('UTC').datetime,
     end=arrow.get(
@@ -68,7 +68,7 @@ v4 = Consent(
 v5 = Consent(
     'bcpp_subject.subjectconsent',
     version='5',
-    updates_versions=['4'],
+    # updates_versions=['4'],
     start=arrow.get(
         datetime(2016, 5, 23, 0, 0, 0), tzinfo=tzinfo).to('UTC').datetime,
     end=arrow.get(
