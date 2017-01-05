@@ -36,6 +36,7 @@
             <li class="{%if navbar_selected == 'member' %}active{%endif%}"><a href="{% url 'member:list_url' %}">Members</a></li>
          		<li class="{%if navbar_selected == 'bcpp_subject' %}active{%endif%}"><a href="{% url 'bcpp-subject:list_url' %}">Subjects</a></li>
          		<li class="{%if navbar_selected == 'bcpp_clinic' %}active{%endif%}"><a href="#">Clinic Subjects</a></li>
+            <li><a data-toggle="modal" data-target="#helpModal" href="#"><i class="fa fa-question-circle fa-lg"></i> </a></li>
             <li id="li-topbar-home" class="{%if navbar_selected == 'home' %}active{%endif%}"><a class="glyphicon glyphicon-home" title="home" href="{% url 'home_url' %}"></a></li>
             {% block settings_url %}
               {{ block.super }}
@@ -47,6 +48,10 @@
         </div>
       </div>
     </nav>
+
+  {% include 'bcpp/help_model.html' %}
+
+
   {% endblock topbar %}
   
 
