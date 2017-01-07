@@ -27,7 +27,7 @@ from enumeration.apps import AppConfig as EnumerationAppConfigParent
 from household.apps import AppConfig as HouseholdAppConfigParent
 from member.apps import AppConfig as MemberAppConfigParent
 from plot.apps import AppConfig as PlotAppConfigParent
-from survey.apps import CurrentSurveys, CurrentSurvey, AppConfig as SurveyAppConfigParent
+from survey.apps import AppConfig as SurveyAppConfigParent, S
 from edc_base.utils import get_utcnow
 
 style = color_style()
@@ -81,13 +81,12 @@ class EdcDeviceAppConfig(EdcDeviceAppConfigParent):
 
 
 class SurveyAppConfig(SurveyAppConfigParent):
-    current_surveys = CurrentSurveys(*[
-        CurrentSurvey('bcpp-survey.bcpp-year-1.bhs.test_community', 0),
-        CurrentSurvey('bcpp-survey.bcpp-year-2.bhs.test_community', 1),
-        CurrentSurvey('bcpp-survey.bcpp-year-2.ahs.test_community', 2),
-        CurrentSurvey('bcpp-survey.bcpp-year-3.ahs.test_community', 3),
-        CurrentSurvey('bcpp-survey.bcpp-year-3.ess.test_community', 4),
-    ])
+    current_surveys = [
+        S('bcpp-survey.bcpp-year-1.bhs.test_community'),
+        S('bcpp-survey.bcpp-year-2.bhs.test_community'),
+        S('bcpp-survey.bcpp-year-2.ahs.test_community'),
+        S('bcpp-survey.bcpp-year-3.ahs.test_community'),
+        S('bcpp-survey.bcpp-year-3.ess.test_community')]
 
 
 class EdcMapAppConfig(EdcMapAppConfigParent):
