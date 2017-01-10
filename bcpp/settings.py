@@ -25,7 +25,7 @@ SECRET_KEY = '9-%tjc_ov-=t6-fefrys4n@izkj4y8oewah6uf2p9q%*!ub%)^'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '192.168.157.5']
 
 
 # Application definition
@@ -41,8 +41,9 @@ INSTALLED_APPS = [
     'tz_detect',
     'django_crypto_fields.apps.AppConfig',
     'django_revision.apps.AppConfig',
-    'edc_base.apps.AppConfig',
+    'edc_search.apps.AppConfig',
     'edc_consent.apps.AppConfig',
+    'edc_lab.apps.AppConfig',
     'edc_dashboard.apps.AppConfig',
     'edc_subset_manager.apps.AppConfig',
     'edc_sync.apps.AppConfig',
@@ -50,6 +51,7 @@ INSTALLED_APPS = [
     'edc_registration.apps.AppConfig',
     'edc_visit_schedule.apps.AppConfig',
     'bcpp.apps.AppConfig',
+    'bcpp.apps.EdcBaseAppConfig',
     'bcpp.apps.EdcMetadataAppConfig',
     'bcpp.apps.EdcIdentifierAppConfig',
     'bcpp.apps.EdcProtocolAppConfig',
@@ -60,11 +62,11 @@ INSTALLED_APPS = [
     'bcpp.apps.EdcTimepointAppConfig',
     'bcpp.apps.EdcAppointmentAppConfig',
     'bcpp.apps.EdcVisitTrackingAppConfig',
-    'household.apps.AppConfig',
-    'member.apps.AppConfig',
-    'plot.apps.AppConfig',
-    'bcpp_lab.apps.AppConfig',
-    'bcpp_subject.apps.AppConfig',
+    'bcpp.apps.HouseholdAppConfig',
+    'bcpp.apps.MemberAppConfig',
+    'bcpp.apps.EnumerationAppConfig',
+    'bcpp.apps.BcppSubjectAppConfig',
+    'bcpp.apps.PlotAppConfig',
 ]
 
 if 'test' in sys.argv:
@@ -169,7 +171,12 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+LANGUAGES = (
+    ('tn', 'Setswana'),
+    ('en', 'English'))
+
+
+TIME_ZONE = 'Africa/Gaborone'
 
 USE_I18N = True
 
@@ -187,3 +194,4 @@ KEY_PATH = os.path.join(BASE_DIR, 'crypto_fields')
 
 DEVICE_ID = '99'
 CURRENT_MAP_AREA = 'test_community'
+CRISPY_TEMPLATE_PACK = 'bootstrap3'

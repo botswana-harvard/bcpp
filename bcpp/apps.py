@@ -5,14 +5,15 @@ from dateutil.tz import gettz
 from django.apps import AppConfig as DjangoAppConfig
 from django.core.management.color import color_style
 
+# from edc_label.apps import AppConfig as EdcLabelConfigParent
 from edc_appointment.apps import AppConfig as EdcAppointmentAppConfigParent
 from edc_appointment.facility import Facility
 from edc_base.apps import AppConfig as EdcBaseAppConfigParent
 from edc_base_test.apps import AppConfig as EdcBaseTestAppConfigParent
 from edc_constants.constants import FAILED_ELIGIBILITY
 from edc_device.apps import AppConfig as EdcDeviceAppConfigParent, DevicePermission
+from edc_device.constants import SERVER, CENTRAL_SERVER, CLIENT
 from edc_identifier.apps import AppConfig as EdcIdentifierAppConfigParent
-# from edc_label.apps import AppConfig as EdcLabelConfigParent
 from edc_map.apps import AppConfig as EdcMapAppConfigParent
 from edc_metadata.apps import AppConfig as EdcMetadataAppConfigParent
 from edc_protocol.apps import AppConfig as EdcProtocolAppConfigParent, SubjectType, Cap
@@ -20,8 +21,14 @@ from edc_timepoint.apps import AppConfig as EdcTimepointAppConfigParent
 from edc_timepoint.timepoint import Timepoint
 from edc_visit_tracking.apps import AppConfig as EdcVisitTrackingAppConfigParent
 from edc_visit_tracking.constants import SCHEDULED, UNSCHEDULED, LOST_VISIT
-from edc_device.constants import SERVER, CENTRAL_SERVER, CLIENT
-from survey.apps import CurrentSurveys, CurrentSurvey, AppConfig as SurveyAppConfigParent
+
+from bcpp_subject.apps import AppConfig as BcppSubjectAppConfigParent
+from enumeration.apps import AppConfig as EnumerationAppConfigParent
+from household.apps import AppConfig as HouseholdAppConfigParent
+from member.apps import AppConfig as MemberAppConfigParent
+from plot.apps import AppConfig as PlotAppConfigParent
+from survey.apps import AppConfig as SurveyAppConfigParent, S
+from edc_base.utils import get_utcnow
 
 style = color_style()
 
@@ -30,9 +37,32 @@ class AppConfig(DjangoAppConfig):
     name = 'bcpp'
 
 
+class PlotAppConfig(PlotAppConfigParent):
+    list_template_name = 'bcpp/plot_list.html'
+
+
+class HouseholdAppConfig(HouseholdAppConfigParent):
+    list_template_name = 'bcpp/household_list.html'
+
+
+class MemberAppConfig(MemberAppConfigParent):
+    list_template_name = 'bcpp/member_list.html'
+
+
+class EnumerationAppConfig(EnumerationAppConfigParent):
+    list_template_name = 'bcpp/enumeration_list.html'
+    enumeration_dashboard_base_html = 'bcpp/base.html'
+
+
+class BcppSubjectAppConfig(BcppSubjectAppConfigParent):
+    list_template_name = 'bcpp/bcpp_subject_list.html'
+
+
 class EdcBaseAppConfig(EdcBaseAppConfigParent):
-    project_name = 'Edc Pharmacy'
+    project_name = 'BCPP'
     institution = 'Botswana-Harvard AIDS Institute'
+    copyright = '2013-{}'.format(get_utcnow().year)
+    license = None
 
 
 class EdcBaseTestAppConfig(EdcBaseTestAppConfigParent):
@@ -51,10 +81,12 @@ class EdcDeviceAppConfig(EdcDeviceAppConfigParent):
 
 
 class SurveyAppConfig(SurveyAppConfigParent):
-    current_surveys = CurrentSurveys(*[
-        CurrentSurvey('bcpp-survey.bcpp-year-1.bhs.test_community', 0),
-        CurrentSurvey('bcpp-survey.bcpp-year-2.ahs.test_community', 1),
-        CurrentSurvey('bcpp-survey.bcpp-year-3.ahs.test_community', 2)])
+    current_surveys = [
+        S('bcpp-survey.bcpp-year-1.bhs.test_community'),
+        S('bcpp-survey.bcpp-year-2.bhs.test_community'),
+        S('bcpp-survey.bcpp-year-2.ahs.test_community'),
+        S('bcpp-survey.bcpp-year-3.ahs.test_community'),
+        S('bcpp-survey.bcpp-year-3.ess.test_community')]
 
 
 class EdcMapAppConfig(EdcMapAppConfigParent):
