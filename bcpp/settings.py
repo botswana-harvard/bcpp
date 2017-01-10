@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'edc_dashboard.apps.AppConfig',
     'edc_subset_manager.apps.AppConfig',
     'edc_sync.apps.AppConfig',
+    'edc_rule_groups.apps.AppConfig',
     'edc_registration.apps.AppConfig',
     'edc_visit_schedule.apps.AppConfig',
     'bcpp.apps.AppConfig',
