@@ -38,24 +38,24 @@ class AppConfig(DjangoAppConfig):
 
 
 class PlotAppConfig(PlotAppConfigParent):
-    list_template_name = 'bcpp/plot_list.html'
+    listboard_template_name = 'bcpp/plot_listboard.html'
 
 
 class HouseholdAppConfig(HouseholdAppConfigParent):
-    list_template_name = 'bcpp/household_list.html'
+    listboard_template_name = 'bcpp/household_listboard.html'
 
 
 class MemberAppConfig(MemberAppConfigParent):
-    list_template_name = 'bcpp/member_list.html'
+    listboard_template_name = 'bcpp/member_listboard.html'
 
 
 class EnumerationAppConfig(EnumerationAppConfigParent):
-    list_template_name = 'bcpp/enumeration_list.html'
+    listboard_template_name = 'bcpp/enumeration_listboard.html'
     enumeration_dashboard_base_html = 'bcpp/base.html'
 
 
 class BcppSubjectAppConfig(BcppSubjectAppConfigParent):
-    list_template_name = 'bcpp/bcpp_subject_list.html'
+    listboard_template_name = 'bcpp/bcpp_subject_listboard.html'
 
 
 class EdcBaseAppConfig(EdcBaseAppConfigParent):

@@ -2,6 +2,10 @@ import sys
 
 from collections import namedtuple
 
+from django.core.management.color import color_style
+
+style = color_style()
+
 Community = namedtuple('Community', 'code name pair intervention')
 
 if 'test' in sys.argv:
@@ -51,4 +55,10 @@ def to_community(code):
 
 
 def is_intervention(community):
-    return communities.get(community).intervention
+    try:
+        return communities.get(community).intervention
+    except AttributeError as e:
+        sys.stdout.write(style.ERROR(
+            '\n * ERROR: Assuming \'{}\' is an intervention community. \n'
+            '   Got {}\n\n'.format(community, str(e))))
+        return True

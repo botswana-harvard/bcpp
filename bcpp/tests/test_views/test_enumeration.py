@@ -34,21 +34,21 @@ class TestEnumeration(MemberMixin, TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_list_view1(self):
-        url = reverse('enumeration:list_url')
+        url = reverse('enumeration:listboard_url')
         request = self.factory.get(url)
         request.user = self.user
         response = EnumerationView.as_view()(request)
         self.assertEqual(response.status_code, 200)
 
     def test_list_view2(self):
-        url = reverse('enumeration:list_url', kwargs=dict(page=1))
+        url = reverse('enumeration:listboard_url', kwargs=dict(page=1))
         request = self.factory.get(url)
         request.user = self.user
         response = EnumerationView.as_view()(request)
         self.assertEqual(response.status_code, 200)
 
     def test_list_view3(self):
-        url = reverse('enumeration:list_url', kwargs=dict(
+        url = reverse('enumeration:listboard_url', kwargs=dict(
             household_identifier=self.household_structure.household.household_identifier))
         request = self.factory.get(url)
         request.user = self.user
@@ -56,7 +56,7 @@ class TestEnumeration(MemberMixin, TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_list_view4(self):
-        url = reverse('enumeration:list_url', kwargs=dict(
+        url = reverse('enumeration:listboard_url', kwargs=dict(
             household_identifier=self.household_structure.household.household_identifier,
             survey=self.household_structure.survey))
         request = self.factory.get(url)
@@ -65,7 +65,7 @@ class TestEnumeration(MemberMixin, TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_list_view5(self):
-        url = reverse('enumeration:list_url', kwargs=dict(
+        url = reverse('enumeration:listboard_url', kwargs=dict(
             plot_identifier=self.household_structure.household.plot.plot_identifier))
         request = self.factory.get(url)
         request.user = self.user
