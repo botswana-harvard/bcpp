@@ -30,12 +30,14 @@ git+https://github.com/botswana-harvard/edc-timepoint.git
 git+https://github.com/botswana-harvard/edc-visit-schedule.git
 git+https://github.com/botswana-harvard/edc-visit-tracking.git
 git+https://github.com/botswana-harvard/getresults-identifier.git
+git+https://github.com/botswana-harvard/edc-search.git
 
 git+https://github.com/botswana-harvard/enumeration.git
 git+https://github.com/botswana-harvard/household.git
 git+https://github.com/botswana-harvard/member.git
 git+https://github.com/botswana-harvard/plot.git
 git+https://github.com/botswana-harvard/survey.git
+git+https://github.com/botswana-harvard/enumeration.git
 
 git+https://github.com/botswana-harvard/bcpp-lab.git
 git+https://github.com/botswana-harvard/bcpp-map.git
