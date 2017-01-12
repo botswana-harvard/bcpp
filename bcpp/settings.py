@@ -193,5 +193,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 KEY_PATH = os.path.join(BASE_DIR, 'crypto_fields')
 
 DEVICE_ID = '99'
-CURRENT_MAP_AREA = 'test_community'
+
+
+CURRENT_MAP_AREA = ''
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
+
+if 'test' in sys.argv:
+    CURRENT_MAP_AREA = 'test_community'

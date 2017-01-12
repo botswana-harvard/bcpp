@@ -27,7 +27,8 @@ from enumeration.apps import AppConfig as EnumerationAppConfigParent
 from household.apps import AppConfig as HouseholdAppConfigParent
 from member.apps import AppConfig as MemberAppConfigParent
 from plot.apps import AppConfig as PlotAppConfigParent
-from survey.apps import AppConfig as SurveyAppConfigParent, S
+from survey.apps import AppConfig as SurveyAppConfigParent
+from survey import S
 from edc_base.utils import get_utcnow
 
 style = color_style()
@@ -82,9 +83,6 @@ class EdcDeviceAppConfig(EdcDeviceAppConfigParent):
 
 class SurveyAppConfig(SurveyAppConfigParent):
     current_surveys = [
-        S('bcpp-survey.bcpp-year-1.bhs.test_community'),
-        S('bcpp-survey.bcpp-year-2.bhs.test_community'),
-        S('bcpp-survey.bcpp-year-2.ahs.test_community'),
         S('bcpp-survey.bcpp-year-3.ahs.test_community'),
         S('bcpp-survey.bcpp-year-3.ess.test_community')]
 
@@ -132,7 +130,7 @@ class EdcMetadataAppConfig(EdcMetadataAppConfigParent):
 #     default_label_identifier_name = ''
 
 class EdcAppointmentAppConfig(EdcAppointmentAppConfigParent):
-    app_label = 'edc_appointment'
+    app_label = 'bcpp_subject'
     default_appt_type = 'home'
     facilities = {
         'home': Facility(name='home', days=[MO, TU, WE, TH, FR, SA, SU],
@@ -142,13 +140,13 @@ class EdcAppointmentAppConfig(EdcAppointmentAppConfigParent):
 class EdcTimepointAppConfig(EdcTimepointAppConfigParent):
     timepoints = [
         Timepoint(
-            model='edc_appointment.appointment',
+            model='bcpp_subject.appointment',
             datetime_field='appt_datetime',
             status_field='appt_status',
             closed_status='DONE'
         ),
         Timepoint(
-            model='edc_appointment.historicalappointment',
+            model='bcpp_subject.historicalappointment',
             datetime_field='appt_datetime',
             status_field='appt_status',
             closed_status='DONE'
