@@ -200,3 +200,5 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 if 'test' in sys.argv:
     CURRENT_MAP_AREA = 'test_community'
+else:
+    CURRENT_MAP_AREA = 'test_community'

@@ -26,8 +26,6 @@ from bcpp_subject.admin_site import bcpp_subject_admin
 from .views import HomeView
 
 urlpatterns = [
-    url(r'login', LoginView.as_view(), name='login_url'),
-    url(r'logout', LogoutView.as_view(pattern_name='login_url'), name='logout_url'),
     url(r'^admin/', admin.site.urls),
     url(r'^admin/', edc_appointment_admin.urls),
     url(r'^admin/', plot_admin.urls),
@@ -42,5 +40,7 @@ urlpatterns = [
     url(r'^appointment/', include('edc_appointment.urls', namespace='edc-appointment')),
     url(r'^edc/', include('edc_base.urls', 'edc-base')),
     url(r'^tz_detect/', include('tz_detect.urls')),
+    url(r'login', LoginView.as_view(), name='login_url'),
+    url(r'logout', LogoutView.as_view(pattern_name='login_url'), name='logout_url'),
     url(r'', HomeView.as_view(), name='home_url'),
 ]
