@@ -1,3 +1,5 @@
+import sys
+
 from datetime import datetime
 from dateutil.relativedelta import MO, TU, WE, TH, FR, SA, SU
 from dateutil.tz import gettz
@@ -82,9 +84,16 @@ class EdcDeviceAppConfig(EdcDeviceAppConfigParent):
 
 
 class SurveyAppConfig(SurveyAppConfigParent):
-    current_surveys = [
-        S('bcpp-survey.bcpp-year-3.ahs.test_community'),
-        S('bcpp-survey.bcpp-year-3.ess.test_community')]
+    if 'test' in sys.argv:
+        current_surveys = [
+            S('bcpp-survey.bcpp-year-1.bhs.test_community'),
+            S('bcpp-survey.bcpp-year-2.ahs.test_community'),
+            S('bcpp-survey.bcpp-year-3.ahs.test_community'),
+            S('bcpp-survey.bcpp-year-3.ess.test_community')]
+    else:
+        current_surveys = [
+            S('bcpp-survey.bcpp-year-3.ahs.test_community'),
+            S('bcpp-survey.bcpp-year-3.ess.test_community')]
 
 
 class EdcMapAppConfig(EdcMapAppConfigParent):
