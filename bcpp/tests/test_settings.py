@@ -42,28 +42,32 @@ INSTALLED_APPS = [
     'tz_detect',
     'django_crypto_fields.apps.AppConfig',
     'django_revision.apps.AppConfig',
-    'edc_base.apps.AppConfig',
+    'edc_search.apps.AppConfig',
+    'edc_consent.apps.AppConfig',
+    'edc_lab.apps.AppConfig',
     'edc_dashboard.apps.AppConfig',
     'edc_subset_manager.apps.AppConfig',
+    'edc_sync.apps.AppConfig',
+    'edc_rule_groups.apps.AppConfig',
     'edc_registration.apps.AppConfig',
-    'edc_visit_tracking.apps.AppConfig',
     'edc_visit_schedule.apps.AppConfig',
     'bcpp.apps.AppConfig',
+    'bcpp.apps.EdcBaseAppConfig',
     'bcpp.apps.EdcMetadataAppConfig',
     'bcpp.apps.EdcIdentifierAppConfig',
     'bcpp.apps.EdcProtocolAppConfig',
-    'bcpp.apps.EdcConsentAppConfig',
     'bcpp.apps.SurveyAppConfig',
     'bcpp.apps.EdcMapAppConfig',
     'bcpp.apps.EdcDeviceAppConfig',
     'bcpp.apps.EdcBaseTestAppConfig',
     'bcpp.apps.EdcTimepointAppConfig',
     'bcpp.apps.EdcAppointmentAppConfig',
-    'household.apps.AppConfig',
-    'member.apps.AppConfig',
-    'plot.apps.AppConfig',
-    'bcpp_lab.apps.AppConfig',
-    'bcpp_subject.apps.AppConfig',
+    'bcpp.apps.EdcVisitTrackingAppConfig',
+    'bcpp.apps.HouseholdAppConfig',
+    'bcpp.apps.MemberAppConfig',
+    'bcpp.apps.EnumerationAppConfig',
+    'bcpp.apps.BcppSubjectAppConfig',
+    'bcpp.apps.PlotAppConfig',
 ]
 
 if 'test' in sys.argv:
@@ -92,8 +96,11 @@ if 'test' in sys.argv:
         'contenttypes': None,
         'sessions': None,
     }
-if 'test' in sys.argv:
-    PASSWORD_HASHERS = ('django_plainpasswordhasher.PlainPasswordHasher', )
+
+PASSWORD_HASHERS = [
+    'django.contrib.auth.hashers.MD5PasswordHasher',
+]
+
 if 'test' in sys.argv:
     DEFAULT_FILE_STORAGE = 'inmemorystorage.InMemoryStorage'
 

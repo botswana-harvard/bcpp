@@ -41,24 +41,24 @@ class AppConfig(DjangoAppConfig):
 
 
 class PlotAppConfig(PlotAppConfigParent):
-    listboard_template_name = 'bcpp/plot_listboard.html'
+    base_template_name = 'bcpp/base.html'
 
 
 class HouseholdAppConfig(HouseholdAppConfigParent):
-    listboard_template_name = 'bcpp/household_listboard.html'
+    base_template_name = 'bcpp/base.html'
 
 
 class MemberAppConfig(MemberAppConfigParent):
-    listboard_template_name = 'bcpp/member_listboard.html'
+    base_template_name = 'bcpp/base.html'
 
 
 class EnumerationAppConfig(EnumerationAppConfigParent):
-    listboard_template_name = 'bcpp/enumeration_listboard.html'
-    enumeration_dashboard_base_html = 'bcpp/base.html'
+    base_template_name = 'bcpp/base.html'
+    subject_dashboard_url_name = 'bcpp-subject:dashboard_url'
 
 
 class BcppSubjectAppConfig(BcppSubjectAppConfigParent):
-    listboard_template_name = 'bcpp/bcpp_subject_listboard.html'
+    base_template_name = 'bcpp/base.html'
 
 
 class EdcBaseAppConfig(EdcBaseAppConfigParent):
@@ -94,6 +94,7 @@ class SurveyAppConfig(SurveyAppConfigParent):
         current_surveys = [
             S('bcpp-survey.bcpp-year-3.ahs.test_community'),
             S('bcpp-survey.bcpp-year-3.ess.test_community')]
+    current_survey_schedule = 'bcpp-survey.bcpp-year-3.test_community'
 
 
 class EdcMapAppConfig(EdcMapAppConfigParent):

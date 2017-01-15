@@ -2,33 +2,55 @@
 {% load staticfiles %}
 
 {% block main %}
-<div class="container">
-   <div class="row">
-      <div class="col-md-4">
-        <div class="panel panel-info">
-          <div class="panel-heading">Reports</div>
-            <div class="panel-body">
-            </div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="panel panel-success">
-          <div class="panel-heading">Statistics</div>
-            <div class="panel-body">
-            </div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="panel panel-warning">
-          <div class="panel-heading">Edc Administration</div>
-            <div class="panel-body">
-              <a role="button" class="btn btn-sm btn-default btn-block" href="{% url 'plot:plot_admin:index' %}">Plots</a>
-              <a role="button" class="btn btn-sm btn-default btn-block" href="{% url 'household:household_admin:index' %}">Households</a>
-              <a role="button" class="btn btn-sm btn-default btn-block" href="{% url 'member:member_admin:index' %}">Member</a>
-              <a role="button" class="btn btn-sm btn-default btn-block" href="{% url 'bcpp-subject:bcpp_subject_admin:index' %}">Subjects</a>
-            </div>
-        </div>
-        </div>
-      </div>
-    </div>
+
+<style>
+
+.bg-1 {
+    background-color: #428bca; /* dark blue */
+    color: #ffffff;
+}
+.bg-2 {
+    background-color: #5bc0de; /* light Blue */
+    color: #ffffff;
+}
+.bg-3 {
+    background-color: #f9f9f9; /* White */
+    color: #555555;
+}
+
+</style>
+
+    {{ block.super }}
+
+<div class="container bg-3 text-center">
+<h3>Hello, let's get started.</h3>
+</div>
+
+
+<div class="container bg-3 text-center">
+	<h3 class="text text-muted">Start by locating and confirming a plot.</h3>
+		<h3>
+			<a href="{% url 'plot:listboard_url' %}" class="btn btn-default btn-lg"><i class="fa fa-building fa-lg"></i> Plots</a>
+		</h3>
+
+
+</div>
+<div class="container bg-3 text-center">
+<h3 class="text text-muted">Next is enumeration and participation</h3>
+<h3>
+	<a href="{% url 'enumeration:listboard_url' %}" class="btn btn-default btn-lg"><i class="fa fa-sitemap fa-lg"></i> Household</a>
+	<a href="#" class="btn btn-default btn-lg disabled"><i class="fa fa-user-secret fa-lg"></i> Anonymous</a>	
+	<a href="#" class="btn btn-default btn-lg disabled"><i class="fa fa-truck fa-lg"></i> Mobile</a>	
+</h3>
+</div>
+
+<div class="container bg-3 text-center">
+<h3 class="text text-muted">Trying to find a member or participant?</h3>
+	<h3>
+	<a href="{% url 'member:listboard_url' %}" class="btn btn-default btn-lg"><i class="fa fa-group fa-lg"></i> Members</a>
+	<a href="{% url 'bcpp-subject:listboard_url' %}"" class="btn btn-default btn-lg"><i class="fa fa-user-circle-o fa-lg"></i> Subject</a>
+	</h3>
+</div>
+
+
 {% endblock main %}
