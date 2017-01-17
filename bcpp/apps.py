@@ -38,6 +38,20 @@ style = color_style()
 
 class AppConfig(DjangoAppConfig):
     name = 'bcpp'
+    base_template_name = 'bcpp/base.html'
+
+
+class EdcProtocolAppConfig(EdcProtocolAppConfigParent):
+    protocol = 'BHP066'
+    protocol_number = '066'
+    protocol_name = 'BCPP'
+    protocol_title = ''
+    subject_types = [
+        SubjectType('subject', 'Research Subject',
+                    Cap(model_name='bcpp_subject.subjectconsent', max_subjects=9999)),
+    ]
+    study_open_datetime = datetime(2013, 10, 18, 0, 0, 0, tzinfo=gettz('UTC'))
+    study_close_datetime = datetime(2018, 12, 1, 0, 0, 0, tzinfo=gettz('UTC'))
 
 
 class PlotAppConfig(PlotAppConfigParent):
@@ -100,23 +114,11 @@ class SurveyAppConfig(SurveyAppConfigParent):
 class EdcMapAppConfig(EdcMapAppConfigParent):
     verbose_name = 'BCPP Mappers'
     mapper_model = 'plot.plot'
+    # FIXME: survey model no longer exists
     mapper_survey_model = 'survey.survey'
     landmark_model = 'bcpp.landmark'
     verify_point_on_save = False
     zoom_levels = ['14', '15', '16', '17', '18']
-
-
-class EdcProtocolAppConfig(EdcProtocolAppConfigParent):
-    protocol = 'BHP066'
-    protocol_number = '066'
-    protocol_name = 'BCPP'
-    protocol_title = ''
-    subject_types = [
-        SubjectType('subject', 'Research Subject',
-                    Cap(model_name='bcpp_subject.subjectconsent', max_subjects=9999)),
-    ]
-    study_open_datetime = datetime(2013, 10, 18, 0, 0, 0, tzinfo=gettz('UTC'))
-    study_close_datetime = datetime(2018, 12, 1, 0, 0, 0, tzinfo=gettz('UTC'))
 
 
 class EdcVisitTrackingAppConfig(EdcVisitTrackingAppConfigParent):

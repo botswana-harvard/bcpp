@@ -3,9 +3,12 @@ from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
 
 from edc_base.view_mixins import EdcBaseViewMixin
+from edc_dashboard.view_mixins import AppConfigViewMixin
 
 
-class HomeView(EdcBaseViewMixin, TemplateView):
+class HomeView(EdcBaseViewMixin, AppConfigViewMixin, TemplateView):
+
+    app_config_name = 'bcpp'
     template_name = 'bcpp/home.html'
 
     @method_decorator(login_required)
