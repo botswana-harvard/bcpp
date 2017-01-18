@@ -30,7 +30,7 @@
 <div class="container bg-3 text-center">
 	<h3 class="text text-muted">Start by locating and confirming a plot.</h3>
 		<h3>
-			<a href="{% url 'plot:listboard_url' %}" class="btn btn-default btn-lg"><i class="fa fa-building fa-lg"></i> Plots</a>
+			<a href="{% url plot_listboard_url_name %}" class="btn btn-default btn-lg"><i class="fa fa-building fa-lg"></i> Plots</a>
 		</h3>
 
 
@@ -38,7 +38,8 @@
 <div class="container bg-3 text-center">
 <h3 class="text text-muted">Next is enumeration and participation</h3>
 <h3>
-	<a href="{% url 'enumeration:listboard_url' %}" class="btn btn-default btn-lg"><i class="fa fa-sitemap fa-lg"></i> Household</a>
+	<a href="{% url enumeration_listboard_url_name %}" class="btn btn-default btn-lg">
+	   <i class="fa fa-sitemap fa-lg"></i> Household</a>
 	<a href="#" class="btn btn-default btn-lg disabled"><i class="fa fa-user-secret fa-lg"></i> Anonymous</a>	
 	<a href="#" class="btn btn-default btn-lg disabled"><i class="fa fa-truck fa-lg"></i> Mobile</a>	
 </h3>
@@ -47,8 +48,8 @@
 <div class="container bg-3 text-center">
 <h3 class="text text-muted">Trying to find a member or participant?</h3>
 	<h3>
-	<a href="{% url 'member:listboard_url' %}" class="btn btn-default btn-lg"><i class="fa fa-group fa-lg"></i> Members</a>
-	<a href="{% url 'bcpp-subject:listboard_url' %}"" class="btn btn-default btn-lg"><i class="fa fa-user-circle-o fa-lg"></i> Subject</a>
+	<a href="{% url member_listboard_url_name %}" class="btn btn-default btn-lg"><i class="fa fa-group fa-lg"></i> Members</a>
+	<a href="{% url bcpp_subject_listboard_url_name %}"" class="btn btn-default btn-lg"><i class="fa fa-user-circle-o fa-lg"></i> Subject</a>
 	</h3>
 </div>
 
