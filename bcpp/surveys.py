@@ -43,7 +43,19 @@ bhs_survey_y1 = Survey(
     full_enrollment_datetime=(get_utcnow() - relativedelta(years=2))
 )
 
+# year 1 ess surveys
+ess_survey_y1 = Survey(
+    name='ess',
+    position=0,
+    map_area='test_community',
+    start=(get_utcnow() - relativedelta(years=3)),
+    end=(get_utcnow() - relativedelta(years=2)),
+    full_enrollment_datetime=(get_utcnow() - relativedelta(years=2))
+)
+
+
 bcpp_year_one.add_survey(bhs_survey_y1)
+bcpp_year_one.add_survey(ess_survey_y1)
 
 # year 2 surveys
 bhs_survey_y2 = Survey(
