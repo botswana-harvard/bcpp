@@ -23,27 +23,41 @@ $(document).ready(function(){
 {% endblock %}
 
 
+
 {% block topbar_navbar_extra_items %}
 
-    {% include 'bcpp/top_navbar.html' %}
+    {{ block.super }}
+    {{ navbar.name }}
+    <li id="li-topbar-anonymous"
+       class="{%if navbar_name == 'anonymous' %}active{%endif%}">
+        <a title="Anonymous"
+            href="{% url 'member:anonymous_listboard_url' %}">
+            <span {%if navbar_name == 'anonymous' %}class="text text-danger"{% endif %}>
+                <i class="fa fa-user-secret fa-lg fa-fw"></i>
+            </span>
+            
+        </a>
+    </li>
+    
 
 {% endblock topbar_navbar_extra_items %}
 
 
-
 {% block settings_url %}
 
-  <li id="li-topbar-administration" class="{%if navbar_selected == 'administration' %}active{%endif%}">
+  <li id="li-topbar-administration" class="{%if navbar_item_selected == 'administration' %}active{%endif%}">
     <a class="glyphicon glyphicon-wrench" title="administration" href="{% url 'administration_url' %}">
     </a>
   </li>
 
 {% endblock settings_url %}
 
-{% block main %}
+{% block modals %}
 
 {{ block.super }}
 
     {% include 'bcpp/help_modal.html' %}
+    {% include 'bcpp/anonymous_modal.html' %}
+    {% include 'enumeration/dashboard/members/anonymous_modal.html' %}
 
-{% endblock main %}
+{% endblock modals %}

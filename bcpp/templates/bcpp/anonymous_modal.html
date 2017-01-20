@@ -1,0 +1,71 @@
+<!-- Modal -->
+<div id="anonymousModal" class="modal fade" role="dialog">
+  
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header ">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">
+            <span class="text text-danger">
+                <i class="fa fa-user-secret fa-2x fa-fw"></i> Anonymous Participation
+            </span>
+        </h4>
+      </div>
+      <div class="modal-body">
+
+        <div class="panel-group">
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                <a role="button" href="#">
+                </a>
+              </h4>
+            </div>
+          <div class="panel panel-default">
+             <div class="list-group">
+                <a class="list-group-item" href="#">
+                    <i class="fa fa-hand-stop-o fa-2x fa-fw"></i> Please read.
+                </a>
+                <a class="list-group-item" href="#">
+                For participants with waived requirement for written documentation of Informed Consent.
+                </a>
+                
+                <a class="list-group-item" href="#">
+                The information the participant chooses to give us will be anonymous.
+                </a>
+                
+                <a class="list-group-item" href="#">
+                Do not record the participant's name or location of residence or other contact information.
+                </a>
+                
+                <a class="list-group-item" href="#">
+                The participant's information will be given a study code number.
+                </a>
+                
+                <a class="list-group-item" href="#">
+                There will be no link between the participant and the study code. 
+                </a>
+                
+                <a class="list-group-item" href="#">
+                The study code will be shared with the participant.
+                </a>
+                </div>                
+            </div>
+        </div>
+
+
+      </div>
+      <div class="modal-footer">
+        <a role="button" class="btn btn-danger"
+            href="{% url 'member_admin:member_enrollmentchecklistanonymous_add' %}">
+            <i class="fa fa-user-secret fa-2x fa-fw"></i> Continue
+        </a>
+
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+
+      </div>
+
+    </div>
+  </div>
+</div>

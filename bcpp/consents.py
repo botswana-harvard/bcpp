@@ -9,6 +9,7 @@ from edc_consent.consent import Consent
 from edc_consent.site_consents import site_consents
 from edc_constants.constants import MALE, FEMALE
 
+ANONYMOUS_CONSENT = 'anonymous'
 
 app_config = django_apps.get_app_config('edc_protocol')
 
@@ -78,4 +79,18 @@ v5 = Consent(
     age_max=64,
     gender=[MALE, FEMALE])
 
-site_consents.register(v1, v2, v3, v4, v5)
+anonymous_v1 = Consent(
+    'bcpp_subject.anonymousconsent',
+    version='1',
+    group=ANONYMOUS_CONSENT,
+    # updates_versions=['4'],
+    start=arrow.get(
+        datetime(2016, 5, 23, 0, 0, 0), tzinfo=tzinfo).to('UTC').datetime,
+    end=arrow.get(
+        datetime(2017, 12, 31, 23, 59, 59), tzinfo=tzinfo).to('UTC').datetime,
+    age_min=16,
+    age_is_adult=18,
+    age_max=64,
+    gender=[MALE, FEMALE])
+
+site_consents.register(v1, v2, v3, v4, v5, anonymous_v1)

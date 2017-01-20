@@ -33,6 +33,8 @@ from survey.apps import AppConfig as SurveyAppConfigParent
 from survey import S
 from edc_base.utils import get_utcnow
 
+from .navbars import navbars
+
 style = color_style()
 
 
@@ -80,6 +82,9 @@ class EdcBaseAppConfig(EdcBaseAppConfigParent):
     institution = 'Botswana-Harvard AIDS Institute'
     copyright = '2013-{}'.format(get_utcnow().year)
     license = None
+
+    def get_navbars(self):
+        return navbars
 
 
 class EdcBaseTestAppConfig(EdcBaseTestAppConfigParent):

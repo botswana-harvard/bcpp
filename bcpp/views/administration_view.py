@@ -17,5 +17,5 @@ class AdministrationView(EdcBaseViewMixin, AppConfigViewMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context.update(navbar_selected='administration')
+        context.update(navbar_item_selected='administration')
         return context

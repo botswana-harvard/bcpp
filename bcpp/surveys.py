@@ -8,6 +8,7 @@ from survey import site_surveys, Survey, SurveySchedule
 
 from .communities import communities
 
+ANONYMOUS_SURVEY = 'ano'
 ESS_SURVEY = 'ess'
 AHS_SURVEY = 'ahs'
 BHS_SURVEY = 'bhs'
@@ -43,19 +44,7 @@ bhs_survey_y1 = Survey(
     full_enrollment_datetime=(get_utcnow() - relativedelta(years=2))
 )
 
-# year 1 ess surveys
-ess_survey_y1 = Survey(
-    name='ess',
-    position=0,
-    map_area='test_community',
-    start=(get_utcnow() - relativedelta(years=3)),
-    end=(get_utcnow() - relativedelta(years=2)),
-    full_enrollment_datetime=(get_utcnow() - relativedelta(years=2))
-)
-
-
 bcpp_year_one.add_survey(bhs_survey_y1)
-bcpp_year_one.add_survey(ess_survey_y1)
 
 # year 2 surveys
 bhs_survey_y2 = Survey(
@@ -94,7 +83,16 @@ ess_survey_y3 = Survey(
     end=(get_utcnow()),
     full_enrollment_datetime=(get_utcnow())
 )
-bcpp_year_three.add_survey(ahs_survey_y3, ess_survey_y3)
+ano_survey_y3 = Survey(
+    name=ANONYMOUS_SURVEY,
+    position=1,
+    map_area='test_community',
+    start=(get_utcnow() - relativedelta(years=1)),
+    end=(get_utcnow()),
+    full_enrollment_datetime=(get_utcnow())
+)
+
+bcpp_year_three.add_survey(ahs_survey_y3, ess_survey_y3, ano_survey_y3)
 
 site_surveys.register(bcpp_year_one)
 site_surveys.register(bcpp_year_two)

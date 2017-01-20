@@ -5,6 +5,21 @@ from edc_map.mapper import Mapper
 from .landmarks import TEST_LANDMARKS
 
 
+class AnonymousMapper(Mapper):
+
+    map_area = 'austin'
+    map_code = '88'
+    center_lat = -30.2671500
+    center_lon = 97.7430600
+    radius = 100.5
+    location_boundary = ()
+
+    intervention = True
+    regions = None  # SECTIONS
+    sections = None  # SUB_SECTIONS
+    landmarks = None
+
+
 class TestPlotMapper(Mapper):
 
     map_area = 'test_community'
@@ -62,3 +77,4 @@ class TestPlotMapper(Mapper):
 #     }
 
 site_mappers.register(TestPlotMapper)
+site_mappers.register(AnonymousMapper)
