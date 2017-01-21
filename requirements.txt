@@ -22,7 +22,6 @@ git+https://github.com/botswana-harvard/edc-protocol.git
 git+https://github.com/botswana-harvard/edc-protocol.git
 git+https://github.com/botswana-harvard/edc-quota.git
 git+https://github.com/botswana-harvard/edc-registration.git
-git+https://github.com/botswana-harvard/edc-rule-groups.git
 git+https://github.com/botswana-harvard/edc-search.git
 git+https://github.com/botswana-harvard/edc-subset-manager.git
 git+https://github.com/botswana-harvard/edc-sync.git

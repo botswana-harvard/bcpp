@@ -20,7 +20,6 @@
 -e /Users/erikvw/source/edc-protocol
 -e /Users/erikvw/source/edc-quota
 -e /Users/erikvw/source/edc-registration
--e /Users/erikvw/source/edc-rule-groups
 -e /Users/erikvw/source/edc-subset-manager
 -e /Users/erikvw/source/edc-sync
 -e /Users/erikvw/source/edc-timepoint
