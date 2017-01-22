@@ -37,44 +37,84 @@ class TestPlotMapper(Mapper):
 
     intervention = True
 
-#     survey_dates = {
-#         BASELINE_SURVEY_SLUG: SurveyDatesTuple(
-#             name='bhs',
-#             start_date=date(2016, 3, 1),
-#             full_enrollment_date=date(2016, 4, 30),
-#             end_date=date(2016, 4, 30),
-#             smc_start_date=date(2016, 4, 30)),
-#         'bcpp-year-2': SurveyDatesTuple(
-#             name='t1',
-#             start_date=date(2016, 4, 11),
-#             full_enrollment_date=date(2016, 6, 30),
-#             end_date=date(2016, 6, 30),
-#             smc_start_date=date(2016, 6, 30)),
-#         'bcpp-year-3': SurveyDatesTuple(
-#             name='t2',
-#             start_date=date(2016, 10, 11),
-#             full_enrollment_date=date(2016, 12, 30),
-#             end_date=date(2016, 12, 30),
-#             smc_start_date=date(2016, 12, 30)),
-#     }
-
-#     clinic_days = {
-#         BASELINE_SURVEY_SLUG: {
-#             'IDCC': ClinicDaysTuple((MO, WE), None),
-#             'ANC': ClinicDaysTuple((MO, TU, WE, TH, FR), None),
-#             'VCT': ClinicDaysTuple((MO, TU, WE, TH, FR), None),
-#             'SMC': ClinicDaysTuple((MO, TU, WE, TH, FR), survey_dates[BASELINE_SURVEY_SLUG].smc_start_date)},
-#         'bcpp-year-2': {
-#             'IDCC': ClinicDaysTuple((MO, WE), None),
-#             'ANC': ClinicDaysTuple((MO, TU, WE, TH, FR), None),
-#             'VCT': ClinicDaysTuple((MO, TU, WE, TH, FR), None),
-#             'SMC': ClinicDaysTuple((MO, TU, WE, TH, FR), survey_dates['bcpp-year-2'].smc_start_date)},
-#         'bcpp-year-3': {
-#             'IDCC': ClinicDaysTuple((MO, WE), None),
-#             'ANC': ClinicDaysTuple((MO, TU, WE, TH, FR), None),
-#             'VCT': ClinicDaysTuple((MO, TU, WE, TH, FR), None),
-#             'SMC': ClinicDaysTuple((MO, TU, WE, TH, FR), survey_dates['bcpp-year-3'].smc_start_date)},
-#     }
-
 site_mappers.register(TestPlotMapper)
-site_mappers.register(AnonymousMapper)
+
+
+class BokaaPlotMapper(Mapper):
+
+    map_area = 'bokaa'
+    map_code = '17'
+    pair = 0
+    regions = None  # SECTIONS
+    sections = None  # SUB_SECTIONS
+
+    landmarks = TEST_LANDMARKS
+
+    center_lat = -24.425856
+    center_lon = 26.021626
+    radius = 100.5
+    location_boundary = ()
+
+    intervention = False
+
+site_mappers.register(BokaaPlotMapper)
+
+
+class DigawanaPlotMapper(Mapper):
+
+    map_area = 'digawana'
+    map_code = '12'
+    pair = 0
+    regions = None  # SECTIONS
+    sections = None  # SUB_SECTIONS
+
+    landmarks = TEST_LANDMARKS
+
+    center_lat = -25.330451
+    center_lon = 25.556502
+    radius = 100.5
+    location_boundary = ()
+
+    intervention = True
+
+site_mappers.register(DigawanaPlotMapper)
+
+
+class GumarePlotMapper(Mapper):
+
+    map_area = 'gumare'
+    map_code = '35'
+    pair = 13
+    regions = None  # SECTIONS
+    sections = None  # SUB_SECTIONS
+
+    landmarks = TEST_LANDMARKS
+
+    center_lat = -19.359734
+    center_lon = 22.163286
+    radius = 100.5
+    location_boundary = ()
+
+    intervention = True
+
+site_mappers.register(GumarePlotMapper)
+
+
+class GwetaPlotMapper(Mapper):
+
+    map_area = 'gweta'
+    map_code = '34'
+    pair = 13
+    regions = None  # SECTIONS
+    sections = None  # SUB_SECTIONS
+
+    landmarks = TEST_LANDMARKS
+
+    center_lat = -20.205621
+    center_lon = 25.251474
+    radius = 100.5
+    location_boundary = ()
+
+    intervention = True
+
+site_mappers.register(GwetaPlotMapper)
