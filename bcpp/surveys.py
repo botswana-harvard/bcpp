@@ -102,7 +102,7 @@ bcpp_year_three.add_survey(
 bcpp_year_three.add_survey(
     Survey(
         name=ANONYMOUS_SURVEY,
-        position=2,
+        position=0,
         map_area='test_community',
         start=bcpp_year_three.start,
         end=bcpp_year_three.end,

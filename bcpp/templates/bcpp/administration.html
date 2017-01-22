@@ -24,12 +24,21 @@
       </div>
       <div class="col-md-4">
         <div class="panel panel-warning">
-          <div class="panel-heading">Edc Administration</div>
+          <div class="panel-heading">Bcpp Administration</div>
             <div class="panel-body">
               <a role="button" class="btn btn-sm btn-default btn-block" href="{% url 'plot:plot_admin:index' %}">Plots</a>
               <a role="button" class="btn btn-sm btn-default btn-block" href="{% url 'household:household_admin:index' %}">Households</a>
               <a role="button" class="btn btn-sm btn-default btn-block" href="{% url 'member:member_admin:index' %}">Member</a>
               <a role="button" class="btn btn-sm btn-default btn-block" href="{% url 'bcpp-subject:bcpp_subject_admin:index' %}">Subjects</a>
+            </div>
+        </div>
+        <div class="panel panel-warning">
+          <div class="panel-heading">Edc Administration</div>
+            <div class="panel-body">
+              <a role="button" class="btn btn-sm btn-default btn-block" href="{% url 'edc-metadata:edc_metadata_admin:index' %}">Metadata</a>
+              <a role="button" class="btn btn-sm btn-default btn-block" href="{% url 'edc-consent:home_url' %}">Consent</a>
+              <a role="button" class="btn btn-sm btn-default btn-block" href="{% url 'edc-visit-schedule:home_url' %}">Visit Schedule</a>
+              <a role="button" class="btn btn-sm btn-default btn-block" href="{% url 'edc-registration:edc_registration_admin:index' %}">Registration</a>
             </div>
         </div>
         </div>

@@ -21,7 +21,10 @@ from edc_base.views import LogoutView, LoginView
 from plot.admin_site import plot_admin
 from household.admin_site import household_admin
 from member.admin_site import member_admin
-from bcpp_subject.admin_site import bcpp_subject_admin  # , bcpp_subject_ahs_t2_admin
+# , bcpp_subject_ahs_t2_admin
+from bcpp_subject.admin_site import bcpp_subject_admin
+from edc_metadata.admin_site import edc_metadata_admin
+from edc_registration.admin_site import edc_registration_admin
 
 from .views import HomeView, AdministrationView
 
@@ -32,17 +35,28 @@ urlpatterns = [
     url(r'^admin/', household_admin.urls),
     url(r'^admin/', member_admin.urls),
     url(r'^admin/', bcpp_subject_admin.urls),
+    url(r'^admin/', edc_metadata_admin.urls),
+    url(r'^admin/', edc_registration_admin.urls),
     # url(r'^admin/', bcpp_subject_ahs_t2_admin.urls),
-    url(r'^admininistration/', AdministrationView.as_view(), name='administration_url'),
+    url(r'^admininistration/', AdministrationView.as_view(),
+        name='administration_url'),
     url('plot/', include('plot.urls', namespace='plot')),
     url('household/', include('household.urls', namespace='household')),
     url('member/', include('member.urls', namespace='member')),
     url('enumeration/', include('enumeration.urls', namespace='enumeration')),
     url('subject/', include('bcpp_subject.urls', namespace='bcpp-subject')),
-    url(r'^appointment/', include('edc_appointment.urls', namespace='edc-appointment')),
+    url(r'^appointment/',
+        include('edc_appointment.urls', namespace='edc-appointment')),
     url(r'^edc/', include('edc_base.urls', 'edc-base')),
+    url(r'^edc_consent/', include('edc_consent.urls', 'edc-consent')),
+    url(r'^edc_metadata/', include('edc_metadata.urls', 'edc-metadata')),
+    url(r'^edc_registration/',
+        include('edc_registration.urls', 'edc-registration')),
+    url(r'^edc_visit_schedule/',
+        include('edc_visit_schedule.urls', 'edc-visit-schedule')),
     url(r'^tz_detect/', include('tz_detect.urls')),
     url(r'login', LoginView.as_view(), name='login_url'),
-    url(r'logout', LogoutView.as_view(pattern_name='login_url'), name='logout_url'),
+    url(r'logout', LogoutView.as_view(
+        pattern_name='login_url'), name='logout_url'),
     url(r'', HomeView.as_view(), name='home_url'),
 ]
