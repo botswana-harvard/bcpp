@@ -46,65 +46,69 @@ bcpp_year_three = SurveySchedule(
         datetime(2018, 4, 9, 23, 59, 59), tzinfo=tzinfo).to('UTC').datetime)
 
 # year 1 surveys
-bhs_survey_y1 = Survey(
-    name=BHS_SURVEY,
-    position=0,
-    map_area='test_community',
-    start=bcpp_year_one.start,
-    end=bcpp_year_one.end,
-    full_enrollment_datetime=bcpp_year_one.end,
+bcpp_year_one.add_survey(
+    Survey(
+        name=BHS_SURVEY,
+        position=0,
+        map_area='test_community',
+        start=bcpp_year_one.start,
+        end=bcpp_year_one.end,
+        full_enrollment_datetime=bcpp_year_one.end)
 )
-
-bcpp_year_one.add_survey(bhs_survey_y1)
 
 
 # year 2 surveys
-bhs_survey_y2 = Survey(
-    name=BHS_SURVEY,
-    position=0,
-    map_area='test_community',
-    start=bcpp_year_two.start,
-    end=bcpp_year_two.end,
-    full_enrollment_datetime=bcpp_year_two.end,
+bcpp_year_two.add_survey(
+    Survey(
+        name=BHS_SURVEY,
+        position=0,
+        map_area='test_community',
+        start=bcpp_year_two.start,
+        end=bcpp_year_two.end,
+        full_enrollment_datetime=bcpp_year_two.end)
 )
 
-ahs_survey_y2 = Survey(
-    name=AHS_SURVEY,
-    position=1,
-    map_area='test_community',
-    start=bcpp_year_two.start,
-    end=bcpp_year_two.end,
-    full_enrollment_datetime=bcpp_year_two.end,
+bcpp_year_two.add_survey(
+    Survey(
+        name=AHS_SURVEY,
+        position=1,
+        map_area='test_community',
+        start=bcpp_year_two.start,
+        end=bcpp_year_two.end,
+        full_enrollment_datetime=bcpp_year_two.end)
 )
-bcpp_year_two.add_survey(bhs_survey_y2, ahs_survey_y2)
 
 # year 3 surveys
-ahs_survey_y3 = Survey(
-    name=AHS_SURVEY,
-    position=0,
-    map_area='test_community',
-    start=bcpp_year_three.start,
-    end=bcpp_year_three.end,
-    full_enrollment_datetime=bcpp_year_three.end,
-)
-ess_survey_y3 = Survey(
-    name=ESS_SURVEY,
-    position=1,
-    map_area='test_community',
-    start=bcpp_year_three.start,
-    end=bcpp_year_three.end,
-    full_enrollment_datetime=bcpp_year_three.end,
-)
-ano_survey_y3 = Survey(
-    name=ANONYMOUS_SURVEY,
-    position=1,
-    map_area='test_community',
-    start=bcpp_year_three.start,
-    end=bcpp_year_three.end,
-    full_enrollment_datetime=bcpp_year_three.end,
+bcpp_year_three.add_survey(
+    Survey(
+        name=AHS_SURVEY,
+        position=0,
+        map_area='test_community',
+        start=bcpp_year_three.start,
+        end=bcpp_year_three.end,
+        full_enrollment_datetime=bcpp_year_three.end)
 )
 
-bcpp_year_three.add_survey(ahs_survey_y3, ess_survey_y3, ano_survey_y3)
+bcpp_year_three.add_survey(
+    Survey(
+        name=ESS_SURVEY,
+        position=1,
+        map_area='test_community',
+        start=bcpp_year_three.start,
+        end=bcpp_year_three.end,
+        full_enrollment_datetime=bcpp_year_three.end)
+)
+
+bcpp_year_three.add_survey(
+    Survey(
+        name=ANONYMOUS_SURVEY,
+        position=2,
+        map_area='test_community',
+        start=bcpp_year_three.start,
+        end=bcpp_year_three.end,
+        full_enrollment_datetime=bcpp_year_three.end)
+)
+
 
 site_surveys.register(bcpp_year_one)
 site_surveys.register(bcpp_year_two)
