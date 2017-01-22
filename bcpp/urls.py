@@ -21,7 +21,7 @@ from edc_base.views import LogoutView, LoginView
 from plot.admin_site import plot_admin
 from household.admin_site import household_admin
 from member.admin_site import member_admin
-from bcpp_subject.admin_site import bcpp_subject_admin, bcpp_subject_ahs_t2_admin
+from bcpp_subject.admin_site import bcpp_subject_admin  # , bcpp_subject_ahs_t2_admin
 
 from .views import HomeView, AdministrationView
 
@@ -32,7 +32,7 @@ urlpatterns = [
     url(r'^admin/', household_admin.urls),
     url(r'^admin/', member_admin.urls),
     url(r'^admin/', bcpp_subject_admin.urls),
-    url(r'^admin/', bcpp_subject_ahs_t2_admin.urls),
+    # url(r'^admin/', bcpp_subject_ahs_t2_admin.urls),
     url(r'^admininistration/', AdministrationView.as_view(), name='administration_url'),
     url('plot/', include('plot.urls', namespace='plot')),
     url('household/', include('household.urls', namespace='household')),
