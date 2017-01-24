@@ -4,13 +4,11 @@ git+https://github.com/botswana-harvard/edc-base.git
 git+https://github.com/erikvw/django-crypto-fields.git
 git+https://github.com/erikvw/django-revision.git
 
-git+https://github.com/botswana-harvard/edc-admin-exclude.git
 git+https://github.com/botswana-harvard/edc-appointment.git
 git+https://github.com/botswana-harvard/edc-consent.git
 git+https://github.com/botswana-harvard/edc-constants.git
 git+https://github.com/botswana-harvard/edc-dashboard.git
 git+https://github.com/botswana-harvard/edc-device.git
-git+https://github.com/botswana-harvard/edc-field-label.git
 git+https://github.com/botswana-harvard/edc-identifier.git
 git+https://github.com/botswana-harvard/edc-lab.git
 git+https://github.com/botswana-harvard/edc-label.git
