@@ -127,7 +127,8 @@ class EdcMapAppConfig(EdcMapAppConfigParent):
 
 
 class EdcVisitTrackingAppConfig(EdcVisitTrackingAppConfigParent):
-    visit_models = {'bcpp_subject': ('subject_visit', 'bcpp_subject.subjectvisit')}
+    visit_models = {
+        'bcpp_subject': ('subject_visit', 'bcpp_subject.subjectvisit')}
 
 
 class EdcIdentifierAppConfig(EdcIdentifierAppConfigParent):
