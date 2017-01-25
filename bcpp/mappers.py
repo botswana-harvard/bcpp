@@ -19,6 +19,8 @@ class AnonymousMapper(Mapper):
     sections = None  # SUB_SECTIONS
     landmarks = None
 
+site_mappers.register(AnonymousMapper)
+
 
 class TestPlotMapper(Mapper):
 
