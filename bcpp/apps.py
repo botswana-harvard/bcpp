@@ -110,7 +110,9 @@ class SurveyAppConfig(SurveyAppConfigParent):
             S('bcpp-survey.bcpp-year-3.ahs.test_community'),
             S('bcpp-survey.bcpp-year-3.ess.test_community')]
     else:
+        # FIXME: update for production use by only including bcpp-year-3
         current_surveys = [
+            S('bcpp-survey.bcpp-year-2.ahs.test_community'),
             S('bcpp-survey.bcpp-year-3.ahs.test_community'),
             S('bcpp-survey.bcpp-year-3.ess.test_community')]
     current_survey_schedule = 'bcpp-survey.bcpp-year-3.test_community'
