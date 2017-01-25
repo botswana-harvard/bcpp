@@ -110,7 +110,7 @@ class SurveyAppConfig(SurveyAppConfigParent):
             S('bcpp-survey.bcpp-year-3.ahs.test_community'),
             S('bcpp-survey.bcpp-year-3.ess.test_community')]
     else:
-        # FIXME: update for production use by only including bcpp-year-3
+        # FIXME: update for production to only included bcpp-year-3
         current_surveys = [
             S('bcpp-survey.bcpp-year-2.ahs.test_community'),
             S('bcpp-survey.bcpp-year-3.ahs.test_community'),
@@ -121,8 +121,6 @@ class SurveyAppConfig(SurveyAppConfigParent):
 class EdcMapAppConfig(EdcMapAppConfigParent):
     verbose_name = 'BCPP Mappers'
     mapper_model = 'plot.plot'
-    # FIXME: survey model no longer exists
-    mapper_survey_model = 'survey.survey'
     landmark_model = 'bcpp.landmark'
     verify_point_on_save = False
     zoom_levels = ['14', '15', '16', '17', '18']
