@@ -7,35 +7,37 @@ from dateutil.tz import gettz
 from django.apps import AppConfig as DjangoAppConfig
 from django.core.management.color import color_style
 
-# from edc_label.apps import AppConfig as EdcLabelConfigParent
-from edc_appointment.apps import AppConfig as EdcAppointmentAppConfigParent
+# from edc_label.apps import AppConfig as EdcLabelConfig
+from edc_appointment.apps import AppConfig as BaseEdcAppointmentAppConfig
 from edc_appointment.facility import Facility
-from edc_base.apps import AppConfig as EdcBaseAppConfigParent
-from edc_base_test.apps import AppConfig as EdcBaseTestAppConfigParent
+from edc_base.apps import AppConfig as BaseEdcBaseAppConfig
+from edc_base_test.apps import AppConfig as BaseEdcBaseTestAppConfig
 from edc_constants.constants import FAILED_ELIGIBILITY
-from edc_device.apps import AppConfig as EdcDeviceAppConfigParent, DevicePermission
+from edc_consent.apps import AppConfig as BaseEdcConsentAppConfig
+from edc_device.apps import AppConfig as BaseEdcDeviceAppConfig, DevicePermission
 from edc_device.constants import SERVER, CENTRAL_SERVER, CLIENT
-from edc_identifier.apps import AppConfig as EdcIdentifierAppConfigParent
-from edc_map.apps import AppConfig as EdcMapAppConfigParent
-from edc_metadata.apps import AppConfig as EdcMetadataAppConfigParent
-from edc_protocol.apps import AppConfig as EdcProtocolAppConfigParent, SubjectType, Cap
-from edc_timepoint.apps import AppConfig as EdcTimepointAppConfigParent
+from edc_identifier.apps import AppConfig as BaseEdcIdentifierAppConfig
+from edc_map.apps import AppConfig as BaseEdcMapAppConfig
+from edc_metadata.apps import AppConfig as BaseEdcMetadataAppConfig
+from edc_protocol.apps import AppConfig as BaseEdcProtocolAppConfig, SubjectType, Cap
+from edc_timepoint.apps import AppConfig as BaseEdcTimepointAppConfig
 from edc_timepoint.timepoint import Timepoint
-from edc_visit_tracking.apps import AppConfig as EdcVisitTrackingAppConfigParent
+from edc_visit_tracking.apps import AppConfig as BaseEdcVisitTrackingAppConfig
 from edc_visit_tracking.constants import SCHEDULED, UNSCHEDULED, LOST_VISIT
 
-from bcpp_subject.apps import AppConfig as BcppSubjectAppConfigParent
-from enumeration.apps import AppConfig as EnumerationAppConfigParent
-from household.apps import AppConfig as HouseholdAppConfigParent
-from member.apps import AppConfig as MemberAppConfigParent
-from plot.apps import AppConfig as PlotAppConfigParent
-from survey.apps import AppConfig as SurveyAppConfigParent
+from bcpp_subject.apps import AppConfig as BaseBcppSubjectAppConfig
+from enumeration.apps import AppConfig as BaseEnumerationAppConfig
+from household.apps import AppConfig as BaseHouseholdAppConfig
+from member.apps import AppConfig as BaseMemberAppConfig
+from plot.apps import AppConfig as BasePlotAppConfig
+from survey.apps import AppConfig as BaseSurveyAppConfig
 from survey import S
 from edc_base.utils import get_utcnow
 
 from .navbars import navbars
 
 style = color_style()
+ANONYMOUS_CONSENT_GROUP = 'anonymous'
 
 
 class AppConfig(DjangoAppConfig):
@@ -43,7 +45,7 @@ class AppConfig(DjangoAppConfig):
     base_template_name = 'bcpp/base.html'
 
 
-class EdcProtocolAppConfig(EdcProtocolAppConfigParent):
+class EdcProtocolAppConfig(BaseEdcProtocolAppConfig):
     protocol = 'BHP066'
     protocol_number = '066'
     protocol_name = 'BCPP'
@@ -56,28 +58,28 @@ class EdcProtocolAppConfig(EdcProtocolAppConfigParent):
     study_close_datetime = datetime(2018, 12, 1, 0, 0, 0, tzinfo=gettz('UTC'))
 
 
-class PlotAppConfig(PlotAppConfigParent):
+class PlotAppConfig(BasePlotAppConfig):
     base_template_name = 'bcpp/base.html'
 
 
-class HouseholdAppConfig(HouseholdAppConfigParent):
+class HouseholdAppConfig(BaseHouseholdAppConfig):
     base_template_name = 'bcpp/base.html'
 
 
-class MemberAppConfig(MemberAppConfigParent):
+class MemberAppConfig(BaseMemberAppConfig):
     base_template_name = 'bcpp/base.html'
 
 
-class EnumerationAppConfig(EnumerationAppConfigParent):
+class EnumerationAppConfig(BaseEnumerationAppConfig):
     base_template_name = 'bcpp/base.html'
     subject_dashboard_url_name = 'bcpp-subject:dashboard_url'
 
 
-class BcppSubjectAppConfig(BcppSubjectAppConfigParent):
+class BcppSubjectAppConfig(BaseBcppSubjectAppConfig):
     base_template_name = 'bcpp/base.html'
 
 
-class EdcBaseAppConfig(EdcBaseAppConfigParent):
+class EdcBaseAppConfig(BaseEdcBaseAppConfig):
     project_name = 'BCPP'
     institution = 'Botswana-Harvard AIDS Institute'
     copyright = '2013-{}'.format(get_utcnow().year)
@@ -87,12 +89,16 @@ class EdcBaseAppConfig(EdcBaseAppConfigParent):
         return navbars
 
 
-class EdcBaseTestAppConfig(EdcBaseTestAppConfigParent):
+class EdcBaseTestAppConfig(BaseEdcBaseTestAppConfig):
     consent_model = 'bcpp_subject.subjectconsent'
     survey_group_name = 'bcpp-survey'
 
 
-class EdcDeviceAppConfig(EdcDeviceAppConfigParent):
+class EdcConsentAppConfig(BaseEdcConsentAppConfig):
+    anonymous_consent_group = ANONYMOUS_CONSENT_GROUP
+
+
+class EdcDeviceAppConfig(BaseEdcDeviceAppConfig):
     device_id = 99
     device_permissions = {
         'plot.plot': DevicePermission(
@@ -102,7 +108,7 @@ class EdcDeviceAppConfig(EdcDeviceAppConfigParent):
     }
 
 
-class SurveyAppConfig(SurveyAppConfigParent):
+class SurveyAppConfig(BaseSurveyAppConfig):
     if 'test' in sys.argv:
         current_surveys = [
             S('bcpp-survey.bcpp-year-1.bhs.test_community'),
@@ -118,7 +124,7 @@ class SurveyAppConfig(SurveyAppConfigParent):
     current_survey_schedule = 'bcpp-survey.bcpp-year-3.test_community'
 
 
-class EdcMapAppConfig(EdcMapAppConfigParent):
+class EdcMapAppConfig(BaseEdcMapAppConfig):
     verbose_name = 'BCPP Mappers'
     mapper_model = 'plot.plot'
     landmark_model = 'bcpp.landmark'
@@ -126,28 +132,28 @@ class EdcMapAppConfig(EdcMapAppConfigParent):
     zoom_levels = ['14', '15', '16', '17', '18']
 
 
-class EdcVisitTrackingAppConfig(EdcVisitTrackingAppConfigParent):
+class EdcVisitTrackingAppConfig(BaseEdcVisitTrackingAppConfig):
     visit_models = {
         'bcpp_subject': ('subject_visit', 'bcpp_subject.subjectvisit')}
 
 
-class EdcIdentifierAppConfig(EdcIdentifierAppConfigParent):
+class EdcIdentifierAppConfig(BaseEdcIdentifierAppConfig):
     identifier_prefix = '066'
 
 
-class EdcMetadataAppConfig(EdcMetadataAppConfigParent):
+class EdcMetadataAppConfig(BaseEdcMetadataAppConfig):
     reason_field = {'bcpp_subject.subjectvisit': 'reason'}
     create_on_reasons = [SCHEDULED, UNSCHEDULED]
     delete_on_reasons = [LOST_VISIT, FAILED_ELIGIBILITY]
 
 
-# class EdcLabelAppConfig(EdcLabelConfigParent):
+# class EdcLabelAppConfig(EdcLabelConfig):
 #     default_cups_server_ip = '10.113.201.114'
 #     default_printer_label = 'leslie_testing'
 #     default_template_file = os.path.join(settings.STATIC_ROOT, 'bcpp', 'label_templates', 'aliquot.lbl')
 #     default_label_identifier_name = ''
 
-class EdcAppointmentAppConfig(EdcAppointmentAppConfigParent):
+class EdcAppointmentAppConfig(BaseEdcAppointmentAppConfig):
     app_label = 'bcpp_subject'
     default_appt_type = 'home'
     facilities = {
@@ -155,7 +161,7 @@ class EdcAppointmentAppConfig(EdcAppointmentAppConfigParent):
                          slots=[99999, 99999, 99999, 99999, 99999, 99999, 99999])}
 
 
-class EdcTimepointAppConfig(EdcTimepointAppConfigParent):
+class EdcTimepointAppConfig(BaseEdcTimepointAppConfig):
     timepoints = [
         Timepoint(
             model='bcpp_subject.appointment',

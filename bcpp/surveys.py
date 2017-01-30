@@ -41,7 +41,7 @@ bcpp_year_three = SurveySchedule(
     group_name='bcpp-survey',
     map_areas=communities,
     start=arrow.get(
-        datetime(2017, 2, 1, 0, 0, 0), tzinfo=tzinfo).to('UTC').datetime,
+        datetime(2017, 1, 26, 0, 0, 0), tzinfo=tzinfo).to('UTC').datetime,
     end=arrow.get(
         datetime(2018, 4, 9, 23, 59, 59), tzinfo=tzinfo).to('UTC').datetime)
 
