@@ -118,6 +118,7 @@ class SurveyAppConfig(BaseSurveyAppConfig):
     else:
         # FIXME: update for production to only included bcpp-year-3
         current_surveys = [
+            S('bcpp-survey.bcpp-year-1.bhs.test_community'),
             S('bcpp-survey.bcpp-year-2.ahs.test_community'),
             S('bcpp-survey.bcpp-year-3.ahs.test_community'),
             S('bcpp-survey.bcpp-year-3.ess.test_community')]
