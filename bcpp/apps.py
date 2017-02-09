@@ -12,6 +12,7 @@ from edc_appointment.apps import AppConfig as BaseEdcAppointmentAppConfig
 from edc_appointment.facility import Facility
 from edc_base.apps import AppConfig as BaseEdcBaseAppConfig
 from edc_base_test.apps import AppConfig as BaseEdcBaseTestAppConfig
+from edc_base.utils import get_utcnow
 from edc_constants.constants import FAILED_ELIGIBILITY
 from edc_consent.apps import AppConfig as BaseEdcConsentAppConfig
 from edc_device.apps import AppConfig as BaseEdcDeviceAppConfig, DevicePermission
@@ -20,6 +21,7 @@ from edc_identifier.apps import AppConfig as BaseEdcIdentifierAppConfig
 from edc_map.apps import AppConfig as BaseEdcMapAppConfig
 from edc_metadata.apps import AppConfig as BaseEdcMetadataAppConfig
 from edc_protocol.apps import AppConfig as BaseEdcProtocolAppConfig, SubjectType, Cap
+from edc_sync.apps import AppConfig as BaseEdcSyncAppConfig
 from edc_timepoint.apps import AppConfig as BaseEdcTimepointAppConfig
 from edc_timepoint.timepoint import Timepoint
 from edc_visit_tracking.apps import AppConfig as BaseEdcVisitTrackingAppConfig
@@ -32,7 +34,6 @@ from member.apps import AppConfig as BaseMemberAppConfig
 from plot.apps import AppConfig as BasePlotAppConfig
 from survey.apps import AppConfig as BaseSurveyAppConfig
 from survey import S
-from edc_base.utils import get_utcnow
 
 from .navbars import navbars
 
@@ -177,3 +178,8 @@ class EdcTimepointAppConfig(BaseEdcTimepointAppConfig):
             closed_status='DONE'
         ),
     ]
+
+
+class EdcSyncAppConfig(BaseEdcSyncAppConfig):
+    edc_sync_files_using = True
+    role = SERVER

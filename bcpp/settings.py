@@ -10,11 +10,13 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
+import configparser
 import os
 import sys
+from pathlib import PurePath
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
+ETC_DIR = str(PurePath(BASE_DIR).parent.joinpath('etc'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
@@ -39,6 +41,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'crispy_forms',
     'tz_detect',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'django_js_reverse',
     'django_crypto_fields.apps.AppConfig',
     'django_revision.apps.AppConfig',
     'edc_search.apps.AppConfig',
@@ -199,3 +204,19 @@ if 'test' in sys.argv:
     CURRENT_MAP_AREA = 'test_community'
 else:
     CURRENT_MAP_AREA = 'test_community'
+try:
+    config = configparser.ConfigParser()
+    config.read(os.path.join(ETC_DIR, 'edc_sync.ini'))
+    CORS_ORIGIN_WHITELIST = tuple(
+        config['corsheaders'].get('cors_origin_whitelist').split(','))
+    CORS_ORIGIN_ALLOW_ALL = config['corsheaders'].getboolean(
+        'cors_origin_allow_all', True)
+except KeyError:
+    CORS_ORIGIN_WHITELIST = None
+    CORS_ORIGIN_ALLOW_ALL = True
+REST_FRAMEWORK = {
+    'PAGE_SIZE': 1,
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+}
