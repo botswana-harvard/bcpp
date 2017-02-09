@@ -135,7 +135,7 @@ WSGI_APPLICATION = 'bcpp.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'edc1',
+        'NAME': 'edc',
         'HOST': '127.0.0.1',
         'PORT': '3306',
         'USER': 'root',
