@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'crispy_forms',
     'tz_detect',
+    'django_js_reverse',
     'django_crypto_fields.apps.AppConfig',
     'django_revision.apps.AppConfig',
     'edc_search.apps.AppConfig',
@@ -134,7 +135,7 @@ WSGI_APPLICATION = 'bcpp.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'edc',
+        'NAME': 'edc1',
         'HOST': '127.0.0.1',
         'PORT': '3306',
         'USER': 'root',
