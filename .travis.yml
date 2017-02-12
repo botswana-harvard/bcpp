@@ -1,0 +1,32 @@
+dist: trusty
+sudo: required
+language: python
+python:
+- 3.5.1
+addons:
+  apt:
+    packages:
+    - libcups2-dev
+services:
+- mysql
+before_install:
+- export DISPLAY=:99.0
+- sh -e /etc/init.d/xvfb start
+- sleep 3
+branches:
+  only:
+  - develop
+install:
+- pip install --upgrade pip
+- pip install -r requirements.txt
+- pip install flake8
+- pip install coveralls
+before_script:
+- mysql -e 'create database edc character set utf8;'
+script:
+- coverage run --source=bcpp manage.py test
+after_success:
+- coveralls
+notifications:
+  slack:
+    secure: DchR5B9BuZroSyfOApogB7rJNv/1MMjYoN6QTULi1F9TkVvyGi2HSAYb5LxrGcbqIsNZPhWnCCLLcQhuJI0JSpF8b5wNfUT9RtQIK6WDYgmPTerynI3abETN9z4LCZeOP1ccE0WiBbz0FIWb/rpx32DQvGgR42K2usvphdJeMUPDOzI4bsR8ESKuD1xowtB4u5lNy9Byf06SFywKm1d1HUuTbNzyIBzzoI1trAzP/tJqj+DPqocpsxz6ofs3RdsYgzu+lsH3fiiITBimJ4eWj/Dg9WSyD09+7RTIpq3q5S3eZMhEsT/+Lkdwpn/7J74qFTDlb46N5msxGFlI2mJ3nKldAEwvjbhDbrfF0ZBSgJRx9RH21WHzZQo7uTnZTlyM+cNKeO7Fu1j3JjS3mV6ADQ4usJFhLQL8bSJ2ozDSBNGLMEy68+CHO66BRIsKsvt6B81aJatMp2l9QxH43200QMZWDHwGDrf7+mgmpwGZgmfaKXQmrjmfTlP3CpMsbsjNL1i59aSoz+jzVClk6EXNEgdtGRKRQaGi/T+wieLN78KRSJdz03Cj+7wP6blGLKgf7gIKAcZEWPnz67RT5skGE7cz0PpoDGA9She9BsgnlTHsjCtfxjkq2QqB0t6cpkuFixZ9XRQJp7UJmrebJAGABqK6NFwmNch77/Gt494u4Vo=
