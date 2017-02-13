@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'tz_detect',
     'django_crypto_fields.apps.AppConfig',
     'django_revision.apps.AppConfig',
-    'edc_search.apps.AppConfig',
     'edc_consent.apps.AppConfig',
     'edc_lab.apps.AppConfig',
     'edc_dashboard.apps.AppConfig',
