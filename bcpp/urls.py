@@ -51,6 +51,7 @@ urlpatterns = [
     url(r'^edc_consent/', include('edc_consent.urls', 'edc-consent')),
     url(r'^edc_map/', include('edc_map.urls', 'edc-map')),
     url(r'^edc_metadata/', include('edc_metadata.urls', 'edc-metadata')),
+    url(r'^edc_map/', include('edc_map.urls', 'edc-map')),
     url(r'^edc_sync/', include('edc_sync.urls', 'edc-sync')),
     url(r'^edc_registration/',
         include('edc_registration.urls', 'edc-registration')),
