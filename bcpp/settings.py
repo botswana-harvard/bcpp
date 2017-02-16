@@ -46,7 +46,6 @@ INSTALLED_APPS = [
     'django_js_reverse',
     'django_crypto_fields.apps.AppConfig',
     'django_revision.apps.AppConfig',
-    'edc_search.apps.AppConfig',
     'edc_lab.apps.AppConfig',
     'edc_dashboard.apps.AppConfig',
     'edc_sync.apps.AppConfig',
