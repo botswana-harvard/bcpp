@@ -30,7 +30,6 @@ from edc_sync.admin import edc_sync_admin
 from .views import HomeView, AdministrationView
 
 urlpatterns = [
-    url(r'^admin/', edc_sync_admin.urls),
     url(r'^admin/', admin.site.urls),
     url(r'^admin/', edc_appointment_admin.urls),
     url(r'^admin/', plot_admin.urls),
@@ -39,6 +38,7 @@ urlpatterns = [
     url(r'^admin/', bcpp_subject_admin.urls),
     url(r'^admin/', edc_metadata_admin.urls),
     url(r'^admin/', edc_registration_admin.urls),
+    url(r'^admin/', edc_sync_admin.urls),
     # url(r'^admin/', bcpp_subject_ahs_t2_admin.urls),
     url(r'^admininistration/', AdministrationView.as_view(),
         name='administration_url'),
@@ -47,7 +47,7 @@ urlpatterns = [
     url('member/', include('member.urls', namespace='member')),
     url('enumeration/', include('enumeration.urls', namespace='enumeration')),
     url('subject/', include('bcpp_subject.urls', namespace='bcpp-subject')),
-    url(r'^edc-sync/', include('edc_sync.urls', namespace='edc-sync')),
+    url(r'^edc_sync/', include('edc_sync.urls', namespace='edc-sync')),
     url(r'^appointment/',
         include('edc_appointment.urls', namespace='edc-appointment')),
     url(r'^edc/', include('edc_base.urls', 'edc-base')),
