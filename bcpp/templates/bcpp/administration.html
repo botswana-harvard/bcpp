@@ -8,7 +8,7 @@
 
 <div class="container">
    <div class="row">
-      <div class="col-md-4">
+      <div class="col-md-5">
         <div class="panel panel-info">
           <div class="panel-heading">Reports</div>
             <div class="panel-body">
@@ -22,7 +22,7 @@
             </div>
         </div>
       </div>
-      <div class="col-md-4">
+      <div class="col-md-3">
         <div class="panel panel-warning">
           <div class="panel-heading">Bcpp Administration</div>
             <div class="panel-body">
@@ -33,15 +33,15 @@
             </div>
         </div>
         <div class="panel panel-warning">
-          <div class="panel-heading">Edc Administration</div>
+          <div class="panel-heading">Edc</div>
             <div class="panel-body">
+              <a role="button" class="btn btn-sm btn-default btn-block" href="{% url 'edc-lab:home_url' %}admin/">Lab</a>
               <a role="button" class="btn btn-sm btn-default btn-block" href="{% url 'edc-sync:home_url' %}">Synchronization</a>
               <a role="button" class="btn btn-sm btn-default btn-block" href="{% url 'edc-map:home_url' %}">Maps</a>
               <a role="button" class="btn btn-sm btn-default btn-block" href="{% url 'edc-metadata:edc_metadata_admin:index' %}">Metadata</a>
               <a role="button" class="btn btn-sm btn-default btn-block" href="{% url 'edc-consent:home_url' %}">Consent</a>
               <a role="button" class="btn btn-sm btn-default btn-block" href="{% url 'edc-visit-schedule:home_url' %}">Visit Schedule</a>
               <a role="button" class="btn btn-sm btn-default btn-block" href="{% url 'edc-registration:edc_registration_admin:index' %}">Registration</a>
-              <a role="button" class="btn btn-sm btn-default btn-block" href="{% url 'edc-map:home_url' %}">Mapping</a>
             </div>
         </div>
         </div>
