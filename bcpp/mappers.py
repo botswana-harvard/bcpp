@@ -32,8 +32,10 @@ class TestPlotMapper(Mapper):
 
     landmarks = TEST_LANDMARKS
 
-    center_lat = -24.655143
-    center_lon = 25.924662
+    center_lat = -24.557709
+    center_lon = 25.807963
+    gps_center_lat = -24.557709
+    gps_center_lon = 25.807963
     radius = 100.5
     location_boundary = ()
 
@@ -51,6 +53,7 @@ class BokaaPlotMapper(Mapper):
     sections = []
     intervention = False
     landmarks = None
+
 
     gps_center_lat = -24.425856
     gps_center_lon = 26.021626

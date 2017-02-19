@@ -47,7 +47,6 @@ INSTALLED_APPS = [
     'django_crypto_fields.apps.AppConfig',
     'django_revision.apps.AppConfig',
     'edc_dashboard.apps.AppConfig',
-    'edc_sync.apps.AppConfig',
     'edc_registration.apps.AppConfig',
     'edc_visit_schedule.apps.AppConfig',
     'bcpp.apps.AppConfig',
@@ -69,6 +68,7 @@ INSTALLED_APPS = [
     'bcpp.apps.EnumerationAppConfig',
     'bcpp.apps.BcppSubjectAppConfig',
     'bcpp.apps.PlotAppConfig',
+    'bcpp.apps.EdcSyncAppConfig',
 ]
 
 if 'test' in sys.argv:
@@ -84,6 +84,7 @@ if 'test' in sys.argv:
         "edc_metadata": None,
         "edc_registration": None,
         "edc_sync": None,
+        'edc_map': None,
         "bcpp": None,
         "bcpp_subject": None,
         "plot": None,
@@ -135,6 +136,7 @@ WSGI_APPLICATION = 'bcpp.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -146,7 +148,6 @@ DATABASES = {
         'TEST': {'NAME': 'testbcpp'}
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
@@ -190,6 +191,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
+
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 KEY_PATH = os.path.join(BASE_DIR, 'crypto_fields')
 
