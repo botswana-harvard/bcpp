@@ -18,6 +18,7 @@ from edc_consent.apps import AppConfig as BaseEdcConsentAppConfig
 from edc_device.apps import AppConfig as BaseEdcDeviceAppConfig, DevicePermission
 from edc_device.constants import SERVER, CENTRAL_SERVER, CLIENT
 from edc_identifier.apps import AppConfig as BaseEdcIdentifierAppConfig
+from edc_lab.apps import AppConfig as BaseEdcLabAppConfig
 from edc_map.apps import AppConfig as BaseEdcMapAppConfig
 from edc_metadata.apps import AppConfig as BaseEdcMetadataAppConfig
 from edc_protocol.apps import AppConfig as BaseEdcProtocolAppConfig, SubjectType, Cap
@@ -78,6 +79,12 @@ class EnumerationAppConfig(BaseEnumerationAppConfig):
 
 class BcppSubjectAppConfig(BaseBcppSubjectAppConfig):
     base_template_name = 'bcpp/base.html'
+
+
+class EdcLabAppConfig(BaseEdcLabAppConfig):
+    base_template_name = 'bcpp/base.html'
+    requisition_model = 'bcpp_subject.subjectrequisition'
+    result_model = 'edc_lab.result'
 
 
 class EdcBaseAppConfig(BaseEdcBaseAppConfig):
