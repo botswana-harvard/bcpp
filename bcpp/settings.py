@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'bcpp.apps.AppConfig',
     'bcpp.apps.EdcBaseAppConfig',
     'bcpp.apps.EdcLabAppConfig',
+    'bcpp.apps.EdcLabelAppConfig',
     'bcpp.apps.EdcMetadataAppConfig',
     'bcpp.apps.EdcIdentifierAppConfig',
     'bcpp.apps.EdcProtocolAppConfig',

@@ -1,3 +1,4 @@
+import os
 import sys
 
 from datetime import datetime
@@ -6,8 +7,8 @@ from dateutil.tz import gettz
 
 from django.apps import AppConfig as DjangoAppConfig
 from django.core.management.color import color_style
+from django.conf import settings
 
-# from edc_label.apps import AppConfig as EdcLabelConfig
 from edc_appointment.apps import AppConfig as BaseEdcAppointmentAppConfig
 from edc_appointment.facility import Facility
 from edc_base.apps import AppConfig as BaseEdcBaseAppConfig
@@ -19,6 +20,7 @@ from edc_device.apps import AppConfig as BaseEdcDeviceAppConfig, DevicePermissio
 from edc_device.constants import SERVER, CENTRAL_SERVER, CLIENT
 from edc_identifier.apps import AppConfig as BaseEdcIdentifierAppConfig
 from edc_lab.apps import AppConfig as BaseEdcLabAppConfig
+from edc_label.apps import AppConfig as BaseEdcLabelAppConfig
 from edc_map.apps import AppConfig as BaseEdcMapAppConfig
 from edc_metadata.apps import AppConfig as BaseEdcMetadataAppConfig
 from edc_protocol.apps import AppConfig as BaseEdcProtocolAppConfig, SubjectType, Cap
@@ -156,12 +158,6 @@ class EdcMetadataAppConfig(BaseEdcMetadataAppConfig):
     delete_on_reasons = [LOST_VISIT, FAILED_ELIGIBILITY]
 
 
-# class EdcLabelAppConfig(EdcLabelConfig):
-#     default_cups_server_ip = '10.113.201.114'
-#     default_printer_label = 'leslie_testing'
-#     default_template_file = os.path.join(settings.STATIC_ROOT, 'bcpp', 'label_templates', 'aliquot.lbl')
-#     default_label_identifier_name = ''
-
 class EdcAppointmentAppConfig(BaseEdcAppointmentAppConfig):
     app_label = 'bcpp_subject'
     default_appt_type = 'home'
@@ -190,3 +186,11 @@ class EdcTimepointAppConfig(BaseEdcTimepointAppConfig):
 class EdcSyncAppConfig(BaseEdcSyncAppConfig):
     edc_sync_files_using = True
     role = SERVER
+
+
+class EdcLabelAppConfig(BaseEdcLabelAppConfig):
+    default_cups_server_ip = '10.113.201.248'
+    default_printer_label = 'aliquot'
+    extra_templates_folder = os.path.join(
+        settings.STATIC_ROOT, 'bcpp', 'label_templates')
+#     default_template_file = os.path.join(settings.STATIC_ROOT, 'bcpp', 'label_templates', 'aliquot.lbl')
