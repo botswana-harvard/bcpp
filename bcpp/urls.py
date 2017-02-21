@@ -27,6 +27,7 @@ from edc_lab.admin_site import edc_lab_admin
 from edc_metadata.admin_site import edc_metadata_admin
 from edc_registration.admin_site import edc_registration_admin
 from edc_sync.admin import edc_sync_admin
+from edc_map.admin import edc_map_admin
 
 from .views import HomeView, AdministrationView
 
@@ -38,6 +39,7 @@ urlpatterns = [
     url(r'^admin/', member_admin.urls),
     url(r'^admin/', bcpp_subject_admin.urls),
     url(r'^admin/', edc_lab_admin.urls),
+    url(r'^admin/', edc_map_admin.urls),
     url(r'^admin/', edc_metadata_admin.urls),
     url(r'^admin/', edc_registration_admin.urls),
     url(r'^admin/', edc_sync_admin.urls),
@@ -49,6 +51,7 @@ urlpatterns = [
     url('member/', include('member.urls', namespace='member')),
     url('enumeration/', include('enumeration.urls', namespace='enumeration')),
     url('subject/', include('bcpp_subject.urls', namespace='bcpp-subject')),
+    url('mapping/', include('edc_map.urls', namespace='edc-map')),
     url(r'^appointment/',
         include('edc_appointment.urls', namespace='edc-appointment')),
     url(r'^edc/', include('edc_base.urls', 'edc-base')),
