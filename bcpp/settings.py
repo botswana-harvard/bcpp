@@ -10,7 +10,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
-import configparser
 import os
 import sys
 from pathlib import PurePath
@@ -208,16 +207,9 @@ if 'test' in sys.argv:
     CURRENT_MAP_AREA = 'test_community'
 else:
     CURRENT_MAP_AREA = 'test_community'
-try:
-    config = configparser.ConfigParser()
-    config.read(os.path.join(ETC_DIR, 'edc_sync.ini'))
-    CORS_ORIGIN_WHITELIST = tuple(
-        config['corsheaders'].get('cors_origin_whitelist').split(','))
-    CORS_ORIGIN_ALLOW_ALL = config['corsheaders'].getboolean(
-        'cors_origin_allow_all', True)
-except KeyError:
-    CORS_ORIGIN_WHITELIST = []
-    CORS_ORIGIN_ALLOW_ALL = True
+
+CORS_ORIGIN_ALLOW_ALL = True
+
 REST_FRAMEWORK = {
     'PAGE_SIZE': 1,
     'DEFAULT_AUTHENTICATION_CLASSES': (
