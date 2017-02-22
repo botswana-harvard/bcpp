@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'crispy_forms',
     'tz_detect',
+    'corsheaders',
     'rest_framework',
     'rest_framework.authtoken',
     'django_js_reverse',
@@ -104,6 +105,7 @@ if 'test' in sys.argv:
     DEFAULT_FILE_STORAGE = 'inmemorystorage.InMemoryStorage'
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -214,7 +216,7 @@ try:
     CORS_ORIGIN_ALLOW_ALL = config['corsheaders'].getboolean(
         'cors_origin_allow_all', True)
 except KeyError:
-    CORS_ORIGIN_WHITELIST = None
+    CORS_ORIGIN_WHITELIST = []
     CORS_ORIGIN_ALLOW_ALL = True
 REST_FRAMEWORK = {
     'PAGE_SIZE': 1,
