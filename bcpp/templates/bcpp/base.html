@@ -31,7 +31,7 @@ $(document).ready(function(){
     <li id="li-topbar-anonymous"
        class="{%if navbar_name == 'anonymous' %}active{%endif%}">
         <a title="Anonymous"
-            href="{% url 'member:anonymous_listboard_url' %}">
+            href="{% url 'bcpp-subject:anonymous_listboard_url' %}">
             <span {%if navbar_name == 'anonymous' %}class="text text-danger"{% endif %}>
                 <i class="fa fa-user-secret fa-lg fa-fw"></i>
             </span>

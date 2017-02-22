@@ -22,7 +22,6 @@ navbars.update(default=navbar_items)
 
 navbar_items = []
 config = [
-    ('member', 'Anonymous Members', 'fa-user-secret'),
     ('bcpp_subject', 'Anonymous Subjects', 'fa-user-secret'),
 ]
 for app_config_name, label, fa_icon in config:
