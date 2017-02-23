@@ -39,16 +39,18 @@ class TestViews(SubjectMixin, TestCase):
         self.assertEqual(response.context['view'], HomeView)
 
     def test_listboard_household(self):
-        response = self.client.get(reverse('household:listboard_url', kwargs={}))
+        response = self.client.get(
+            reverse('household:listboard_url', kwargs={}))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['view'], HomeView)
 
     def test_listboard_enumeration(self):
-        response = self.client.get(reverse('enumeration:listboard_url', kwargs={}))
+        response = self.client.get(
+            reverse('enumeration:listboard_url', kwargs={}))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['view'], HomeView)
 
     def test_listboard_bcpp_subject(self):
-        response = self.client.get(reverse('bcpp-subject:listboard_url'))
+        response = self.client.get(reverse('bcpp_subject:listboard_url'))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['view'], HomeView)

@@ -76,7 +76,7 @@ class MemberAppConfig(BaseMemberAppConfig):
 
 class EnumerationAppConfig(BaseEnumerationAppConfig):
     base_template_name = 'bcpp/base.html'
-    subject_dashboard_url_name = 'bcpp-subject:dashboard_url'
+    subject_dashboard_url_name = 'bcpp_subject:dashboard_url'
 
 
 class BcppSubjectAppConfig(BaseBcppSubjectAppConfig):
