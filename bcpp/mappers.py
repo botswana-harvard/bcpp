@@ -2,7 +2,7 @@ from edc_map.site_mappers import site_mappers
 
 from edc_map.mapper import Mapper
 
-from .landmarks import TEST_LANDMARKS
+from .landmarks import TEST_LANDMARKS, METSIMOTLHABE_LANDMARKS
 
 
 class AnonymousMapper(Mapper):
@@ -30,7 +30,7 @@ class TestPlotMapper(Mapper):
     regions = None  # SECTIONS
     sections = None  # SUB_SECTIONS
 
-    landmarks = TEST_LANDMARKS
+    landmarks = METSIMOTLHABE_LANDMARKS
 
     center_lat = -24.557709
     center_lon = 25.807963
