@@ -1,7 +1,8 @@
-^XA
-^FO300,15^A0N,20,20^FD${protocol} Site ${site}^FS
-^FO300,34^BY1,3.0^BCN,50,N,N,N
-^BY^FD${manifest_identifier}^FS
-^FO300,92^A0N,20,20^FD${category}^FS
-^FO300,112^A0N,20,20^FDDOB: ${manifest_datetime}^FS
+^XA^PR4
+^FO305,15^A0N,20,15^FD${protocol} Site ${site} MANIFEST^FS
+^FO305,34^BY1^BCN,50,N,N,N,A
+^FD${barcode_value}^FS
+^FO305,92^A0N,20,15^FD${manifest_identifier}^FS
+^FO305,112^A0N,20,15^FD${category}
+^FO305,152^A0N,20,15^FD${manifest_datetime}^FS
 ^XZ
