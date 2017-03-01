@@ -3,6 +3,6 @@
 ^FO305,34^BY1^BCN,50,N,N,N,A
 ^FD${barcode_value}^FS
 ^FO305,92^A0N,20,15^FD${manifest_identifier}^FS
-^FO305,112^A0N,20,15^FD${category}
+^FO305,112^A0N,20,15^FD${category}^FS
 ^FO305,152^A0N,20,15^FD${manifest_datetime}^FS
 ^XZ
