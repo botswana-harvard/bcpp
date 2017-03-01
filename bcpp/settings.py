@@ -216,3 +216,5 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     ),
 }
+
+LABEL_PRINTER = 'home_label_printer'

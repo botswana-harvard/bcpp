@@ -61,6 +61,16 @@ class EdcProtocolAppConfig(BaseEdcProtocolAppConfig):
     study_open_datetime = datetime(2013, 10, 18, 0, 0, 0, tzinfo=gettz('UTC'))
     study_close_datetime = datetime(2018, 12, 1, 0, 0, 0, tzinfo=gettz('UTC'))
 
+    @property
+    def site_name(self):
+        from edc_map.site_mappers import site_mappers
+        return site_mappers.current_map_area
+
+    @property
+    def site_code(self):
+        from edc_map.site_mappers import site_mappers
+        return site_mappers.current_map_code
+
 
 class PlotAppConfig(BasePlotAppConfig):
     base_template_name = 'bcpp/base.html'
@@ -189,8 +199,5 @@ class EdcSyncAppConfig(BaseEdcSyncAppConfig):
 
 
 class EdcLabelAppConfig(BaseEdcLabelAppConfig):
-    # default_cups_server_ip = '10.113.200.216'
-    default_printer_name = 'home_label_printer'
     template_folder = os.path.join(
         settings.STATIC_ROOT, 'bcpp', 'label_templates')
-#     default_template_file = os.path.join(settings.STATIC_ROOT, 'bcpp', 'label_templates', 'aliquot.lbl')
