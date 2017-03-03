@@ -25,6 +25,7 @@ from edc_map.apps import AppConfig as BaseEdcMapAppConfig
 from edc_metadata.apps import AppConfig as BaseEdcMetadataAppConfig
 from edc_protocol.apps import AppConfig as BaseEdcProtocolAppConfig, SubjectType, Cap
 from edc_sync.apps import AppConfig as BaseEdcSyncAppConfig
+from edc_sync_files.apps import AppConfig as BaseEdcSyncFilesAppConfig
 from edc_timepoint.apps import AppConfig as BaseEdcTimepointAppConfig
 from edc_timepoint.timepoint import Timepoint
 from edc_visit_tracking.apps import AppConfig as BaseEdcVisitTrackingAppConfig
@@ -185,7 +186,23 @@ class EdcTimepointAppConfig(BaseEdcTimepointAppConfig):
 
 class EdcSyncAppConfig(BaseEdcSyncAppConfig):
     edc_sync_files_using = True
-    role = SERVER
+    role = CLIENT
+    server_ip = '192.168.1.85'
+
+
+class EdcSyncFilesAppConfig(BaseEdcSyncFilesAppConfig):
+    edc_sync_files_using = True
+    role = CLIENT
+    #
+    user = 'django'
+    host = '192.168.1.85'
+    password = None
+    source_folder = os.path.join(
+        settings.MEDIA_ROOT, 'transactions', 'outgoing')
+    destination_folder = os.path.join(
+        settings.MEDIA_ROOT, 'transactions', 'outgoing')
+    archive_folder = os.path.join(
+        settings.MEDIA_ROOT, 'transactions', 'archive')
 
 
 class EdcLabelAppConfig(BaseEdcLabelAppConfig):

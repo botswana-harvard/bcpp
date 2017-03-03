@@ -26,7 +26,7 @@ SECRET_KEY = '9-%tjc_ov-=t6-fefrys4n@izkj4y8oewah6uf2p9q%*!ub%)^'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '192.168.1.66']
 
 
 # Application definition
@@ -70,6 +70,7 @@ INSTALLED_APPS = [
     'bcpp.apps.BcppSubjectAppConfig',
     'bcpp.apps.PlotAppConfig',
     'bcpp.apps.EdcSyncAppConfig',
+    'bcpp.apps.EdcSyncFilesAppConfig',
 ]
 
 if 'test' in sys.argv:
