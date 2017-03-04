@@ -33,3 +33,6 @@ git+https://github.com/botswana-harvard/plot.git@develop#egg=plot
 git+https://github.com/botswana-harvard/survey.git@develop#egg=survey
 git+https://github.com/erikvw/django-crypto-fields.git@develop#egg=django_crypto_fields
 git+https://github.com/erikvw/django-revision.git@develop#egg=django_revision
+
+# make sure pip is updated!
+git+https://github.com/xhtml2pdf/xhtml2pdf.git

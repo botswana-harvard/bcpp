@@ -53,7 +53,7 @@ class EdcProtocolAppConfig(BaseEdcProtocolAppConfig):
     protocol = 'BHP066'
     protocol_number = '066'
     protocol_name = 'BCPP'
-    protocol_title = ''
+    protocol_title = 'Botswana Combination Prevention Project'
     subject_types = [
         SubjectType('subject', 'Research Subject',
                     Cap(model_name='bcpp_subject.subjectconsent', max_subjects=9999)),
