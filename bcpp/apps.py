@@ -121,6 +121,7 @@ class EdcConsentAppConfig(BaseEdcConsentAppConfig):
 
 class EdcDeviceAppConfig(BaseEdcDeviceAppConfig):
     device_id = 99
+    client_hostname_list = ['ckgathi']
     device_permissions = {
         'plot.plot': DevicePermission(
             model='plot.plot',
