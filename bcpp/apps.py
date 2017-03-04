@@ -203,6 +203,7 @@ class EdcSyncAppConfig(BaseEdcSyncAppConfig):
 
 class EdcSyncFilesAppConfig(BaseEdcSyncFilesAppConfig):
     edc_sync_files_using = True
+    config_subfolder_name = 'bcpp'
     role = CLIENT
     #
     user = 'django'
