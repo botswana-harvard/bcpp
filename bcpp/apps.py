@@ -11,6 +11,7 @@ from django.conf import settings
 
 from edc_appointment.apps import AppConfig as BaseEdcAppointmentAppConfig
 from edc_appointment.facility import Facility
+from edc_base.address import Address
 from edc_base.apps import AppConfig as BaseEdcBaseAppConfig
 from edc_base_test.apps import AppConfig as BaseEdcBaseTestAppConfig
 from edc_base.utils import get_utcnow
@@ -102,9 +103,21 @@ class EdcLabAppConfig(BaseEdcLabAppConfig):
 
 class EdcBaseAppConfig(BaseEdcBaseAppConfig):
     project_name = 'BCPP'
-    institution = 'Botswana-Harvard AIDS Institute'
+    institution = 'Botswana-Harvard AIDS Institute Partnership'
     copyright = '2013-{}'.format(get_utcnow().year)
-    license = None
+    license = 'GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007'
+    physical_address = Address(
+        company_name='Botswana-Harvard AIDS Institute Partnership',
+        address='Plot 1836',
+        city='Gaborone',
+        country='Botswana',
+        tel='+267 3902671',
+        fax='+267 3901284')
+    postal_address = Address(
+        company_name='Botswana-Harvard AIDS Institute Partnership',
+        address='Private Bag BO 320',
+        city='Bontleng',
+        country='Botswana')
 
     def get_navbars(self):
         return navbars
