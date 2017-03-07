@@ -1,0 +1,99 @@
+<!-- Modal -->
+<div id="helpModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Help</h4>
+      </div>
+      <div class="modal-body">
+        <div class="panel-group" id="accordion">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                <a role="button" href="#collapsePlots" data-toggle="collapse" data-parent="#accordion"><i class="fa fa-building fa-sm"></i> Plots</a>
+              </h4>
+            </div>
+            <div id="collapsePlots" class="panel-collapse collapse">
+              <div class="panel panel-default">
+                <div class="panel panel-heading">Add / Change Plot</div>
+                <div class="panel panel-body">
+                  <p>A plot log <i class="fa fa-file-o fa-sm"></i> is required before adding/changing a plot.</p>
+
+                  <p>RSS and HTC plots are already in the system and only need to be edited.
+
+                  During ESS it may be necessary to add a plot. Plots may only be added in an ESS community.</p>
+
+                  <p>Once a plot <i class="fa fa-building fa-sm"></i> has been added the edit <i class="fa fa-pencil fa-sm"></i> 
+                  plot button should appear showing the plot identifier. If  the button is disabled, check the plot log 
+                  <i class="fa fa-history fa-sm"></i> history. If a current plot log does not exist, you will need to 
+                  add one before the plot may be changed.</p>
+
+                  <p>Once at the plot, you need to:
+                    <ul>
+                      <li>confirm the GPS point;</li>
+                      <li>enter the number of households</li>
+                      <li>estimate the number of eligible members that live on the plot</li>
+                    </ul>
+                  </p>
+
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                <a role="button" href="#collapseHousehold" data-toggle="collapse" data-parent="#accordion">Household</a>
+              </h4>
+            </div>
+            <div id="collapseHousehold" class="panel-collapse collapse">
+              <p>Households reference ...</p>
+            </div>
+          </div>
+
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                <a role="button" href="#collapseIcons" data-toggle="collapse" data-parent="#accordion">Icon reference</a>
+              </h4>
+            </div>
+            <div id="collapseIcons" class="panel-collapse collapse">
+              <div class="panel-body">
+                <ul class="list-group">
+                <li class="list-group-item"><i class="fa fa-plus fa-lg"></i> Add</li>
+                <li class="list-group-item"><i class="fa fa-pencil fa-lg"></i> Change</li>
+                <li class="list-group-item"><i class="fa fa-building fa-lg"></i> Plot</li>
+                <li class="list-group-item"><i class="fa fa-file-o fa-lg"></i> Report. For example plot log, absent member, etc</li>
+                <li class="list-group-item"><i class="fa fa-files-o fa-lg"></i> Reports. For example plot logs, absent member reports, etc</li>
+                <li class="list-group-item"><i class="fa fa-history fa-lg"></i> Report history. For example "plot log history"</li>
+                <li class="list-group-item"><i class="fa fa-home fa-lg"></i> Household</li>
+                <li class="list-group-item"><i class="fa fa-group fa-lg"></i> Members</li>
+                <li class="list-group-item"><i class="fa fa-user-circle-o fa-lg"></i> Subject</li>
+                <li class="list-group-item"><i class="fa fa-male fa-lg"></i> Male</li>
+                <li class="list-group-item"><i class="fa fa-female fa-lg"></i> Female</li>
+                <li class="list-group-item"><i class="fa fa-sitemap fa-lg"></i> Enumeration / Structure of household / Composition</li>
+                <li class="list-group-item"><i class="fa fa-search fa-lg"></i> Search</li>
+                <li class="list-group-item"><i class="fa fa-undo fa-lg"></i> Undo a search</li>
+                <li class="list-group-item"><i class="fa fa-filter fa-lg"></i> Filter a list</li>
+                <li class="list-group-item"><i class="fa fa-star fa-lg"></i> Complete</li>
+                <li class="list-group-item"><i class="fa fa-star-half-o fa-lg"></i> Incomplete</li>
+                <li class="list-group-item"><i class="fa fa-star-o fa-lg"></i> New</li>
+                <li class="list-group-item"><i class="fa fa-spinner fa-lg"></i> In progress</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>

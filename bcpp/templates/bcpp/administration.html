@@ -1,0 +1,54 @@
+  {% extends 'bcpp/base.html' %}
+
+  {% block main %}
+
+    {{ block.super }}
+
+
+
+<div class="container">
+   <div class="row">
+      <div class="col-md-5">
+        <div class="panel panel-info">
+          <div class="panel-heading">Reports</div>
+            <div class="panel-body">
+            </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="panel panel-success">
+          <div class="panel-heading">Statistics</div>
+            <div class="panel-body">
+            </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="panel panel-warning">
+          <div class="panel-heading">Bcpp Administration</div>
+            <div class="panel-body">
+              <a role="button" class="btn btn-sm btn-default btn-block" href="{% url 'plot:plot_admin:index' %}">Plots</a>
+              <a role="button" class="btn btn-sm btn-default btn-block" href="{% url 'household:household_admin:index' %}">Households</a>
+              <a role="button" class="btn btn-sm btn-default btn-block" href="{% url 'member:member_admin:index' %}">Member</a>
+              <a role="button" class="btn btn-sm btn-default btn-block" href="{% url 'bcpp_subject:bcpp_subject_admin:index' %}">Subjects</a>
+            </div>
+        </div>
+        <div class="panel panel-warning">
+          <div class="panel-heading">Edc</div>
+            <div class="panel-body">
+              <a role="button" class="btn btn-sm btn-default btn-block" href="{% url 'edc_consent:home_url' %}">Consent</a>
+              <a role="button" class="btn btn-sm btn-default btn-block" href="{% url 'edc_device:home_url' %}">Device</a>
+              <a role="button" class="btn btn-sm btn-default btn-block" href="{% url 'edc_lab:home_url' %}admin/">Lab</a>
+              <a role="button" class="btn btn-sm btn-default btn-block" href="{% url 'edc_label:home_url' %}">Labels</a>
+              <a role="button" class="btn btn-sm btn-default btn-block" href="{% url 'edc_map:home_url' %}">Maps</a>
+              <a role="button" class="btn btn-sm btn-default btn-block" href="{% url 'edc_metadata:edc_metadata_admin:index' %}">Metadata</a>
+              <a role="button" class="btn btn-sm btn-default btn-block" href="{% url 'edc_protocol:home_url' %}">Protocol</a>
+              <a role="button" class="btn btn-sm btn-default btn-block" href="{% url 'edc_registration:edc_registration_admin:index' %}">Registration</a>
+              <a role="button" class="btn btn-sm btn-default btn-block" href="{% url 'edc_sync:home_url' %}">Synchronization</a>
+              <a role="button" class="btn btn-sm btn-default btn-block" href="{% url 'edc_visit_schedule:home_url' %}">Visit Schedule</a>
+            </div>
+        </div>
+        </div>
+      </div>
+    </div>
+
+    {% endblock main %}

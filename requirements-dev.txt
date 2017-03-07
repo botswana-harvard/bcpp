@@ -1,0 +1,36 @@
+-e /Users/erikvw/source/bcpp-lab
+-e /Users/erikvw/source/bcpp-map
+-e /Users/erikvw/source/bcpp-subject
+-e /Users/erikvw/source/edc-appointment
+-e /Users/erikvw/source/edc-base
+-e /Users/erikvw/source/edc-consent
+-e /Users/erikvw/source/edc-constants
+-e /Users/erikvw/source/edc-dashboard
+-e /Users/erikvw/source/edc-device
+-e /Users/erikvw/source/edc-identifier
+-e /Users/erikvw/source/edc-lab
+-e /Users/erikvw/source/edc-label
+-e /Users/erikvw/source/edc-locator
+-e /Users/erikvw/source/edc-map
+-e /Users/erikvw/source/edc-metadata
+-e /Users/erikvw/source/edc-offstudy
+-e /Users/erikvw/source/edc-protocol
+# -e /Users/erikvw/source/edc-quota
+-e /Users/erikvw/source/edc-registration
+-e /Users/erikvw/source/edc-search
+-e /Users/erikvw/source/edc-sync
+-e /Users/erikvw/source/edc-rest
+-e /Users/erikvw/source/edc-timepoint
+-e /Users/erikvw/source/edc-visit-schedule
+-e /Users/erikvw/source/edc-visit-tracking
+-e /Users/erikvw/source/enumeration
+-e /Users/erikvw/source/getresults-identifier
+-e /Users/erikvw/source/household
+-e /Users/erikvw/source/member
+-e /Users/erikvw/source/plot
+-e /Users/erikvw/source/survey
+-e /Users/erikvw/source/django-crypto-fields
+-e /Users/erikvw/source/django-revision
+
+# make sure pip is updated!
+git+https://github.com/xhtml2pdf/xhtml2pdf.git
