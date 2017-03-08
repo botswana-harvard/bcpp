@@ -80,6 +80,7 @@ class PlotAppConfig(BasePlotAppConfig):
 
 class HouseholdAppConfig(BaseHouseholdAppConfig):
     base_template_name = 'bcpp/base.html'
+    max_failed_enumeration_attempts = 10
 
 
 class MemberAppConfig(BaseMemberAppConfig):
