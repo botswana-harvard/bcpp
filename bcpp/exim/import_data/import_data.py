@@ -10,6 +10,11 @@ from datetime import datetime
 from pprint import pprint
 
 from django.db.models.fields import DateTimeField
+from django.db.utils import IntegrityError
+
+
+class ImportDataError(Exception):
+    pass
 
 
 class ImportDataFromCsv:
@@ -61,7 +66,10 @@ class ImportDataFromCsv:
             self.validate_choice_fields(row)
             obj = self.model(**row)
             if save:
-                obj.save_base(raw=True)
+                try:
+                    obj.save_base(raw=True)
+                except IntegrityError as e:
+                    raise IntegrityError('{}. Got {}'.format(str(e), obj.id))
                 if self.post_row_handler:
                     self.post_row_handler(obj)
             if debug:
@@ -87,6 +95,12 @@ class ImportDataFromCsv:
                 dt = datetime.strptime(x, '%Y-%m-%d')
             elif re.match('^[0-9]{4}\-[0-9]{2}\-[0-9]{2} [0-9]{2}\:[0-9]{2}\:[0-9]{2}$', x):
                 dt = datetime.strptime(x, '%Y-%m-%d %H:%M:%S')
+            elif re.match('^[0-9]{4}\-[0-9]{2}\-[0-9]{2} [0-9]{2}\:[0-9]{2}\:[0-9]{2}\+[0-9]{2}\:[0-9]{2}$', x):
+                x = re.match(
+                    '^[0-9]{4}\-[0-9]{2}\-[0-9]{2} [0-9]{2}\:[0-9]{2}\:[0-9]{2}', x).group()
+                dt = datetime.strptime(x, '%Y-%m-%d %H:%M:%S')
+            else:
+                raise ImportDataError('Invalid date string. Got {}'.format(x))
             return arrow.Arrow.fromdatetime(dt).to('UTC').datetime
 
         if self._df.empty:

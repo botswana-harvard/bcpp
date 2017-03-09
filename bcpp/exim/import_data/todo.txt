@@ -13,3 +13,5 @@ review identifier history table to prevent duplicate identifiers
     etc ...
     
 check survey_schedule field is populated
+
+delete from registeredsubject where subject_identifier is None
