@@ -1,6 +1,7 @@
 from member.models import RepresentativeEligibility
 
-from ...recipe import site_recipes, Recipe
+from ...model_recipe import ModelRecipe
+from ...recipe import site_recipes
 
 
 def post_import_handler():
@@ -9,6 +10,6 @@ def post_import_handler():
         obj.save_base(raw=True)
 
 
-site_recipes.register(Recipe(
+site_recipes.register(ModelRecipe(
     model_name='member.representativeeligibility',
     post_import_handler=post_import_handler))

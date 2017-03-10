@@ -1,4 +1,18 @@
-LOAD DATA INFILE '/Users/erikvw/bcpp_201703/new/member/householdmember4mysql.csv'
+# First prepare Dataframe using ImportCsvToModel and re-export to_csv()
+#
+#     import pandas as pd
+#     from bcpp.exim.import_data import site_recipes, ImportCsvToModel
+#     
+#     recipe = site_recipes.recipes.get('edc_registration.registeredsubject')
+#     obj = ImportCsvToModel(recipe=recipe)
+#     obj.df.to_csv('/Users/erikvw/bcpp_201703/new/edc_registration/registeredsubject4mysql.csv', index=False, encoding='utf-8')
+#
+# Next copy the SQL command below into mysql console
+#
+# Last, resave all model instances to encrypt
+#
+
+LOAD DATA INFILE '/Users/erikvw/bcpp_201703/new/edc_registration/registredsubject4mysql.csv'
 INTO TABLE edc_migrated.edc_registration_registeredsubject
 CHARACTER SET UTF8
 FIELDS TERMINATED BY ','
@@ -11,7 +25,6 @@ screening_datetime = nullif(@screening_datetime, ''),
 id = replace(@id,'-',''),
 registration_datetime = str_to_date(@registration_datetime, '%Y-%m-%d %H:%i:%s+00:00'),
 created = str_to_date(@created, '%Y-%m-%d %H:%i:%s+00:00'),
-# randomization_datetime = str_to_date(@randomization_datetime, '%Y-%m-%d %H:%i:%s+00:00'),
 randomization_datetime = if(@randomization_datetime, str_to_date(@randomization_datetime, '%Y-%m-%d %H:%i:%s+00:00'), NULL),
 modified = str_to_date(@modified, '%Y-%m-%d %H:%i:%s+00:00'),
 identity_or_pk = uuid();

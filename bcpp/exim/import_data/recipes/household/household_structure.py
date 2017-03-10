@@ -2,7 +2,8 @@ import pandas as pd
 
 from household.models import HouseholdStructure
 
-from ...recipe import site_recipes, Recipe
+from ...model_recipe import ModelRecipe
+from ...recipe import site_recipes
 
 
 def survey_schedule(row):
@@ -30,7 +31,7 @@ def post_import_handler():
             'test_community', obj.household.plot.map_area)
         obj.save_base(raw=True)
 
-site_recipes.register(Recipe(
+site_recipes.register(ModelRecipe(
     model_name='household.householdstructure',
     df_apply_functions=df_apply_functions,
     df_rename_columns=df_rename_columns))

@@ -1,6 +1,7 @@
 import pandas as pd
 
-from ...recipe import site_recipes, Recipe
+from ...model_recipe import ModelRecipe
+from ...recipe import site_recipes
 
 
 df_drop_columns = [
@@ -29,7 +30,7 @@ df_apply_functions = {
 }
 
 
-site_recipes.register(Recipe(
+site_recipes.register(ModelRecipe(
     model_name='household.household',
     df_drop_columns=df_drop_columns,
     df_apply_functions=df_apply_functions))

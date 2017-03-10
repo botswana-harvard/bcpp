@@ -4,7 +4,7 @@ import audit trail
 update slug fields
 
 household_structure.survey_schedule
-    - done: fix survey_schedule in houswehold_structure (test_community -> real community)
+    - done: fix survey_schedule in household_structure (test_community -> real community)
     - verify survey_schedule_object returns correct community
     
 review identifier history table to prevent duplicate identifiers
@@ -12,6 +12,58 @@ review identifier history table to prevent duplicate identifiers
     household
     etc ...
     
-check survey_schedule field is populated
+check survey_schedule field is populated on all models that use it
 
-delete from registeredsubject where subject_identifier is None
+household_member : calculate citizen, non-citizen
+
+
+Notes:
+    household member 63050 reduced to 62863 after removing duplicates
+    on key (first_name, initials, household_structure).
+
+    
+
+Duplicate RegisteredSubjects
+
+Cannot update registered subject with a duplicate 'identity'. Got 171523610.
+Cannot update registered subject with a duplicate 'identity'. Got 104224018.
+Cannot update registered subject with a duplicate 'identity'. Got 565616307.
+Cannot update registered subject with a duplicate 'identity'. Got 587123019.
+Cannot update registered subject with a duplicate 'identity'. Got 848526010.
+Cannot update registered subject with a duplicate 'identity'. Got 683429315.
+Cannot update registered subject with a duplicate 'identity'. Got 866129604.
+Cannot update registered subject with a duplicate 'identity'. Got 550924510.
+Cannot update registered subject with a duplicate 'identity'. Got 884820716.
+Cannot update registered subject with a duplicate 'identity'. Got 613024905.
+Cannot update registered subject with a duplicate 'identity'. Got 637729102.
+Cannot update registered subject with a duplicate 'identity'. Got 943614203.
+Cannot update registered subject with a duplicate 'identity'. Got 477620700.
+Cannot update registered subject with a duplicate 'identity'. Got 826522206.
+Cannot update registered subject with a duplicate 'identity'. Got 595525509.
+Cannot update registered subject with a duplicate 'identity'. Got 646716109.
+Cannot update registered subject with a duplicate 'identity'. Got 580810303.
+Cannot update registered subject with a duplicate 'identity'. Got 788016800.
+Cannot update registered subject with a duplicate 'identity'. Got 227026801.
+Cannot update registered subject with a duplicate 'identity'. Got 087322802.
+Cannot update registered subject with a duplicate 'identity'. Got 895513705.
+Cannot update registered subject with a duplicate 'identity'. Got 387222600.
+Cannot update registered subject with a duplicate 'identity'. Got 365129005.
+Cannot update registered subject with a duplicate 'identity'. Got 306729821.
+Cannot update registered subject with a duplicate 'identity'. Got 029715401.
+Cannot update registered subject with a duplicate 'identity'. Got 427823914.
+Cannot update registered subject with a duplicate 'identity'. Got 381925302.
+
+
+
+# list data
+SELECT 'hostname_created', 'name', 'short_name', 'created', 'user_modified',
+'modified', 'hostname_modified', 'version', 'display_index', 'user_created',
+'field_name','id','revision'
+UNION ALL
+SELECT hostname_created, name, short_name, created, user_modified,
+modified, hostname_modified, version, display_index, user_created,
+field_name,id,revision INTO OUTFILE '/Users/erikvw/bcpp_201703/bcpp_list_electricalappliances.csv'
+CHARACTER SET UTF8
+FIELDS TERMINATED BY ',' ENCLOSED BY ''
+LINES TERMINATED BY '\n'
+FROM bhp066.bcpp_list_electricalappliances;

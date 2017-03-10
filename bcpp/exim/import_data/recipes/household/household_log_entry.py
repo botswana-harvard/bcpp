@@ -1,6 +1,7 @@
 from household.constants import ELIGIBLE_REPRESENTATIVE_PRESENT
 
-from ...recipe import site_recipes, Recipe
+from ...model_recipe import ModelRecipe
+from ...recipe import site_recipes
 
 
 def household_status(row):
@@ -12,6 +13,6 @@ def household_status(row):
 df_apply_functions = {'household_status': lambda row: household_status(row)}
 
 
-site_recipes.register(Recipe(
+site_recipes.register(ModelRecipe(
     model_name='household.householdlogentry',
     df_apply_functions=df_apply_functions))

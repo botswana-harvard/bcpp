@@ -15,7 +15,7 @@ class ExportData:
         self.encrypted_models = []
         excluded_models = [
             'incomingtransaction', 'outgoingtransaction', 'crypt']
-        for app_config in django_apps.get_app_configs()():
+        for app_config in django_apps.get_app_configs():
             for model in app_config.get_models():
                 for field in model._meta.fields:
                     if hasattr(field, 'field_cryptor'):

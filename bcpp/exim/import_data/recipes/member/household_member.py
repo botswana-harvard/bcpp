@@ -1,10 +1,12 @@
+import pandas as pd
 import numpy as np
 
 from edc_registration.models import RegisteredSubject
 
 from member.models import HouseholdMember
 
-from ...recipe import site_recipes, Recipe
+from ...model_recipe import ModelRecipe
+from ...recipe import site_recipes
 
 
 df_drop_columns = [
@@ -25,6 +27,12 @@ df_apply_functions = {
     'citizen': lambda row: row['eligible_subject'],
     'relation': lambda row: 'family_friend' if row['relation'].lower() == 'family friend' else row['relation'].lower(),
     'study_resident': lambda row: np.NaN if row['study_resident'] == 'Unknown' else row['study_resident'],
+    'eligible_subject': lambda row: False if pd.isnull(row['eligible_subject']) else row['eligible_subject'],
+    'enrollment_checklist_completed': lambda row: False if pd.isnull(row['enrollment_checklist_completed']) else row['enrollment_checklist_completed'],
+    'enrollment_loss_completed': lambda row: False if pd.isnull(row['enrollment_loss_completed']) else row['enrollment_loss_completed'],
+    'eligible_hoh': lambda row: False if pd.isnull(row['eligible_hoh']) else row['eligible_hoh'],
+    'citizen': lambda row: False,
+    'non_citizen': lambda row: False,
 }
 
 
@@ -42,7 +50,7 @@ def post_import_handler():
         obj.household_identifier = obj.household_structure.household.household_identifier
         obj.save_base(raw=True)
 
-site_recipes.register(Recipe(
+site_recipes.register(ModelRecipe(
     model_name='member.householdmember',
     df_drop_columns=df_drop_columns,
     df_rename_columns=df_rename_columns,

@@ -5,7 +5,8 @@ from edc_constants.constants import WEEKENDS, WEEKDAYS
 
 from plot.constants import NON_RESIDENTIAL, TWENTY_PERCENT, FIVE_PERCENT
 
-from ...recipe import site_recipes, Recipe
+from ...model_recipe import ModelRecipe
+from ...recipe import site_recipes
 
 
 def fix_status(row):
@@ -59,7 +60,7 @@ df_apply_functions = {
 }
 
 
-site_recipes.register(Recipe(
+site_recipes.register(ModelRecipe(
     model_name='plot.plot',
     df_rename_columns=df_rename_columns,
     df_drop_columns=df_drop_columns,

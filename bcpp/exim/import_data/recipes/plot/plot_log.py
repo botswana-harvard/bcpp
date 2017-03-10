@@ -2,7 +2,8 @@ from django.apps import apps as django_apps
 
 from plot.models import Plot, PlotLog
 
-from ...recipe import site_recipes, Recipe
+from ...model_recipe import ModelRecipe
+from ...recipe import site_recipes
 
 
 def post_import_handler():
@@ -13,6 +14,6 @@ def post_import_handler():
             PlotLog.objects.create(
                 plot=plot, report_datetime=plot.report_datetime)
 
-site_recipes.register(Recipe(
+site_recipes.register(ModelRecipe(
     model_name='plot.plotlog',
     post_import_handler=post_import_handler))
