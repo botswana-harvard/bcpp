@@ -14,8 +14,6 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-from django.conf import settings
-from django.conf.urls.static import static
 
 from edc_appointment.admin_site import edc_appointment_admin
 from edc_base.views import LogoutView, LoginView
@@ -74,4 +72,4 @@ urlpatterns = [
     url(r'logout', LogoutView.as_view(
         pattern_name='login_url'), name='logout_url'),
     url(r'', HomeView.as_view(), name='home_url'),
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+]
