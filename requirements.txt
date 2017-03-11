@@ -1,5 +1,4 @@
 git+https://github.com/botswana-harvard/bcpp-lab.git@develop#egg=bcpp_lab
-git+https://github.com/botswana-harvard/bcpp-map.git@develop#egg=bcpp_map
 git+https://github.com/botswana-harvard/bcpp-subject.git@develop#egg=bcpp_subject
 git+https://github.com/botswana-harvard/edc-appointment.git@develop#egg=edc_appointment
 git+https://github.com/botswana-harvard/edc-base.git@develop#egg=edc_base
@@ -16,9 +15,7 @@ git+https://github.com/botswana-harvard/edc-map.git@develop#egg=edc_map
 git+https://github.com/botswana-harvard/edc-metadata.git@develop#egg=edc_metadata
 git+https://github.com/botswana-harvard/edc-offstudy.git@develop#egg=edc_offstudy
 git+https://github.com/botswana-harvard/edc-protocol.git@develop#egg=edc_protocol
-git+https://github.com/botswana-harvard/edc-quota.git@develop#egg=edc_quota
 git+https://github.com/botswana-harvard/edc-registration.git@develop#egg=edc_registration
-git+https://github.com/botswana-harvard/edc-search.git@develop#egg=edc_search
 git+https://github.com/botswana-harvard/edc-subset-manager.git@develop#egg=edc_subset_manager
 git+https://github.com/botswana-harvard/edc-sync-files.git@develop#egg=edc_sync_files
 git+https://github.com/botswana-harvard/edc-sync.git@develop#egg=edc_sync
