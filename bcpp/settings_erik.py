@@ -178,8 +178,10 @@ LANGUAGE_CODE = 'en-us'
 
 LANGUAGES = (
     ('tn', 'Setswana'),
-    ('en', 'English'))
-
+    ('en', 'English'),
+    ('kck', 'Ikalanga'),
+    ('hbs', 'Hambukushu'),
+)
 
 TIME_ZONE = 'Africa/Gaborone'
 

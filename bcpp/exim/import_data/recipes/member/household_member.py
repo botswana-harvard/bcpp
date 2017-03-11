@@ -52,6 +52,7 @@ def post_import_handler():
 
 site_recipes.register(ModelRecipe(
     model_name='member.householdmember',
+    old_model_name='bcpp_household_member.householdmember',
     df_drop_columns=df_drop_columns,
     df_rename_columns=df_rename_columns,
     df_apply_functions=df_apply_functions,

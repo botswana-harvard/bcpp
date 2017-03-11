@@ -15,4 +15,5 @@ df_apply_functions = {'household_status': lambda row: household_status(row)}
 
 site_recipes.register(ModelRecipe(
     model_name='household.householdlogentry',
+    old_model_name='bcpp_household.householdlogentry',
     df_apply_functions=df_apply_functions))

@@ -32,5 +32,6 @@ df_apply_functions = {
 
 site_recipes.register(ModelRecipe(
     model_name='household.household',
+    old_model_name='bcpp_household.household',
     df_drop_columns=df_drop_columns,
     df_apply_functions=df_apply_functions))

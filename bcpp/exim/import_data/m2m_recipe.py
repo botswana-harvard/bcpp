@@ -10,13 +10,16 @@ from .import_csv_to_model import ImportCsvToModel
 from .model_recipe import ModelRecipe
 from .recipe import Recipe
 from .settings import OLD_DB, NEW_DB, SOURCE_DIR, UPDATED_DIR
+from pprint import pprint
 
 
 class M2mRecipe(Recipe):
 
     def __init__(self, data_model_name=None, old_list_model_name=None,
-                 list_model_name=None, old_data_model_app_label=None, **kwargs):
+                 list_model_name=None, old_data_model_app_label=None,
+                 join_lists_on=None, **kwargs):
         super().__init__(**kwargs)
+        self.join_lists_on = join_lists_on or 'short_name'
         self.data_model = django_apps.get_model(*data_model_name.split('.'))
         self.old_data_model_app_label = old_data_model_app_label
         self.list_model = django_apps.get_model(*list_model_name.split('.'))
@@ -49,6 +52,7 @@ class M2mRecipe(Recipe):
         recipe = ModelRecipe(model_name=self.list_model._meta.label_lower)
         ImportCsvToModel(recipe=recipe, save=True)
 
+    @property
     def ids(self):
         """Returns a dictionary {old_id1: new_uuid1, old_id2: new_uuid2, ...}.
         """
@@ -56,22 +60,49 @@ class M2mRecipe(Recipe):
             'SELECT old.id old_id, new.id new_id, old.short_name '
             'FROM {old_db}.{old_list_dbtable} AS old '
             'LEFT JOIN {db}.{list_dbtable} AS new '
-            'ON new.short_name=old.short_name;').format(
+            'ON TRIM(new.{join_field})=TRIM(old.{join_field});').format(
                 old_db=OLD_DB, old_list_dbtable='_'.join(
                     self.old_list_model_name.split('.')),
-                db=NEW_DB, list_dbtable=self.list_model._meta.db_table)
+                db=NEW_DB, list_dbtable=self.list_model._meta.db_table,
+                join_field=self.join_lists_on)
         with connection.cursor() as cursor:
             cursor.execute(sql)
             rows = cursor.fetchall()
-        return {row[0]: row[1] for row in rows}
+        ids = {row[0]: row[1] for row in rows}
+        if not ids:
+            print(sql)
+            raise ImportDataError(
+                'Please review original/new list tables. no records JOINed')
+        for v in ids.values():
+            if not v:
+                pprint(ids)
+                raise ImportDataError(
+                    'Please review original/new list tables. Mismatch on JOIN')
+        return ids
+
+    @property
+    def old_intermediate_tblname(self):
+        """Returns the db.tablename.
+        """
+        return '{}.{}_{}_{}'.format(
+            OLD_DB,
+            self.old_data_model_app_label,
+            self.data_model._meta.model_name,
+            '_'.join(re.findall('[A-Z][^A-Z]*', self.list_model._meta.object_name)).lower())
+
+    @property
+    def intermediate_tblname(self):
+        """Returns the db.tablename.
+        """
+        return '{}.{}_{}_{}'.format(
+            NEW_DB, self.data_model._meta.app_label,
+            self.data_model._meta.model_name,
+            '_'.join(re.findall('[A-Z][^A-Z]*', self.list_model._meta.object_name)).lower())
 
     def old_intermediate_into_outfile(self):
         """Selects the original intermediate data into an OUTFILE.
         """
-        tbl = '{}_{}_{}'.format(
-            self.old_data_model_app_label,
-            self.data_model._meta.model_name,
-            '_'.join(re.findall('[A-Z][^A-Z]*', self.list_model._meta.object_name)).lower())
+        tbl = self.old_intermediate_tblname
         outfile = os.path.join(
             UPDATED_DIR, '{}_{}.outfile.txt'.format(
                 '/'.join(self.data_model._meta.label_lower.split('.')),
@@ -84,10 +115,10 @@ class M2mRecipe(Recipe):
             "CHARACTER SET UTF8 "
             "FIELDS TERMINATED BY ',' ENCLOSED BY '' "
             "LINES TERMINATED BY '\n' "
-            "FROM {old_db}.{tbl};").format(
+            "FROM {tbl};").format(
                 data_field='{}_id'.format(self.data_model._meta.model_name),
                 list_field='{}_id'.format(self.list_model._meta.model_name),
-                outfile=outfile, old_db=OLD_DB, tbl=tbl)
+                outfile=outfile, tbl=tbl)
         with connection.cursor() as cursor:
             cursor.execute(sql)
         return outfile
@@ -118,12 +149,9 @@ class M2mRecipe(Recipe):
     def load_intermediate_infile(self, infile=None):
         """Loads the updated INFILE to the new DB intermediate table.
         """
-        tbl = '{}_{}_{}'.format(
-            self.data_model._meta.app_label,
-            self.data_model._meta.model_name,
-            '_'.join(re.findall('[A-Z][^A-Z]*', self.list_model._meta.object_name)).lower())
+        tbl = self.intermediate_tblname
         sql = (
-            "LOAD DATA INFILE '{infile}' INTO TABLE {db}.{tbl} "
+            "LOAD DATA INFILE '{infile}' INTO TABLE {tbl} "
             "CHARACTER SET UTF8 "
             "FIELDS TERMINATED BY ',' ENCLOSED BY '' "
             "LINES TERMINATED BY '\n' "
@@ -131,7 +159,7 @@ class M2mRecipe(Recipe):
             "(id, {data_field}, {list_field});".format(
                 data_field='{}_id'.format(self.data_model._meta.model_name),
                 list_field='{}_id'.format(self.list_model._meta.model_name),
-                infile=infile, db=NEW_DB, tbl=tbl))
+                infile=infile, tbl=tbl))
         with connection.cursor() as cursor:
             cursor.execute(sql)
 

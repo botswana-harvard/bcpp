@@ -4,9 +4,12 @@ from collections import OrderedDict
 from datetime import datetime
 from pprint import pprint
 
+from django.core.management.color import color_style
 from django.db.utils import IntegrityError
 
 from .base_import_csv import BaseImportCsv
+
+style = color_style()
 
 
 class ImportCsvToModel(BaseImportCsv):
@@ -37,10 +40,11 @@ class ImportCsvToModel(BaseImportCsv):
         start = datetime.now()
         sys.stdout.write('{} ...\r'.format(self.model._meta.label_lower))
         row_count = len(self.df)
+        error_count = 0
         rows = (OrderedDict(row) for i, row in self.df.iterrows())
         for index, row in enumerate(rows):
             sys.stdout.write(
-                '{} ...{}/{}  \r'.format(self.model._meta.label_lower, index, row_count))
+                '{} ...{}/{}  \r'.format(self.model._meta.label_lower, index + 1, row_count))
             if debug:
                 pprint(row)
             row = self.convert_nan(row)
@@ -53,8 +57,13 @@ class ImportCsvToModel(BaseImportCsv):
                     try:
                         obj.save_base(raw=True)
                     except IntegrityError as e:
-                        raise IntegrityError(
-                            '{}. Got {}'.format(str(e), obj.id))
+                        err_msg = '{}. Got {}'.format(str(e), obj.id)
+                        if self.raise_errors:
+                            raise IntegrityError(err_msg)
+                        else:
+                            sys.stdout.write(
+                                style.ERROR('\n' + err_msg + '\n'))
+                            error_count += 1
                     if self.post_row_handler:
                         self.post_row_handler(obj)
             if debug:
@@ -63,8 +72,11 @@ class ImportCsvToModel(BaseImportCsv):
             self.post_import_handler()
         end = datetime.now()
         sys.stdout.write(
-            '{} ... {}/{}  Done in {} min  \n'.format(
-                self.model._meta.label_lower, index, row_count,
+            '{} ... {}/{}.  {}. Done in {} min  \n'.format(
+                self.model._meta.label_lower, index +
+                1, row_count,
+                '{} error{}'.format(
+                    error_count, 's' if error_count > 1 else ''),
                 (end - start).seconds / 60))
 
     @property

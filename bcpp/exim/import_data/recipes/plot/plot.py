@@ -62,6 +62,7 @@ df_apply_functions = {
 
 site_recipes.register(ModelRecipe(
     model_name='plot.plot',
+    old_model_name='bcpp_household.plot',
     df_rename_columns=df_rename_columns,
     df_drop_columns=df_drop_columns,
     df_map_options=df_map_options,

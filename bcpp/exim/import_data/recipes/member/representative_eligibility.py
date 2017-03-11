@@ -12,4 +12,5 @@ def post_import_handler():
 
 site_recipes.register(ModelRecipe(
     model_name='member.representativeeligibility',
+    old_model_name='bcpp_household.representativeeligibility',
     post_import_handler=post_import_handler))
