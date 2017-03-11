@@ -3,3 +3,4 @@ from .household import *
 from .member import *
 from .bcpp_subject import *
 from .edc_registration import *
+from .bcpp_subject import *

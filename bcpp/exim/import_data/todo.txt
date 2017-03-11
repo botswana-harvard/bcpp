@@ -23,6 +23,8 @@ Notes:
 
     
 
+
+
 Duplicate RegisteredSubjects
 
 Cannot update registered subject with a duplicate 'identity'. Got 171523610.
@@ -54,6 +56,25 @@ Cannot update registered subject with a duplicate 'identity'. Got 427823914.
 Cannot update registered subject with a duplicate 'identity'. Got 381925302.
 
 
+MEMBER STATUS MODELS
+some are model pair of model + model_entry
+
+# member.enrollmentchecklist ... 13791/13791.  11 errors.
+# member.enrolmentloss ... 563/563.  1 error.
+one orphaned record could not be imported for
+household_member_id='d5c5b93e-6d52-4837-aa47-2964a664ae9c'
+# member.refusedmember ... 1560/1560.  0 error.
+added missing REASON option
+('I already know my status', ('I already know my status')),
+
+# member.deceasedmember NOT IMPORTED!!!
+
+
+BCPP_SUBJECT
+
+# bcpp_subject.subjectconsent
+
+subject_identifier_as_pk should be 32 not 36.  use uuid4().hex for storage
 
 # list data
 SELECT 'hostname_created', 'name', 'short_name', 'created', 'user_modified',

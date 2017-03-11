@@ -1,16 +1,11 @@
 import arrow
 import numpy as np
-import os
 import pandas as pd
 import re
-import sys
 
-from collections import OrderedDict
 from datetime import datetime
-from pprint import pprint
 
 from django.db.models.fields import DateTimeField
-from django.db.utils import IntegrityError
 
 from .exceptions import ImportDataError
 
@@ -33,8 +28,9 @@ class BaseImportCsv:
 
     """
 
-    def __init__(self, recipe=None, path=None):
+    def __init__(self, recipe=None, raise_errors=None):
         self._df = pd.DataFrame()
+        self.raise_errors = True if raise_errors is None else raise_errors
         self.column_names = None
         self.recipe = recipe
         self.row_handler = self.recipe.row_handler
@@ -47,7 +43,7 @@ class BaseImportCsv:
 
     @property
     def df(self):
-        """Returns a dataframe from the CSV.
+        """Returns a dataframe from the CSV at "recipe.in_path".
         """
         def date_parser(x):
             """Func to convert date/datetime string to timezone aware datetime.
@@ -68,10 +64,10 @@ class BaseImportCsv:
 
         if self._df.empty:
             df = pd.read_csv(
-                self.recipe.path, low_memory=False, names=self.column_names)
+                self.recipe.in_path, low_memory=False, names=self.column_names)
             parse_dates = self.date_columns(df)
             self._df = pd.read_csv(
-                self.recipe.path, low_memory=False,
+                self.recipe.in_path, low_memory=False,
                 parse_dates=parse_dates, date_parser=date_parser)
             self._df = self._df.rename(columns=self.df_rename_columns)
             for column_name in self.df_drop_columns:

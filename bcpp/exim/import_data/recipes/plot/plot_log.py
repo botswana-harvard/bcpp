@@ -16,4 +16,5 @@ def post_import_handler():
 
 site_recipes.register(ModelRecipe(
     model_name='plot.plotlog',
+    old_model_name='bcpp_household.plotlog',
     post_import_handler=post_import_handler))

@@ -11,4 +11,5 @@ df_apply_functions = {
 
 site_recipes.register(ModelRecipe(
     model_name='plot.plotlogentry',
+    old_model_name='bcpp_household.plotlogentry',
     df_apply_functions=df_apply_functions))

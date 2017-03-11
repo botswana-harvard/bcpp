@@ -1,0 +1,29 @@
+# First prepare Dataframe using ImportCsvToModel and re-export to_csv()
+#
+#     import pandas as pd
+#     from bcpp.exim.import_data import site_recipes
+#     
+#     recipe = site_recipes.recipes.get('bcpp_subject.subjectconsent')
+#     recipe.df.to_csv('/Users/erikvw/bcpp_201703/new/bcpp_subject/subjectconsent4mysql.csv', index=False, encoding='utf-8')
+#
+# Next copy the SQL command below into mysql console
+#
+# Last, resave all model instances to encrypt
+#
+
+LOAD DATA INFILE '/Users/erikvw/bcpp_201703/new/bcpp_subject/subjectconsent4mysql.csv'
+INTO TABLE edc_migrated.bcpp_subject_subjectconsent
+CHARACTER SET UTF8
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n' STARTING BY ''
+IGNORE 1 LINES
+(comment,confirm_identity,hostname_created,last_name,may_store_samples,@consent_datetime,hostname_modified,is_minor,witness_name,is_literate,subject_type,consent_copy,user_created,@id,marriage_certificate,first_name,@subject_identifier_as_pk,is_dob_estimated,verified_by,user_modified,@is_signed,@is_verified_datetime,subject_identifier_aka,version,citizen,legal_marriage,is_verified,is_incarcerated,revision,consent_reviewed,assessment_score,study_questions,sid,subject_identifier,marriage_certificate_no,identity,language,@created,identity_type,@household_member_id,@modified,consent_signature,dm_comment,gender,@dob,survey_schedule,guardian_name,initials)
+SET 
+dob = nullif(@dob, ''),
+id = replace(@id,'-',''),
+subject_identifier_as_pk = replace(@subject_identifier_as_pk,'-',''),
+household_member_id = replace(@id,'-',''),
+consent_datetime = str_to_date(@consent_datetime, '%Y-%m-%d %H:%i:%s+00:00'),
+is_verified_datetime = str_to_date(@is_verified_datetime, '%Y-%m-%d %H:%i:%s+00:00'),
+created = str_to_date(@created, '%Y-%m-%d %H:%i:%s+00:00'),
+modified = str_to_date(@modified, '%Y-%m-%d %H:%i:%s+00:00');

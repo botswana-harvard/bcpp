@@ -12,4 +12,5 @@ df_drop_columns = [
 
 site_recipes.register(ModelRecipe(
     model_name='edc_registration.registeredsubject',
+    old_model_name='edc_registration.registeredsubject',
     df_drop_columns=df_drop_columns))

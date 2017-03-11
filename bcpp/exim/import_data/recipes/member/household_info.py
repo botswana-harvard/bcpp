@@ -10,7 +10,8 @@ m2m_recipes = [
         data_model_name='member.householdinfo',
         old_data_model_app_label='bcpp_household_member',
         list_model_name='member.electricalappliances',
-        old_list_model_name='bcpp_list.electricalappliances'),
+        old_list_model_name='bcpp_list.electricalappliances',
+        join_lists_on='name'),
     M2mRecipe(
         data_model_name='member.householdinfo',
         old_data_model_app_label='bcpp_household_member',
@@ -32,6 +33,7 @@ df_apply_functions = {
 
 site_recipes.register(ModelRecipe(
     model_name='member.householdinfo',
+    old_model_name='bcpp_household_member.householdinfo',
     df_drop_columns=['registered_subject_id', 'household_member_id'],
     df_apply_functions=df_apply_functions,
     m2m_recipes=m2m_recipes,

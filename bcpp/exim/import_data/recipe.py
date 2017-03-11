@@ -1,8 +1,7 @@
+import pandas as pd
 import os
 
 from collections import OrderedDict
-
-from .settings import UPDATED_DIR
 
 
 class AlreadyRegistered(Exception):
@@ -14,12 +13,13 @@ class Recipe:
     name = None
     import_csv_class = None
 
-    def __init__(self, csv_filename=None,
-                 row_handler=None, post_row_handler=None, post_import_handler=None,
+    def __init__(self, row_handler=None, post_row_handler=None,
+                 post_import_handler=None,
                  df_map_options=None, df_apply_functions=None,
                  df_rename_columns=None, df_drop_columns=None):
-        self.csv_filename = csv_filename
-        self.path = os.path.join(UPDATED_DIR or '', csv_filename or '')
+        self._df = pd.DataFrame()
+        self.in_path = None  # set in child class
+        self.out_path = None  # set in child class
         # manipulate dataframe columns
         self.df_rename_columns = df_rename_columns or {}
         self.df_drop_columns = df_drop_columns or []
@@ -30,12 +30,15 @@ class Recipe:
         self.post_row_handler = post_row_handler
         self.post_import_handler = post_import_handler
 
-    def import_csv(self, save=None, debug=None):
-        self.import_csv_class(recipe=self, save=save, debug=debug)
+    def import_csv(self, **kwargs):
+        self.import_csv_class(recipe=self, **kwargs)
 
+    @property
     def df(self):
-        obj = self.import_csv_class(recipe=self)
-        return obj.df
+        if self._df.empty:
+            obj = self.import_csv_class(recipe=self)
+            self._df = obj.df
+        return self._df
 
 
 class Recipes:

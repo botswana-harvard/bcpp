@@ -33,5 +33,6 @@ def post_import_handler():
 
 site_recipes.register(ModelRecipe(
     model_name='household.householdstructure',
+    old_model_name='bcpp_household.householdstructure',
     df_apply_functions=df_apply_functions,
     df_rename_columns=df_rename_columns))
