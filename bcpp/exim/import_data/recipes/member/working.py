@@ -2,10 +2,10 @@ import pandas as pd
 from ...recipe import site_recipes
 
 
-def fetch_duplicate_members_into_df():
-    """Returns a df.
+def import_duplicate_members():
+    """Returns a recipe.
 
-    Fetches excluded household members, originally flagged as duplicates,
+    Imports excluded household members, originally flagged as duplicates,
     who have consented.
 
     """
@@ -18,13 +18,25 @@ def fetch_duplicate_members_into_df():
     #         "WHERE b.id is NULL;")
     df_old_members = pd.read_csv(
         '/Users/erikvw/bcpp_201703/bcpp_household_member/householdmember.csv',
-        low_memory=False)
+        low_memory=False,
+        encoding='utf-8',
+        sep='|',
+        lineterminator='\n',
+        escapechar='\\')
     df_members = pd.read_csv(
         '/Users/erikvw/bcpp_201703/new/member/householdmember.csv',
-        low_memory=False)
+        low_memory=False,
+        encoding='utf-8',
+        sep='|',
+        lineterminator='\n',
+        escapechar='\\')
     df_consents = pd.read_csv(
         '/Users/erikvw/bcpp_201703/new/bcpp_subject/subjectconsent4mysql.csv',
-        low_memory=False)
+        low_memory=False,
+        encoding='utf-8',
+        sep='|',
+        lineterminator='\n',
+        escapechar='\\')
     df = pd.merge(df_consents, df_members, left_on='household_member_id',
                   right_on='id', how='left', suffixes=('', '_y'))
     df_missing = df_old_members[
@@ -32,7 +44,13 @@ def fetch_duplicate_members_into_df():
     df_missing.to_csv(
         path_or_buf='/Users/erikvw/bcpp_201703/new/member/householdmember.consented.dups.csv',
         index=False,
-        encoding='utf-8')
+        encoding='utf-8',
+        sep='|',
+        lineterminator='\n',
+        escapechar='\\')
     recipe = site_recipes.recipes.get('member.householdmember')
     recipe.in_path = '/Users/erikvw/bcpp_201703/new/member/householdmember.consented.dups.csv'
+    recipe.df_apply_functions.update({
+        'initials': lambda row: '{}Z{}'.format(row['initials'][0], row['initials'][1])})
     recipe.import_csv()
+    return recipe

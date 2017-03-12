@@ -5,7 +5,7 @@
 #     
 #     recipe = site_recipes.recipes.get('edc_registration.registeredsubject')
 #     obj = ImportCsvToModel(recipe=recipe)
-#     obj.df.to_csv('/Users/erikvw/bcpp_201703/new/edc_registration/registeredsubject4mysql.csv', index=False, encoding='utf-8')
+#     obj.df.to_csv('/Users/erikvw/bcpp_201703/new/edc_registration/registeredsubject4mysql.csv', index=False, encoding='utf-8', sep='|')
 #
 # Next copy the SQL command below into mysql console
 #
@@ -15,7 +15,7 @@
 LOAD DATA INFILE '/Users/erikvw/bcpp_201703/new/edc_registration/registredsubject4mysql.csv'
 INTO TABLE edc_migrated.edc_registration_registeredsubject
 CHARACTER SET UTF8
-FIELDS TERMINATED BY ','
+FIELDS TERMINATED BY '|'
 LINES TERMINATED BY '\n' STARTING BY ''
 IGNORE 1 LINES
 (comment,hostname_created,last_name,@screening_datetime,subject_consent_id,hostname_modified,subject_type,registration_identifier,user_created,@id,first_name,subject_identifier_as_pk,dm_comment,is_dob_estimated,user_modified,subject_identifier_aka,sid,subject_identifier,relative_identifier,revision,@registration_datetime,identity,registration_status,additional_key,@created,identity_type,gender,@randomization_datetime,@modified,@dob,initials)

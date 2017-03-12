@@ -17,8 +17,10 @@ class M2mRecipe(Recipe):
 
     def __init__(self, data_model_name=None, old_list_model_name=None,
                  list_model_name=None, old_data_model_app_label=None,
-                 join_lists_on=None, **kwargs):
+                 join_lists_on=None, read_sep=None, write_sep=None, **kwargs):
         super().__init__(**kwargs)
+        self.read_sep = read_sep or '|'
+        self.write_sep = write_sep or '|'
         self.join_lists_on = join_lists_on or 'short_name'
         self.data_model = django_apps.get_model(*data_model_name.split('.'))
         self.old_data_model_app_label = old_data_model_app_label
@@ -39,7 +41,12 @@ class M2mRecipe(Recipe):
         path = os.path.join(
             SOURCE_DIR, self.old_list_model_name.split('.')[0],
             '{}.csv'.format(self.old_list_model_name.split('.')[1]))
-        df = pd.read_csv(path, low_memory=False)
+        df = pd.read_csv(
+            path, low_memory=False,
+            encoding='utf-8',
+            sep=self.read_csv_sep,
+            lineterminator='\n',
+            escapechar='\\')
         df['id'] = df.apply(
             lambda row: self.get_new_id(row['id']), axis=1)
         path = os.path.join(
@@ -48,7 +55,10 @@ class M2mRecipe(Recipe):
         df.to_csv(
             path_or_buf=path,
             index=False,
-            encoding='utf-8')
+            encoding='utf-8',
+            sep='|',
+            line_terminator='\n',
+            escapechar='\\')
         recipe = ModelRecipe(model_name=self.list_model._meta.label_lower)
         ImportCsvToModel(recipe=recipe, save=True)
 
@@ -113,7 +123,7 @@ class M2mRecipe(Recipe):
             "SELECT id, replace({data_field}, '-', ''), {list_field} INTO OUTFILE "
             "'{outfile}' "
             "CHARACTER SET UTF8 "
-            "FIELDS TERMINATED BY ',' ENCLOSED BY '' "
+            "FIELDS TERMINATED BY '|' ENCLOSED BY '' "
             "LINES TERMINATED BY '\n' "
             "FROM {tbl};").format(
                 data_field='{}_id'.format(self.data_model._meta.model_name),
@@ -137,13 +147,16 @@ class M2mRecipe(Recipe):
         """
         infile = outfile.replace('outfile', 'infile')
         list_field = '{}_id'.format(self.list_model._meta.model_name)
-        df = pd.read_csv(outfile, low_memory=False)
+        df = pd.read_csv(outfile, low_memory=False, sep=self.read_sep)
         df[list_field] = df.apply(
             lambda row: self.get_new_id(row[list_field]), axis=1)
         df.to_csv(
             path_or_buf=infile,
             index=False,
-            encoding='utf-8')
+            encoding='utf-8',
+            sep=self.write_sep,
+            line_terminator='\n',
+            escapechar='\\')
         return infile
 
     def load_intermediate_infile(self, infile=None):
@@ -153,7 +166,7 @@ class M2mRecipe(Recipe):
         sql = (
             "LOAD DATA INFILE '{infile}' INTO TABLE {tbl} "
             "CHARACTER SET UTF8 "
-            "FIELDS TERMINATED BY ',' ENCLOSED BY '' "
+            "FIELDS TERMINATED BY '|' ENCLOSED BY '' "
             "LINES TERMINATED BY '\n' "
             "IGNORE 1 LINES "
             "(id, {data_field}, {list_field});".format(
@@ -179,7 +192,7 @@ class M2mRecipe(Recipe):
             "modified, hostname_modified, version, display_index, user_created, "
             "ifnull(field_name, ''),id, ifnull(revision, '') INTO OUTFILE '{csv_filename}' "
             "CHARACTER SET UTF8 "
-            "FIELDS TERMINATED BY ',' ENCLOSED BY '' "
+            "FIELDS TERMINATED BY '|' ENCLOSED BY '' "
             "LINES TERMINATED BY '\n' "
             "FROM {old_db}.{old_list_dbtable};").format(
                 csv_filename=csv_filename, old_db=OLD_DB,

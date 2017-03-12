@@ -1,0 +1,11 @@
+LOAD DATA INFILE '/Users/erikvw/bcpp_201703/new/bcpp_subject/subjectvisit.csv'
+INTO TABLE edc_migrated.bcpp_subject_subjectvisit
+CHARACTER SET utf8
+FIELDS TERMINATED BY '|' ENCLOSED BY '"'
+LINES TERMINATED BY '\n' STARTING BY ''
+IGNORE 1 LINES
+(@modified,hostname_created,consent_version,reason,info_source,info_source_other,@created,user_modified,hostname_modified,comments,reason_unscheduled,subject_identifier,reason_missed,appointment_id,user_created,report_datetime,household_member_id,@id,revision,survey_schedule)
+SET 
+id = replace(@id,'-',''),
+created = NULLIF(STR_TO_DATE(@created, '%Y-%m-%d %H:%i:%s+00:00'), "0000-00-00"),
+modified = NULLIF(STR_TO_DATE(@modified, '%Y-%m-%d %H:%i:%s+00:00'), "0000-00-00");
