@@ -30,6 +30,7 @@ class BaseImportCsv:
 
     def __init__(self, recipe=None, raise_errors=None):
         self._df = pd.DataFrame()
+        self.read_csv_sep = recipe.read_csv_sep or '|'
         self.raise_errors = True if raise_errors is None else raise_errors
         self.column_names = None
         self.recipe = recipe
@@ -38,6 +39,7 @@ class BaseImportCsv:
         self.post_import_handler = self.recipe.post_import_handler
         self.df_rename_columns = self.recipe.df_rename_columns
         self.df_drop_columns = self.recipe.df_drop_columns
+        self.df_add_columns = self.recipe.df_add_columns
         self.df_map_options = self.recipe.df_map_options
         self.df_apply_functions = self.recipe.df_apply_functions
 
@@ -64,20 +66,32 @@ class BaseImportCsv:
 
         if self._df.empty:
             df = pd.read_csv(
-                self.recipe.in_path, low_memory=False, names=self.column_names)
+                self.recipe.in_path, low_memory=False, names=self.column_names,
+                sep=self.read_csv_sep,
+                encoding='utf-8',
+                lineterminator='\n',
+                escapechar='\\')
             parse_dates = self.date_columns(df)
             self._df = pd.read_csv(
                 self.recipe.in_path, low_memory=False,
-                parse_dates=parse_dates, date_parser=date_parser)
+                parse_dates=parse_dates, date_parser=date_parser,
+                sep=self.read_csv_sep,
+                encoding='utf-8',
+                lineterminator='\n',
+                escapechar='\\')
             self._df = self._df.rename(columns=self.df_rename_columns)
-            for column_name in self.df_drop_columns:
-                self._df = self._df.drop(column_name, axis=1)
+            for column_name in self.df_add_columns:
+                try:
+                    self._df[column_name]
+                except KeyError:
+                    self._df[column_name] = np.NaN
             for column, options in self.df_map_options.items():
                 self._df[column] = self._df[column].map(options.get)
             for column, func in self.df_apply_functions.items():
                 self._df[column] = self._df.apply(
                     lambda row: func(row), axis=1)
-
+            for column_name in self.df_drop_columns:
+                self._df = self._df.drop(column_name, axis=1)
         return self._df
 
     def date_columns(self, df):

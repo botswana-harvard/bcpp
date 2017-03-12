@@ -74,7 +74,8 @@ BCPP_SUBJECT
 
 # bcpp_subject.subjectconsent
 
-subject_identifier_as_pk should be 32 not 36.  use uuid4().hex for storage
+subject_identifier_as_pk should be UUIDField() not 36 CharField.  use uuid4().hex for storage
+identity_or_pk
 
 # list data
 SELECT 'hostname_created', 'name', 'short_name', 'created', 'user_modified',
@@ -85,6 +86,6 @@ SELECT hostname_created, name, short_name, created, user_modified,
 modified, hostname_modified, version, display_index, user_created,
 field_name,id,revision INTO OUTFILE '/Users/erikvw/bcpp_201703/bcpp_list_electricalappliances.csv'
 CHARACTER SET UTF8
-FIELDS TERMINATED BY ',' ENCLOSED BY ''
+FIELDS TERMINATED BY '|' ENCLOSED BY ''
 LINES TERMINATED BY '\n'
 FROM bhp066.bcpp_list_electricalappliances;

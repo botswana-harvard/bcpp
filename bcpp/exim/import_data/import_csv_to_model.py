@@ -8,6 +8,7 @@ from django.core.management.color import color_style
 from django.db.utils import IntegrityError
 
 from .base_import_csv import BaseImportCsv
+from django.db import transaction
 
 style = color_style()
 
@@ -55,10 +56,12 @@ class ImportCsvToModel(BaseImportCsv):
             if save:
                 if not self.model.objects.filter(id=obj.id).exists():
                     try:
-                        obj.save_base(raw=True)
+                        with transaction.atomic():
+                            obj.save_base(raw=True)
                     except IntegrityError as e:
                         err_msg = '{}. Got {}'.format(str(e), obj.id)
                         if self.raise_errors:
+                            pprint(obj.__dict__)
                             raise IntegrityError(err_msg)
                         else:
                             sys.stdout.write(

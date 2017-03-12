@@ -1,5 +1,5 @@
 SELECT id, householdinfo_id, electricalappliances_id INTO OUTFILE '/Users/erikvw/bcpp_household_member_householdinfo_electrical_appliances.txt'
 CHARACTER SET UTF8
-FIELDS TERMINATED BY ',' ENCLOSED BY ''
+FIELDS TERMINATED BY '|' ENCLOSED BY ''
 LINES TERMINATED BY '\n'
 FROM bcpp_household_member_householdinfo_electrical_appliances;
