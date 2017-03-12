@@ -4,12 +4,12 @@
 * import audit trail
 * update slug fields
 * household_structure.survey_schedule
-    ** done: fix survey_schedule in household_structure (test_community -> real community)
-    ** verify survey_schedule_object returns correct community
+    * done: fix survey_schedule in household_structure (test_community -> real community)
+    * verify survey_schedule_object returns correct community
 * review identifier history table to prevent duplicate identifiers
-    ** plot
-    ** household
-    ** etc ...
+    * plot
+    * household
+    * etc ...
 * check survey_schedule field is populated on all models that use it
 * household_member : calculate citizen, non-citizen
     
