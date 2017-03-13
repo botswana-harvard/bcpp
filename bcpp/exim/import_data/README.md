@@ -126,7 +126,19 @@
     UPDATE bcpp_subject_appointment SET visit_schedule_name='visit_schedule_ahs'
     WHERE schedule_name='ahs_schedule';
 
+* update subject_identifier
+
+    UPDATE bcpp_subject_appointment APPT
+    JOIN member_householdmember HHM ON APPT.household_member_id = HHM.id
+    SET APPT.subject_identifier = HHM.subject_identifier;
+
 ### subject visit
+
+* update subject_identifier
+    
+    UPDATE bcpp_subject_subjectvisit V
+    JOIN bcpp_subject_appointment APPT ON V.appointment_id = APPT.id
+    SET V.subject_identifier = APPT.subject_identifier;
 
 * update survey_schedule
     
