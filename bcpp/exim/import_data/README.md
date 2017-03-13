@@ -21,11 +21,39 @@
 * household member 63050 reduced to 62863 after removing duplicates
     on key (first_name, initials, household_structure).
 * added back 17 to match with consents
+* update survey_schedule in HHM from HHS:
+
+    UPDATE member_householdmember HHM
+    JOIN household_householdstructure HHS ON HHM.household_structure_id = HHS.id
+    SET HHM.survey_schedule = HHS.survey_schedule;
+* update subject_identifier
+
+    UPDATE member_householdmember HHM
+    LEFT JOIN edc_registration_registeredsubject AS REG
+    ON HHM.internal_identifier=REG.registration_identifier 
+    SET HHM.subject_identifier=IFNULL(REG.subject_identifier, replace(uuid(),'-',''));
+
+    SELECT distinct r.subject_identifier
+    FROM member_householdmember as hhm LEFT JOIN edc_registration_registeredsubject AS r
+    ON hhm.internal_identifier=r.registration_identifier 
+    WHERE SUBSTRING(r.subject_identifier, 1, 4)='066-';
 
 
 ## REGISTERED_SUBJECT
 
-### Duplicate RegisteredSubjects
+* add back 44 missing registered subject records    
+
+    INSERT INTO edc_registration_registeredsubject 
+    (subject_type, id, subject_identifier_as_pk, registration_identifier, first_name, initials, gender, created, modified, registration_datetime,
+    subject_identifier, identity_or_pk, user_created, user_modified, hostname_created, hostname_modified, dm_comment) 
+    SELECT 'subject', replace(uuid(),'-',''), replace(uuid(),'-',''), HHM.id, HHM.first_name, HHM.initials, HHM.gender, HHM.created, now(), HHM.created,
+    replace(uuid(),'-',''), replace(uuid(),'-',''), HHM.user_created, 'erikvw', HHM.hostname_created, HHM.hostname_modified, 'created erikvw'
+    FROM member_householdmember AS hhm
+    LEFT JOIN edc_registration_registeredsubject AS reg 
+    ON hhm.internal_identifier=reg.registration_identifier
+    WHERE reg.id is NULL;
+
+* Duplicate RegisteredSubjects
 
     Cannot update registered subject with a duplicate 'identity'. Got 171523610.
     Cannot update registered subject with a duplicate 'identity'. Got 104224018.
@@ -55,8 +83,7 @@
     Cannot update registered subject with a duplicate 'identity'. Got 427823914.
     Cannot update registered subject with a duplicate 'identity'. Got 381925302.
 
-
-### registered subject with subjectidentifier but no consent
+* registered subject with subjectidentifier but no consent (clinic consents?)
 
     SELECT r.subject_identifier FROM edc_registration_registeredsubject as r
     LEFT JOIN bcpp_subject_subjectconsent as c ON r.subject_identifier=c.subject_identifier
@@ -80,6 +107,42 @@
 
     subject_identifier_as_pk should be UUIDField() not 36 CharField.  use uuid4().hex for storage
     identity_or_pk
+
+### Appointment
+* update survey_schedule
+
+    UPDATE bcpp_subject_appointment APPT
+    JOIN member_householdmember HHM ON APPT.household_member_id = HHM.id
+    SET APPT.survey_schedule = HHM.survey_schedule;
+* update survey
+    
+    UPDATE bcpp_subject_appointment SET survey=CONCAT(SUBSTRING(survey_schedule,1,23), '.bhs', SUBSTRING(survey_schedule,24,100)) WHERE schedule_name='bhs_schedule';
+    UPDATE bcpp_subject_appointment SET survey=CONCAT(SUBSTRING(survey_schedule,1,23), '.ahs', SUBSTRING(survey_schedule,24,100)) WHERE schedule_name='ahs_schedule';
+    
+* update visit_schedule_name
+
+    UPDATE bcpp_subject_appointment SET visit_schedule_name='visit_schedule_bhs'
+    WHERE schedule_name='bhs_schedule';
+    UPDATE bcpp_subject_appointment SET visit_schedule_name='visit_schedule_ahs'
+    WHERE schedule_name='ahs_schedule';
+
+### subject visit
+
+* update survey_schedule
+    
+    UPDATE bcpp_subject_subjectvisit V
+    JOIN bcpp_subject_appointment APPT ON V.appointment_id = APPT.id
+    SET V.survey_schedule = APPT.survey_schedule;
+
+    UPDATE bcpp_subject_subjectvisit V
+    JOIN bcpp_subject_appointment APPT ON V.appointment_id = APPT.id
+    SET 
+    V.survey_schedule = APPT.survey_schedule,
+    V.survey=APPT.survey,
+    V.visit_schedule_name=APPT.visit_schedule_name,
+    V.schedule_name=APPT.schedule_name,
+    V.visit_code=APPT.visit_code;
+
 
 ## LIST DATA
     SELECT 'hostname_created', 'name', 'short_name', 'created', 'user_modified',

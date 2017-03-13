@@ -35,11 +35,6 @@ class Recipe:
         self.df_add_columns = df_add_columns or []
         self.df_map_options = df_map_options or {}
         self.df_apply_functions = df_apply_functions or {}
-        self.df_apply_functions.update({
-            'user_modified': lambda row: (
-                row['user_created']
-                if (pd.isnull(row['user_modified']) or ''.join(row['user_modified'].split()) == '')
-                else row['user_modified'])})
         # manipulate single row as dictionary (read from df)
         self.row_handler = row_handler
         self.post_row_handler = post_row_handler

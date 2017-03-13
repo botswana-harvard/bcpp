@@ -5,10 +5,10 @@ from datetime import datetime
 from pprint import pprint
 
 from django.core.management.color import color_style
+from django.db import transaction
 from django.db.utils import IntegrityError
 
 from .base_import_csv import BaseImportCsv
-from django.db import transaction
 
 style = color_style()
 

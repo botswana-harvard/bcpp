@@ -1,3 +1,5 @@
+import uuid
+
 from ...model_recipe import ModelRecipe
 from ...recipe import site_recipes
 from ..household.household_structure import survey_schedule
@@ -11,6 +13,7 @@ df_rename_columns = []
 
 df_apply_functions = {
     'survey_schedule': lambda row: survey_schedule(row),
+    'appointment_id': lambda row: uuid.UUID(row['appointment_id']),
 }
 
 site_recipes.register(ModelRecipe(
