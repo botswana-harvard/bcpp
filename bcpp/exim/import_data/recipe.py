@@ -101,7 +101,7 @@ class Recipe:
             self._raw_df = pd.read_csv(
                 self.in_path, low_memory=False,
                 encoding='utf-8',
-                sep=self.read_csv_sep,
+                sep='|',
                 lineterminator='\n',
                 escapechar='\\')
         return self._raw_df

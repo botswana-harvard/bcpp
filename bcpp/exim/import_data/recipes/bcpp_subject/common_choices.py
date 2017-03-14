@@ -1,4 +1,5 @@
-from edc_constants.constants import UNKNOWN, OTHER, DWTA, NOT_SURE
+from edc_constants.constants import UNKNOWN, OTHER, DWTA, NOT_SURE,\
+    NOT_APPLICABLE
 
 
 def common_choices(value):
@@ -12,4 +13,6 @@ def common_choices(value):
         return UNKNOWN
     elif value == 'Not Sure':
         return NOT_SURE
+    elif value == 'Not applicable':
+        return NOT_APPLICABLE
     return value

@@ -23,11 +23,15 @@
 * added back 17 to match with consents
 * update survey_schedule in HHM from HHS:
 
+    ```sql
     UPDATE member_householdmember HHM
     JOIN household_householdstructure HHS ON HHM.household_structure_id = HHS.id
     SET HHM.survey_schedule = HHS.survey_schedule;
+    ```
+
 * update subject_identifier
 
+    ```sql
     UPDATE member_householdmember HHM
     LEFT JOIN edc_registration_registeredsubject AS REG
     ON HHM.internal_identifier=REG.registration_identifier 
@@ -37,12 +41,13 @@
     FROM member_householdmember as hhm LEFT JOIN edc_registration_registeredsubject AS r
     ON hhm.internal_identifier=r.registration_identifier 
     WHERE SUBSTRING(r.subject_identifier, 1, 4)='066-';
-
+    ```
 
 ## REGISTERED_SUBJECT
 
 * add back 44 missing registered subject records    
 
+    ```sql
     INSERT INTO edc_registration_registeredsubject 
     (subject_type, id, subject_identifier_as_pk, registration_identifier, first_name, initials, gender, created, modified, registration_datetime,
     subject_identifier, identity_or_pk, user_created, user_modified, hostname_created, hostname_modified, dm_comment) 
@@ -52,6 +57,7 @@
     LEFT JOIN edc_registration_registeredsubject AS reg 
     ON hhm.internal_identifier=reg.registration_identifier
     WHERE reg.id is NULL;
+    ```
 
 * Duplicate RegisteredSubjects
 
@@ -85,9 +91,11 @@
 
 * registered subject with subjectidentifier but no consent (clinic consents?)
 
+    ```sql
     SELECT r.subject_identifier FROM edc_registration_registeredsubject as r
     LEFT JOIN bcpp_subject_subjectconsent as c ON r.subject_identifier=c.subject_identifier
     WHERE c.id is NULL and SUBSTRING(r.subject_identifier, 1, 4) = '066-';
+    ```
 
 ## MEMBER STATUS MODELS
 
@@ -105,43 +113,56 @@
 
 ### bcpp_subject.subjectconsent
 
+    ```sql
     subject_identifier_as_pk should be UUIDField() not 36 CharField.  use uuid4().hex for storage
     identity_or_pk
+    ```
 
 ### Appointment
 * update survey_schedule
 
+    ```sql
     UPDATE bcpp_subject_appointment APPT
     JOIN member_householdmember HHM ON APPT.household_member_id = HHM.id
     SET APPT.survey_schedule = HHM.survey_schedule;
+    ```
 * update survey
     
+    ```sql
     UPDATE bcpp_subject_appointment SET survey=CONCAT(SUBSTRING(survey_schedule,1,23), '.bhs', SUBSTRING(survey_schedule,24,100)) WHERE schedule_name='bhs_schedule';
     UPDATE bcpp_subject_appointment SET survey=CONCAT(SUBSTRING(survey_schedule,1,23), '.ahs', SUBSTRING(survey_schedule,24,100)) WHERE schedule_name='ahs_schedule';
+    ```
     
 * update visit_schedule_name
 
+    ```sql
     UPDATE bcpp_subject_appointment SET visit_schedule_name='visit_schedule_bhs'
     WHERE schedule_name='bhs_schedule';
     UPDATE bcpp_subject_appointment SET visit_schedule_name='visit_schedule_ahs'
     WHERE schedule_name='ahs_schedule';
+    ```
 
 * update subject_identifier
 
+    ```sql
     UPDATE bcpp_subject_appointment APPT
     JOIN member_householdmember HHM ON APPT.household_member_id = HHM.id
     SET APPT.subject_identifier = HHM.subject_identifier;
+    ```
 
 ### subject visit
 
 * update subject_identifier
     
+    ```sql
     UPDATE bcpp_subject_subjectvisit V
     JOIN bcpp_subject_appointment APPT ON V.appointment_id = APPT.id
     SET V.subject_identifier = APPT.subject_identifier;
+    ```
 
 * update survey_schedule
     
+    ```sql
     UPDATE bcpp_subject_subjectvisit V
     JOIN bcpp_subject_appointment APPT ON V.appointment_id = APPT.id
     SET V.survey_schedule = APPT.survey_schedule;
@@ -154,9 +175,15 @@
     V.visit_schedule_name=APPT.visit_schedule_name,
     V.schedule_name=APPT.schedule_name,
     V.visit_code=APPT.visit_code;
+    ```
 
+## Enrollment Models
+
+Populate enrollment / disenrollment
 
 ## LIST DATA
+
+    ```sql
     SELECT 'hostname_created', 'name', 'short_name', 'created', 'user_modified',
     'modified', 'hostname_modified', 'version', 'display_index', 'user_created',
     'field_name','id','revision'
@@ -168,3 +195,4 @@
     FIELDS TERMINATED BY '|' ENCLOSED BY ''
     LINES TERMINATED BY '\n'
     FROM bhp066.bcpp_list_electricalappliances;
+    ```
