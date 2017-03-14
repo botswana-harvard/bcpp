@@ -1,3 +1,4 @@
+import sys
 import pandas as pd
 import re
 import os
@@ -41,12 +42,20 @@ class M2mRecipe(Recipe):
         path = os.path.join(
             SOURCE_DIR, self.old_list_model_name.split('.')[0],
             '{}.csv'.format(self.old_list_model_name.split('.')[1]))
+        sys.stdout.write(
+            '  M2M, importing old list model from {}'.format(path))
         df = pd.read_csv(
             path, low_memory=False,
             encoding='utf-8',
-            sep=self.read_csv_sep,
-            lineterminator='\n',
-            escapechar='\\')
+            sep=',')
+        if len(list(df.columns)) == 1:
+            df = pd.read_csv(
+                path, low_memory=False,
+                encoding='utf-8',
+                sep='|',
+                lineterminator='\n',
+                escapechar='\\')
+
         df['id'] = df.apply(
             lambda row: self.get_new_id(row['id']), axis=1)
         path = os.path.join(
@@ -60,6 +69,7 @@ class M2mRecipe(Recipe):
             line_terminator='\n',
             escapechar='\\')
         recipe = ModelRecipe(model_name=self.list_model._meta.label_lower)
+        recipe.in_path = path
         ImportCsvToModel(recipe=recipe, save=True)
 
     @property
