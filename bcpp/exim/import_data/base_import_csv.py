@@ -4,6 +4,7 @@ import pandas as pd
 import re
 
 from datetime import datetime
+from dateutil.parser import parse
 
 from django.db.models.fields import DateTimeField
 
@@ -60,8 +61,14 @@ class BaseImportCsv:
                 x = re.match(
                     '^[0-9]{4}\-[0-9]{2}\-[0-9]{2} [0-9]{2}\:[0-9]{2}\:[0-9]{2}', x).group()
                 dt = datetime.strptime(x, '%Y-%m-%d %H:%M:%S')
+            elif re.match('^[0-9]{1,2}\/[0-9]{1,2}\/[0-9]{2} [0-9]{2}\:[0-9]{2}$', x):
+                dt = parse(x)
             else:
-                raise ImportDataError('Invalid date string. Got {}'.format(x))
+                try:
+                    dt = parse(x)
+                except ValueError:
+                    raise ImportDataError(
+                        'Invalid date string. Got {}'.format(x))
             return arrow.Arrow.fromdatetime(dt).to('UTC').datetime
 
         if self._df.empty:

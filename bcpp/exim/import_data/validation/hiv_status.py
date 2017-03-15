@@ -44,7 +44,8 @@ class HivStatus:
 
     def merge(self, dfB=None, csv_filename=None):
         def convert_sas_date(value):
-            
+            raise
+
         if csv_filename:
             dfB = pd.read_csv(csv_filename, low_memory=False)
             dfB['final_hiv_status'] = dfB[

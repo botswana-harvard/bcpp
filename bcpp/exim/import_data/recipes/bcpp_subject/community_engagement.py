@@ -18,7 +18,7 @@ df_apply_functions = {
 
 m2m_recipes = [
     M2mRecipe(
-        # problems_engagement
+        field_name='problems_engagement',
         data_model_name='bcpp_subject.communityengagement',
         old_data_model_app_label='bcpp_subject',
         list_model_name='bcpp_subject.neighbourhoodproblems',
