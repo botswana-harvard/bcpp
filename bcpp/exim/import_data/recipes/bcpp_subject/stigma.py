@@ -3,22 +3,24 @@ from ...model_recipe import ModelRecipe
 from ...recipe import site_recipes
 from .common_choices import common_choices
 
-df_drop_columns = ['quota_pk', 'request_code']
+df_drop_columns = []
 
 df_add_columns = []
 
 df_rename_columns = {}
 
 df_apply_functions = {
-    'poc_vl_type': lambda row: common_choices(row['poc_vl_type']),
-    'quantifier': lambda row: common_choices(row['quantifier']),
-    'easy_of_use': lambda row: common_choices(row['easy_of_use']),
+    'anticipate_stigma': lambda row: common_choices(row['anticipate_stigma']),
+    'enacted_shame_stigma': lambda row: common_choices(row['enacted_shame_stigma']),
+    'saliva_stigma': lambda row: common_choices(row['saliva_stigma']),
+    'teacher_stigma': lambda row: common_choices(row['teacher_stigma']),
+    'children_stigma': lambda row: common_choices(row['children_stigma']),
 }
 
 m2m_recipes = []
 
 site_recipes.register(ModelRecipe(
-    model_name='bcpp_subject.pimavl',
+    model_name='bcpp_subject.stigma',
     df_drop_columns=df_drop_columns,
     df_add_columns=df_add_columns,
     df_rename_columns=df_rename_columns,

@@ -34,5 +34,7 @@ from .second_partner import *
 from .third_partner import *
 from .sexual_behaviour import *
 from .stigma_opinion import *
-# from .stigma import *
-# from .subject_locator import *
+from .stigma import *
+from .subject_locator import *
+from .residency_mobility import *
+from .resource_utilization import *
