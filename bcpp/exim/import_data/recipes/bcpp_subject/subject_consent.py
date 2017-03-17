@@ -1,3 +1,6 @@
+from uuid import uuid4
+import pandas as pd
+
 from edc_constants.constants import NO
 
 from ...model_recipe import ModelRecipe
@@ -10,6 +13,8 @@ df_drop_columns = [
     'study_site_id',
     'community']
 
+df_add_columns = ['consent_identifier', 'citizen']
+
 df_rename_columns = {
     'survey_id': 'survey_schedule'}
 
@@ -19,12 +24,16 @@ df_apply_functions = {
     'survey_schedule': lambda row: survey_schedule(row),
     'is_signed': lambda row: 1 if row['is_signed'] is True else 0,
     'is_verified': lambda row: 1 if row['is_verified'] is True else 0,
+    'citizen': lambda row: NO if pd.isnull(row['citizen']) else row['citizen'],
+    'consent_identifier': lambda row: uuid4().hex if pd.isnull(row['consent_identifier']) else row['consent_identifier'],
+    'comment': lambda row: row['comment'] if pd.isnull(row['comment']) else row['comment'].replace('\r\n', ' '),
 }
 
 
 site_recipes.register(ModelRecipe(
     model_name='bcpp_subject.subjectconsent',
     df_drop_columns=df_drop_columns,
+    df_add_columns=df_add_columns,
     df_rename_columns=df_rename_columns,
     df_apply_functions=df_apply_functions,
 ))

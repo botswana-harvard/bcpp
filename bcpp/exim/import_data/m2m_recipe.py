@@ -1,27 +1,53 @@
-import pandas as pd
-import re
 import os
+import pandas as pd
+import sys
 
 from django.apps import apps as django_apps
 from django.db import connection
 
-from .exceptions import ImportDataError
 from .import_csv_to_model import ImportCsvToModel
 from .model_recipe import ModelRecipe
 from .recipe import Recipe
 from .settings import OLD_DB, NEW_DB, SOURCE_DIR, UPDATED_DIR
-from pprint import pprint
+from django.db.utils import OperationalError
+
+
+class M2MImportError(Exception):
+    pass
 
 
 class M2mRecipe(Recipe):
 
-    def __init__(self, data_model_name=None, old_list_model_name=None,
+    def __init__(self, field_name=None, data_model_name=None, old_list_model_name=None,
                  list_model_name=None, old_data_model_app_label=None,
-                 join_lists_on=None, **kwargs):
+                 old_data_model_model_name=None,
+                 join_lists_on=None, read_sep=None, write_sep=None, **kwargs):
         super().__init__(**kwargs)
+        self._list_df = pd.DataFrame()
+        self._new_list_df = pd.DataFrame()
+        self._old_list_df = pd.DataFrame()
+        self._lists_sql = None
+        self.read_sep = read_sep or '|'
+        self.write_sep = write_sep or '|'
+        self.field_name = field_name
+        self.list_fields = [
+            'created',
+            'modified',
+            'user_created',
+            'user_modified',
+            'hostname_created',
+            'hostname_modified',
+            'revision',
+            'id',
+            'name',
+            'short_name',
+            'display_index',
+            'field_name',
+            'version']
         self.join_lists_on = join_lists_on or 'short_name'
         self.data_model = django_apps.get_model(*data_model_name.split('.'))
         self.old_data_model_app_label = old_data_model_app_label
+        self.old_data_model_model_name = old_data_model_model_name
         self.list_model = django_apps.get_model(*list_model_name.split('.'))
         self.old_list_model_name = old_list_model_name
         self.name = '{}.{}'.format(
@@ -33,52 +59,79 @@ class M2mRecipe(Recipe):
         infile = self.update_intermediate_into_infile(outfile)
         self.load_intermediate_infile(infile)
 
-    def import_list_model(self):
-        """Imports list data after updating id to a UUID.
+    @property
+    def old_list_df(self):
+        """Returns a DF of the original list.
         """
-        path = os.path.join(
-            SOURCE_DIR, self.old_list_model_name.split('.')[0],
-            '{}.csv'.format(self.old_list_model_name.split('.')[1]))
-        df = pd.read_csv(path, low_memory=False)
-        df['id'] = df.apply(
-            lambda row: self.get_new_id(row['id']), axis=1)
+        if self._old_list_df.empty:
+            path = os.path.join(
+                SOURCE_DIR, self.old_list_model_name.split('.')[0],
+                '{}.csv'.format(self.old_list_model_name.split('.')[1]))
+            sys.stdout.write(
+                '  M2M, importing old list model from {}'.format(path))
+            df = pd.read_csv(
+                path, low_memory=False,
+                encoding='utf-8',
+                sep=',')
+            if len(list(df.columns)) == 1:
+                df = pd.read_csv(
+                    path, low_memory=False,
+                    encoding='utf-8',
+                    sep='|',
+                    lineterminator='\n',
+                    escapechar='\\')
+            try:
+                df['short_name'] = df.apply(
+                    self.df_apply_functions['short_name'], axis=1)
+            except KeyError:
+                pass
+            self._old_list_df = df
+        return self._old_list_df
+
+    @property
+    def new_list_df(self):
+        """Returns a DF of the new list.
+        """
+        if self._new_list_df.empty:
+            sql = 'SELECT {fields} FROM {db}.{list_dbtable}'.format(
+                db=NEW_DB, list_dbtable=self.list_model._meta.db_table,
+                fields=','.join(self.list_fields))
+            with connection.cursor() as cursor:
+                cursor.execute(sql)
+                rows = cursor.fetchall()
+            data = {}
+            for index, field in enumerate(self.list_fields):
+                data.update({field: [row[index] for row in rows]})
+            self._new_list_df = pd.DataFrame(data)
+        return self._new_list_df
+
+    @property
+    def list_df(self):
+        """Returns a DF that is a merge of the old and new list dfs (to link old and new id).
+        """
+        df = pd.merge(self.old_list_df, self.new_list_df,
+                      on='short_name', how='left', suffixes=['_old', ''])
+        if not len(df[pd.isnull(df['id'])]) == 0:
+            raise M2MImportError('Some M2M options do not match.')
+        return df
+
+    def import_list_model(self):
+        """Exports then re-imports list data after updating id to a UUID.
+        """
         path = os.path.join(
             UPDATED_DIR, self.list_model._meta.app_label,
             '{}.csv'.format(self.list_model._meta.model_name))
-        df.to_csv(
+        self.list_df.to_csv(
+            columns=self.list_fields,
             path_or_buf=path,
             index=False,
-            encoding='utf-8')
+            encoding='utf-8',
+            sep='|',
+            line_terminator='\n',
+            escapechar='\\')
         recipe = ModelRecipe(model_name=self.list_model._meta.label_lower)
+        recipe.in_path = path
         ImportCsvToModel(recipe=recipe, save=True)
-
-    @property
-    def ids(self):
-        """Returns a dictionary {old_id1: new_uuid1, old_id2: new_uuid2, ...}.
-        """
-        sql = (
-            'SELECT old.id old_id, new.id new_id, old.short_name '
-            'FROM {old_db}.{old_list_dbtable} AS old '
-            'LEFT JOIN {db}.{list_dbtable} AS new '
-            'ON TRIM(new.{join_field})=TRIM(old.{join_field});').format(
-                old_db=OLD_DB, old_list_dbtable='_'.join(
-                    self.old_list_model_name.split('.')),
-                db=NEW_DB, list_dbtable=self.list_model._meta.db_table,
-                join_field=self.join_lists_on)
-        with connection.cursor() as cursor:
-            cursor.execute(sql)
-            rows = cursor.fetchall()
-        ids = {row[0]: row[1] for row in rows}
-        if not ids:
-            print(sql)
-            raise ImportDataError(
-                'Please review original/new list tables. no records JOINed')
-        for v in ids.values():
-            if not v:
-                pprint(ids)
-                raise ImportDataError(
-                    'Please review original/new list tables. Mismatch on JOIN')
-        return ids
 
     @property
     def old_intermediate_tblname(self):
@@ -87,20 +140,21 @@ class M2mRecipe(Recipe):
         return '{}.{}_{}_{}'.format(
             OLD_DB,
             self.old_data_model_app_label,
-            self.data_model._meta.model_name,
-            '_'.join(re.findall('[A-Z][^A-Z]*', self.list_model._meta.object_name)).lower())
+            self.old_data_model_model_name or self.data_model._meta.model_name,
+            self.field_name)
 
     @property
     def intermediate_tblname(self):
         """Returns the db.tablename.
         """
         return '{}.{}_{}_{}'.format(
-            NEW_DB, self.data_model._meta.app_label,
+            NEW_DB,
+            self.data_model._meta.app_label,
             self.data_model._meta.model_name,
-            '_'.join(re.findall('[A-Z][^A-Z]*', self.list_model._meta.object_name)).lower())
+            self.field_name)
 
     def old_intermediate_into_outfile(self):
-        """Selects the original intermediate data into an OUTFILE.
+        """Exports the original intermediate data into an OUTFILE.
         """
         tbl = self.old_intermediate_tblname
         outfile = os.path.join(
@@ -108,42 +162,45 @@ class M2mRecipe(Recipe):
                 '/'.join(self.data_model._meta.label_lower.split('.')),
                 self.list_model._meta.model_name))
         sql = (
-            "SELECT 'id', '{data_field}', '{list_field}' "
+            "SELECT 'id', '{data_field}', '{field_name}' "
             "UNION ALL "
-            "SELECT id, replace({data_field}, '-', ''), {list_field} INTO OUTFILE "
+            "SELECT id, replace({data_field}, '-', ''), {field_name} INTO OUTFILE "
             "'{outfile}' "
             "CHARACTER SET UTF8 "
-            "FIELDS TERMINATED BY ',' ENCLOSED BY '' "
+            "FIELDS TERMINATED BY '|' ENCLOSED BY '' "
             "LINES TERMINATED BY '\n' "
             "FROM {tbl};").format(
-                data_field='{}_id'.format(self.data_model._meta.model_name),
-                list_field='{}_id'.format(self.list_model._meta.model_name),
+                data_field='{}_id'.format(self.old_data_model_model_name),
+                field_name='{}_id'.format(
+                    self.old_list_model_name.split('.')[1]),
                 outfile=outfile, tbl=tbl)
         with connection.cursor() as cursor:
             cursor.execute(sql)
         return outfile
-
-    def get_new_id(self, value):
-        """Map old id to new UUID.
-        """
-        for old_id, new_id in self.ids.items():
-            if value == old_id:
-                return new_id
-        raise ImportDataError(
-            'M2M mapping not found. Got {}'.format(value))
 
     def update_intermediate_into_infile(self, outfile=None):
         """Reads the OUTFILE, updates the ids, writes back to INFILE.
         """
         infile = outfile.replace('outfile', 'infile')
         list_field = '{}_id'.format(self.list_model._meta.model_name)
-        df = pd.read_csv(outfile, low_memory=False)
-        df[list_field] = df.apply(
-            lambda row: self.get_new_id(row[list_field]), axis=1)
+        df = pd.read_csv(outfile, low_memory=False, sep=self.read_sep)
+        columns = list(df.columns)
+        if list_field not in columns:
+            raise M2MImportError(
+                'Invalid list field for intermediate table. Got {}. '
+                'Expected one of {}'.format(list_field, columns))
+        df = pd.merge(
+            df, self.list_df, left_on=list_field, right_on='id_old', suffixes=['', '_new'])
+        df = df.drop([list_field], axis=1)
+        df = df.rename(columns={'id_new': list_field})
         df.to_csv(
+            columns=columns,
             path_or_buf=infile,
             index=False,
-            encoding='utf-8')
+            encoding='utf-8',
+            sep=self.write_sep,
+            line_terminator='\n',
+            escapechar='\\')
         return infile
 
     def load_intermediate_infile(self, infile=None):
@@ -153,7 +210,7 @@ class M2mRecipe(Recipe):
         sql = (
             "LOAD DATA INFILE '{infile}' INTO TABLE {tbl} "
             "CHARACTER SET UTF8 "
-            "FIELDS TERMINATED BY ',' ENCLOSED BY '' "
+            "FIELDS TERMINATED BY '|' ENCLOSED BY '' "
             "LINES TERMINATED BY '\n' "
             "IGNORE 1 LINES "
             "(id, {data_field}, {list_field});".format(
@@ -179,7 +236,7 @@ class M2mRecipe(Recipe):
             "modified, hostname_modified, version, display_index, user_created, "
             "ifnull(field_name, ''),id, ifnull(revision, '') INTO OUTFILE '{csv_filename}' "
             "CHARACTER SET UTF8 "
-            "FIELDS TERMINATED BY ',' ENCLOSED BY '' "
+            "FIELDS TERMINATED BY '|' ENCLOSED BY '' "
             "LINES TERMINATED BY '\n' "
             "FROM {old_db}.{old_list_dbtable};").format(
                 csv_filename=csv_filename, old_db=OLD_DB,

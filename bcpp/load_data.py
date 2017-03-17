@@ -21,7 +21,7 @@ list_data = {
         (CANCER, 'Cancer'),
         (TUBERCULOSIS, 'Tuberculosis'),
         (OTHER, 'Other serious infection'),
-        (NONE, ' None'),
+        (NONE, 'None'),
         (STI, 'STI (Sexually Transmitted Infection)')],
     'bcpp_subject.familyplanning': [
         ('Condoms, consistent use (male or female)',
