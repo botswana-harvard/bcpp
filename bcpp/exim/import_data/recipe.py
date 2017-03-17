@@ -23,7 +23,8 @@ class Recipe:
                  post_import_handler=None,
                  df_map_options=None, df_apply_functions=None,
                  df_rename_columns=None, df_drop_columns=None,
-                 df_add_columns=None, read_csv_sep=None, **kwargs):
+                 df_add_columns=None, df_copy_columns=None,
+                 read_csv_sep=None, **kwargs):
         self._df = pd.DataFrame()
         self._raw_df = pd.DataFrame()
         self.read_csv_sep = read_csv_sep or '|'
@@ -33,6 +34,7 @@ class Recipe:
         self.df_rename_columns = df_rename_columns or {}
         self.df_drop_columns = df_drop_columns or []
         self.df_add_columns = df_add_columns or []
+        self.df_copy_columns = df_copy_columns or {}
         self.df_map_options = df_map_options or {}
         self.df_apply_functions = df_apply_functions or {}
         # manipulate single row as dictionary (read from df)
@@ -59,21 +61,24 @@ class Recipe:
                 escapechar='\\')
         self.import_csv_class(recipe=self, **kwargs)
 
-    def export_df(self, **kwargs):
+    def export_df(self, path_or_buf=None, sep=None, columns=None, **kwargs):
         """Export the final dataframe to CSV.
 
         Default options are optimized for mysql OUTFILE.
         """
-        self.df.to_csv(
-            path_or_buf=self.out_path,
+        options = dict(
+            path_or_buf=path_or_buf or self.out_path,
             index=False,
             encoding='utf-8',
-            sep='|',
+            sep=sep or '|',
             quoting=csv.QUOTE_MINIMAL,
             quotechar='"',
             line_terminator='\n',
             na_rep='NULL',
             escapechar='\\')
+        if columns:
+            options.update(columns=columns)
+        self.df.to_csv(**options)
 
     def export_raw_df(self, read_csv_sep=None):
         """Export the "raw" dataframe to CSV using the PIPE delimiter.

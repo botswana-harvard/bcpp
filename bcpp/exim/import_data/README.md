@@ -16,6 +16,12 @@
 
 # ISSUES
 
+## Plot
+
+    ```sql
+    update plot_plot set location_name='plot' where confirmed=1;
+    ```
+    
 ## Household Member
 
 * household member 63050 reduced to 62863 after removing duplicates
@@ -23,14 +29,44 @@
 * added back 17 to match with consents
 * update survey_schedule in HHM from HHS:
 
+   update survey schedule from HHS
+   
     ```sql
     UPDATE member_householdmember HHM
     JOIN household_householdstructure HHS ON HHM.household_structure_id = HHS.id
     SET HHM.survey_schedule = HHS.survey_schedule;
     ```
 
-* update subject_identifier
+   update household_identifier from HH
 
+    ```sql
+    UPDATE member_householdmember HHM
+    JOIN household_householdstructure HHS ON HHM.household_structure_id = HHS.id
+    JOIN household_household HH ON HHS.household_id = HH.id
+    SET HHM.household_identifier = HH.household_identifier;
+    ```
+
+   List all household identifiers from HH and HHM
+   
+    ```sql
+    SELECT hh.household_identifier, hhm.household_identifier
+    FROM member_householdmember as hhm
+    LEFT JOIN household_householdstructure as hhs on hhm.household_structure_id=hhs.id
+    LEFT JOIN household_household as hh on hhs.household_id=hh.id;
+    ```
+
+* update subject_identifier
+    
+   Find all occurences of `subject_identifier`
+   
+    ```sql
+    SELECT table_name,table_schema, column_name
+    FROM INFORMATION_SCHEMA.COLUMNS
+    WHERE table_schema='edc_migrated' AND column_name='subject_identifier';
+    ```
+
+   update in `member_householdmember`
+   
     ```sql
     UPDATE member_householdmember HHM
     LEFT JOIN edc_registration_registeredsubject AS REG
@@ -43,6 +79,64 @@
     WHERE SUBSTRING(r.subject_identifier, 1, 4)='066-';
     ```
 
+##Identifiers
+
+###identifier_model
+
+   subjects
+
+    ```sql
+    INSERT INTO edc_identifier_identifiermodel (id,name,subject_type,model,identifier,
+    device_id,sequence_number,created,modified,user_created,user_modified,
+    hostname_created,hostname_modified,
+    protocol_number,study_site,revision)
+    SELECT
+    REPLACE(uuid(),'-','') as id,
+    'subjectidentifier' as name,
+    'subject' as subject_type,
+    'bcpp_subject.subjectconsent' as model,
+    subject_identifier as identifier,
+    substring(subject_identifier, 7, 2) as device_id,
+    CAST(substring(subject_identifier, 9, 4) AS UNSIGNED) as sequence_number,
+    created as created,
+    modified as modified,
+    user_created as user_created,
+    user_modified as user_modified,
+    hostname_created as hostname_created,
+    hostname_modified as hostname_modified,
+    substring(subject_identifier, 1, 3) as protocol_number,
+    substring(subject_identifier, 5, 2) as study_site,
+    revision as revision
+    FROM edc_registration_registeredsubject where SUBSTRING(subject_identifier, 1, 4)='066-';
+    ```
+   plots
+   
+    ```sql
+    INSERT INTO edc_identifier_identifiermodel (id,name,subject_type,model,identifier,
+    device_id,sequence_number,created,modified,user_created,user_modified,
+    hostname_created,hostname_modified,
+    protocol_number,study_site,revision)
+    SELECT
+    REPLACE(uuid(),'-','') as id,
+    'plot_identifier' as name,
+    NULL as subject_type,
+    'plot.plot' as model,
+    plot_identifier as identifier,
+    '99' as device_id,
+    CAST(substring(plot_identifier, 3, 4) AS UNSIGNED) as sequence_number,
+    created as created,
+    modified as modified,
+    user_created as user_created,
+    user_modified as user_modified,
+    hostname_created as hostname_created,
+    hostname_modified as hostname_modified,
+    '066' as protocol_number,
+    substring(plot_identifier, 1, 2) as study_site,
+    revision as revision
+    FROM plot_plot;
+    ```
+   
+   
 ## REGISTERED_SUBJECT
 
 * add back 44 missing registered subject records    
@@ -176,6 +270,15 @@
     V.schedule_name=APPT.schedule_name,
     V.visit_code=APPT.visit_code;
     ```
+
+### subject_locator
+
+    ```sql
+    UPDATE bcpp_subject_subjectlocator L
+    JOIN edc_registration_registeredsubject R ON L.subject_identifier = R.id
+    SET L.subject_identifier = R.subject_identifier;
+    ```
+
 
 ## Enrollment Models
 

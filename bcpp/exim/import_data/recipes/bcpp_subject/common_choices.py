@@ -1,3 +1,5 @@
+import pandas as pd
+import numpy as np
 
 from edc_constants.constants import (
     UNKNOWN, OTHER, DWTA, NOT_SURE, NEG, POS,
@@ -7,6 +9,7 @@ from bcpp_subject.constants import DAYS, YEARS, MONTHS
 
 
 def common_choices(value, na=None):
+    na = na or np.NaN
     if value == 'Other':
         return OTHER
     elif value == 'not_answering':
@@ -31,8 +34,8 @@ def common_choices(value, na=None):
         return NEG
     elif value == 'positive':
         return POS
-    elif value is None:
-        return na
     elif value == 'None':
+        return na
+    elif pd.isnull(value):
         return na
     return value

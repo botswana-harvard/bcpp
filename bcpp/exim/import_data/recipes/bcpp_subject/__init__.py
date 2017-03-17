@@ -25,8 +25,8 @@ from .medical_diagnoses import *
 from .non_pregnancy import *
 from .pregnancy import *
 from .outpatient_care import *
-# from .pima_cd4 import *
-# from .pima_vl import *
+from .pima_cd4 import *
+from .pima_vl import *
 from .positive_participant import *
 from .quality_of_life import *
 from .recent_partner import *
@@ -38,3 +38,4 @@ from .stigma import *
 from .subject_locator import *
 from .residency_mobility import *
 from .resource_utilization import *
+from .subject_requisition import *

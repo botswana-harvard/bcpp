@@ -41,6 +41,7 @@ class BaseImportCsv:
         self.df_rename_columns = self.recipe.df_rename_columns
         self.df_drop_columns = self.recipe.df_drop_columns
         self.df_add_columns = self.recipe.df_add_columns
+        self.df_copy_columns = self.recipe.df_copy_columns
         self.df_map_options = self.recipe.df_map_options
         self.df_apply_functions = self.recipe.df_apply_functions
 
@@ -53,7 +54,9 @@ class BaseImportCsv:
             """
             if pd.isnull(x):
                 return np.nan
-            if re.match('^[0-9]{4}\-[0-9]{2}\-[0-9]{2}$', x):
+            elif re.match('^[0-9]{1,2}\/[0-9]{1,2}\/[0-9]{2}$', x):
+                dt = parse(x, dayfirst=True)
+            elif re.match('^[0-9]{4}\-[0-9]{2}\-[0-9]{2}$', x):
                 dt = datetime.strptime(x, '%Y-%m-%d')
             elif re.match('^[0-9]{4}\-[0-9]{2}\-[0-9]{2} [0-9]{2}\:[0-9]{2}\:[0-9]{2}$', x):
                 dt = datetime.strptime(x, '%Y-%m-%d %H:%M:%S')
@@ -62,10 +65,10 @@ class BaseImportCsv:
                     '^[0-9]{4}\-[0-9]{2}\-[0-9]{2} [0-9]{2}\:[0-9]{2}\:[0-9]{2}', x).group()
                 dt = datetime.strptime(x, '%Y-%m-%d %H:%M:%S')
             elif re.match('^[0-9]{1,2}\/[0-9]{1,2}\/[0-9]{2} [0-9]{2}\:[0-9]{2}$', x):
-                dt = parse(x)
+                dt = parse(x, yearfirst=True)
             else:
                 try:
-                    dt = parse(x)
+                    dt = parse(x, yearfirst=True)
                 except ValueError:
                     raise ImportDataError(
                         'Invalid date string. Got {}'.format(x))
@@ -86,6 +89,8 @@ class BaseImportCsv:
                 encoding='utf-8',
                 lineterminator='\n',
                 escapechar='\\')
+            for column, copy_column in self.df_copy_columns.items():
+                self._df[column] = self._df[copy_column]
             self._df = self._df.rename(columns=self.df_rename_columns)
             for column_name in self.df_add_columns:
                 try:
