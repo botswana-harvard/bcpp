@@ -8,6 +8,15 @@ from ...recipe import site_recipes
 from ..household.household_structure import survey_schedule
 
 
+"""
+Also run
+
+UPDATE bcpp_subject_subjectconsent as C
+LEFT JOIN member_householdmember as M on C.household_member_id=M.id
+SET C.survey_schedule=M.survey_schedule;
+"""
+
+
 df_drop_columns = [
     'registered_subject_id',
     'study_site_id',

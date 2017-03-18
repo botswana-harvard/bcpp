@@ -10,7 +10,7 @@ from bcpp_subject.constants import DAYS, YEARS, MONTHS
 
 def common_choices(value, na=None):
     na = na or np.NaN
-    if value == 'Other':
+    if value.lower() == 'other':
         return OTHER
     elif value == 'not_answering':
         return DWTA

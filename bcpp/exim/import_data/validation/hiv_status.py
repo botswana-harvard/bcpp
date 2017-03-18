@@ -27,7 +27,7 @@ class HivStatus:
                 sys.stdout.write('{}/{}   \r'.format(index + 1, total))
                 subjects.append({
                     k: v for k, v in SubjectHelper(
-                        subject_identifier=subject_identifier).__dict__.items() if k not in [
+                        subject_identifier=subject_identifier).options.items() if k not in [
                         'baseline', 'current', 'subject_visit']})
             sys.stdout.write('{}/{}   Done\n'.format(index + 1, total))
             self.df = pd.DataFrame(subjects)

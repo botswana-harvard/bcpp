@@ -39,7 +39,7 @@ df_apply_functions = {
 m2m_recipes = []
 
 """
-manually created CSV. was full of duplications.
+manually created CSV. was full of duplicates.
 """
 
 site_recipes.register(ModelRecipe(
