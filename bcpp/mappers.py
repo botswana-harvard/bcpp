@@ -46,8 +46,6 @@ class TestPlotMapper(Mapper):
 
     center_lat = -24.557709
     center_lon = 25.807963
-    gps_center_lat = -24.557709
-    gps_center_lon = 25.807963
     radius = 100.5
     location_boundary = ()
 
@@ -66,9 +64,7 @@ class BokaaPlotMapper(Mapper):
     intervention = False
     landmarks = BOKAA_LANDMARKS
     center_lat = -24.426910
-    center_lon = 26.020103
-    gps_center_lat = -24.426910
-    gps_center_lon = 26.020103
+    center_lon = 26.020618
     radius = 5.5
 
 site_mappers.register(BokaaPlotMapper)
@@ -81,8 +77,8 @@ class DigawanaPlotMapper(Mapper):
     pair = 1
     regions = []
     sections = []
-    gps_center_lat = -25.330451
-    gps_center_lon = 25.556502
+    center_lat = -25.330451
+    center_lon = 25.556502
     radius = 3.5
     landmarks = DIGAWANA_LANDMARKS
 
@@ -101,8 +97,8 @@ class GumarePlotMapper(Mapper):
     intervention = True
     landmarks = GUMARE_LANDMARKS
 
-    gps_center_lat = -19.359734
-    gps_center_lon = 22.163286
+    center_lat = -19.362483
+    center_lon = 22.165860
     radius = 5.5
 
 site_mappers.register(GumarePlotMapper)
@@ -117,9 +113,8 @@ class GwetaPlotMapper(Mapper):
     sections = []
     intervention = True
     landmarks = GWETA_LANDMARKS
-
-    gps_center_lat = -20.205621
-    gps_center_lon = 25.251474
+    center_lat = -20.205298
+    center_lon = 25.250788
     radius = 5.5
 
 site_mappers.register(GwetaPlotMapper)
@@ -132,8 +127,8 @@ class LentsweletauPlotMapper(Mapper):
     pair = 3
     regions = []
     sections = []
-    gps_center_lat = -24.252443
-    gps_center_lon = 25.854249
+    center_lat = -24.253009
+    center_lon = 25.853233
     radius = 5.0
     intervention = True
     landmarks = LENTSWELETAU_LANDMARKS
@@ -150,8 +145,8 @@ class LeralaPlotMapper(Mapper):
     sections = []
     intervention = True
     landmarks = None
-    gps_center_lat = -22.7830257
-    gps_center_lon = 27.7605844
+    center_lat = -22.781363
+    center_lon = 27.760241
     radius = 5.5
 
 site_mappers.register(LeralaPlotMapper)
@@ -165,8 +160,8 @@ class LetlhakengPlotMapper(Mapper):
     regions = []
     sections = []
     landmarks = LETLHAKENG_LANDMARKS
-    gps_center_lat = -24.099361
-    gps_center_lon = 25.032163
+    center_lat = -24.099945
+    center_lon = 25.033250
     radius = 5.0
     intervention = False
 
@@ -182,8 +177,8 @@ class MasungaPlotMapper(Mapper):
     sections = []
     intervention = True
     landmarks = MASUNGA_LANDMARKS
-    gps_center_lat = -20.667218
-    gps_center_lon = 27.428340
+    center_lat = -20.667218
+    center_lon = 27.428340
     radius = 7.5
 
 site_mappers.register(MasungaPlotMapper)
@@ -198,8 +193,8 @@ class MathangwanePlotMapper(Mapper):
     sections = []
     intervention = True
     landmarks = MATHANGWANE_LANDMARKS
-    gps_center_lat = -20.993214
-    gps_center_lon = 27.333963
+    center_lat = -20.993214
+    center_lon = 27.333963
     radius = 6.5
 
 site_mappers.register(MathangwanePlotMapper)
@@ -214,8 +209,8 @@ class MaunatlalaPlotMapper(Mapper):
     sections = []
     intervention = True
     landmarks = MAUNATLALA_LANDMARKS
-    gps_center_lat = -22.8658437618
-    gps_center_lon = 27.4198811366
+    center_lat = -22.8658437618
+    center_lon = 27.4198811366
     radius = 5.5
 
 site_mappers.register(MaunatlalaPlotMapper)
@@ -230,8 +225,8 @@ class MetsimotlhabePlotMapper(Mapper):
     sections = []
     intervention = False
     landmarks = METSIMOTLHABE_LANDMARKS
-    gps_center_lat = -24.554426
-    gps_center_lon = 25.809554
+    center_lat = -24.554426
+    center_lon = 25.809554
     radius = 7.5
 
 site_mappers.register(MetsimotlhabePlotMapper)
@@ -245,8 +240,8 @@ class MmadinarePlotMapper(Mapper):
     sections = []
     intervention = False
     landmarks = MMADINARE_LANDMARKS
-    gps_center_lat = -21.869753
-    gps_center_lon = 27.753179
+    center_lat = -21.869753
+    center_lon = 27.753179
     radius = 7.5
 
 site_mappers.register(MmadinarePlotMapper)
@@ -261,8 +256,8 @@ class MmandunyanePlotMapper(Mapper):
     sections = []
     intervention = False
     landmarks = MMANDUNYANE_LANDMARKS
-    gps_center_lat = -20.994015
-    gps_center_lon = 27.334564
+    center_lat = -20.994015
+    center_lon = 27.334564
     radius = 6.5
 
 site_mappers.register(MmandunyanePlotMapper)
@@ -279,8 +274,6 @@ class MmankgodiPlotMapper(Mapper):
     landmarks = MMANKGODI_LANDMARKS
     center_lat = -24.729837
     center_lon = 25.646853
-    gps_center_lat = -24.729837
-    gps_center_lon = 25.646853
     radius = 5.5
 
 site_mappers.register(MmankgodiPlotMapper)
@@ -295,8 +288,8 @@ class MmathethePlotMapper(Mapper):
     sections = []
     intervention = False
     landmarks = MMATHETHE_LANDMARKS
-    gps_center_lat = -25.318327
-    gps_center_lon = 25.269320
+    center_lat = -25.318327
+    center_lon = 25.269320
     radius = 5.5
 
 site_mappers.register(MmathethePlotMapper)
@@ -311,8 +304,8 @@ class MolapowabojangPlotMapper(Mapper):
     sections = []
     intervention = False
     landmarks = MOLAPOWABOJANG_LANDMARKS
-    gps_center_lat = -25.204009
-    gps_center_lon = 25.562754
+    center_lat = -25.204009
+    center_lon = 25.562754
     radius = 5.5
 
 site_mappers.register(MolapowabojangPlotMapper)
@@ -327,8 +320,8 @@ class NataPlotMapper(Mapper):
     sections = []
     intervention = False
     landmarks = NATA_LANDMARKS
-    gps_center_lat = -20.207917
-    gps_center_lon = 26.184711
+    center_lat = -20.207917
+    center_lon = 26.184711
     radius = 5.5
 
 site_mappers.register(NataPlotMapper)
@@ -343,8 +336,8 @@ class NkangePlotMapper(Mapper):
     sections = []
     intervention = True
     landmarks = NKANGE_LANDMARKS
-    gps_center_lat = -20.29269441
-    gps_center_lon = 27.13549895
+    center_lat = -20.29269441
+    center_lon = 27.13549895
     radius = 6.5
 
 site_mappers.register(NkangePlotMapper)
