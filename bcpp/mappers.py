@@ -352,8 +352,8 @@ class OodiPlotMapper(Mapper):
     sections = []
     intervention = True
     landmarks = OODI_LANDMARKS
-    gps_center_lat = -24.425856
-    gps_center_lon = 26.021626
+    center_lat = -24.425856
+    center_lon = 26.021626
     radius = 5.5
 
 site_mappers.register(OodiPlotMapper)
@@ -368,8 +368,8 @@ class OtsePlotMapper(Mapper):
     sections = []
     intervention = True
     landmarks = OTSE_LANDMARKS
-    gps_center_lat = -25.033194
-    gps_center_lon = 25.747132
+    center_lat = -25.033194
+    center_lon = 25.747132
     radius = 5.5
 
 site_mappers.register(OtsePlotMapper)
@@ -384,8 +384,8 @@ class RakopsPlotMapper(Mapper):
     sections = []
     intervention = False
     landmarks = RAKOPS_LANDMARKS
-    gps_center_lat = -21.034979
-    gps_center_lon = 24.401214
+    center_lat = -21.034979
+    center_lon = 24.401214
     radius = 5.5
 
 site_mappers.register(RakopsPlotMapper)
@@ -400,8 +400,8 @@ class RamokgonamiPlotMapper(Mapper):
     sections = []
     intervention = False
     landmarks = RAMOKGONAMI_LANDMARKS
-    gps_center_lat = -22.8658437618
-    gps_center_lon = 27.4198811366
+    center_lat = -22.8658437618
+    center_lon = 27.4198811366
     radius = 5.5
 
 site_mappers.register(RamokgonamiPlotMapper)
@@ -416,8 +416,8 @@ class RanakaPlotMapper(Mapper):
     sections = []
     intervention = False
     landmarks = RANAKA_LANDMARKS
-    gps_center_lat = -24.908703
-    gps_center_lon = 25.463033
+    center_lat = -24.908703
+    center_lon = 25.463033
     radius = 4
 
 site_mappers.register(RanakaPlotMapper)
@@ -432,8 +432,8 @@ class SebinaPlotMapper(Mapper):
     sections = []
     intervention = False
     landmarks = SEBINA_LANDMARKS
-    gps_center_lat = -20.806103
-    gps_center_lon = 27.200003
+    center_lat = -20.806103
+    center_lon = 27.200003
     radius = 6.5
 
 site_mappers.register(SebinaPlotMapper)
@@ -448,8 +448,8 @@ class SefharePlotMapper(Mapper):
     sections = []
     intervention = True
     landmarks = SEFHARE_LANDMARKS
-    gps_center_lat = -23.027271
-    gps_center_lon = 27.526095
+    center_lat = -23.027271
+    center_lon = 27.526095
     radius = 5.5
 
 site_mappers.register(SefharePlotMapper)
@@ -464,8 +464,8 @@ class SefophePlotMapper(Mapper):
     sections = []
     intervention = False
     landmarks = SEFOPHE_LANDMARKS
-    gps_center_lat = -22.1918153
-    gps_center_lon = 27.9624366
+    center_lat = -22.1918153
+    center_lon = 27.9624366
     radius = 5.5
 
 site_mappers.register(SefophePlotMapper)
@@ -480,8 +480,8 @@ class ShakawePlotMapper(Mapper):
     sections = []
     intervention = False
     landmarks = SHAKAWE_LANDMARKS
-    gps_center_lat = -18.360902
-    gps_center_lon = 21.836862
+    center_lat = -18.360902
+    center_lon = 21.836862
     radius = 11
 
 site_mappers.register(ShakawePlotMapper)
@@ -496,8 +496,8 @@ class ShoshongPlotMapper(Mapper):
     sections = []
     intervention = True
     landmarks = SHOSHONG_LANDMARKS
-    gps_center_lat = -23.032546
-    gps_center_lon = 26.516352
+    center_lat = -23.032546
+    center_lon = 26.516352
     radius = 6.0
 
 site_mappers.register(ShoshongPlotMapper)
@@ -512,8 +512,8 @@ class TatiSidingPlotMapper(Mapper):
     sections = []
     intervention = True
     landmarks = TATI_SIDING_LANDMARKS
-    gps_center_lat = -21.274018
-    gps_center_lon = 27.474822
+    center_lat = -21.274018
+    center_lon = 27.474822
     radius = 6.5
 
 site_mappers.register(TatiSidingPlotMapper)
@@ -528,8 +528,8 @@ class TsetsebjwePlotMapper(Mapper):
     sections = []
     intervention = False
     landmarks = TSETSEBJWE_LANDMARKS
-    gps_center_lat = -22.41391
-    gps_center_lon = 28.39465
+    center_lat = -22.41391
+    center_lon = 28.39465
     radius = 5.5
 
 site_mappers.register(TsetsebjwePlotMapper)
