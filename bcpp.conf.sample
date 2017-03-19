@@ -1,0 +1,34 @@
+[django]
+secret_key =
+
+# my.cnf
+[client]
+database = edc
+user = root
+password =
+default-character-set = utf8
+init_command = 'SET storage_engine=INNODB'
+
+[edc_device]
+role = CentralServer
+device_id = 99
+
+[edc_sync]
+
+[edc_sync_files]
+user = django
+remote_host = communityserver
+usb_volume = /Volumes/BCPP
+
+[survey]
+group_name = bcpp-survey
+schedule_name = bcpp-year-3
+
+[edc_map]
+map_area = test_community
+
+[edc_label]
+label_printer = label_printer
+
+[django_crypto_fields]
+key_path = crypto_fields
