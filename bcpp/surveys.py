@@ -4,11 +4,13 @@ import arrow
 from datetime import datetime
 from dateutil.tz import gettz
 
+from django.conf import settings
+
 from survey import site_surveys, Survey, SurveySchedule
 
 from .communities import communities
 
-tzinfo = gettz('Africa/Gaborone')
+tzinfo = gettz(settings.TIME_ZONE)
 
 ANONYMOUS_SURVEY = 'ano'
 ESS_SURVEY = 'ess'
@@ -20,7 +22,7 @@ BCPP_YEAR_3 = 'bcpp-year-3'
 
 bcpp_year_one = SurveySchedule(
     name=BCPP_YEAR_1,
-    group_name='bcpp-survey',
+    group_name=settings.SURVEY_GROUP_NAME,
     map_areas=communities,
     start=arrow.get(
         datetime(2013, 10, 18, 0, 0, 0), tzinfo=tzinfo).to('UTC').datetime,
@@ -29,7 +31,7 @@ bcpp_year_one = SurveySchedule(
 
 bcpp_year_two = SurveySchedule(
     name=BCPP_YEAR_2,
-    group_name='bcpp-survey',
+    group_name=settings.SURVEY_GROUP_NAME,
     map_areas=communities,
     start=arrow.get(
         datetime(2015, 2, 1, 0, 0, 0), tzinfo=tzinfo).to('UTC').datetime,
@@ -38,7 +40,7 @@ bcpp_year_two = SurveySchedule(
 
 bcpp_year_three = SurveySchedule(
     name=BCPP_YEAR_3,
-    group_name='bcpp-survey',
+    group_name=settings.SURVEY_GROUP_NAME,
     map_areas=communities,
     start=arrow.get(
         datetime(2017, 1, 26, 0, 0, 0), tzinfo=tzinfo).to('UTC').datetime,
@@ -50,7 +52,7 @@ bcpp_year_one.add_survey(
     Survey(
         name=BHS_SURVEY,
         position=0,
-        map_area='test_community',
+        map_area=settings.CURRENT_MAP_AREA,
         start=bcpp_year_one.start,
         end=bcpp_year_one.end,
         full_enrollment_datetime=bcpp_year_one.end)
@@ -62,7 +64,7 @@ bcpp_year_two.add_survey(
     Survey(
         name=BHS_SURVEY,
         position=0,
-        map_area='test_community',
+        map_area=settings.CURRENT_MAP_AREA,
         start=bcpp_year_two.start,
         end=bcpp_year_two.end,
         full_enrollment_datetime=bcpp_year_two.end)
@@ -72,7 +74,7 @@ bcpp_year_two.add_survey(
     Survey(
         name=AHS_SURVEY,
         position=1,
-        map_area='test_community',
+        map_area=settings.CURRENT_MAP_AREA,
         start=bcpp_year_two.start,
         end=bcpp_year_two.end,
         full_enrollment_datetime=bcpp_year_two.end)
@@ -83,7 +85,7 @@ bcpp_year_three.add_survey(
     Survey(
         name=AHS_SURVEY,
         position=0,
-        map_area='test_community',
+        map_area=settings.CURRENT_MAP_AREA,
         start=bcpp_year_three.start,
         end=bcpp_year_three.end,
         full_enrollment_datetime=bcpp_year_three.end)
@@ -93,7 +95,7 @@ bcpp_year_three.add_survey(
     Survey(
         name=ESS_SURVEY,
         position=1,
-        map_area='test_community',
+        map_area=settings.CURRENT_MAP_AREA,
         start=bcpp_year_three.start,
         end=bcpp_year_three.end,
         full_enrollment_datetime=bcpp_year_three.end)
@@ -103,7 +105,7 @@ bcpp_year_three.add_survey(
     Survey(
         name=ANONYMOUS_SURVEY,
         position=0,
-        map_area='test_community',
+        map_area=settings.CURRENT_MAP_AREA,
         start=bcpp_year_three.start,
         end=bcpp_year_three.end,
         full_enrollment_datetime=bcpp_year_three.end)
