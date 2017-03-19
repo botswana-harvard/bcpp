@@ -1,3 +1,4 @@
+import configparser
 import os
 import sys
 
@@ -44,6 +45,8 @@ from .navbars import navbars
 
 style = color_style()
 ANONYMOUS_CONSENT_GROUP = 'anonymous'
+config = configparser.RawConfigParser()
+config.read(os.path.join(settings.ETC_DIR, settings.CONFIG_FILE))
 
 
 class AppConfig(DjangoAppConfig):
@@ -134,8 +137,9 @@ class EdcConsentAppConfig(BaseEdcConsentAppConfig):
 
 
 class EdcDeviceAppConfig(BaseEdcDeviceAppConfig):
-    device_id = 99
-    client_hostname_list = ['ckgathi']
+    use_settings = True
+    device_id = settings.DEVICE_ID
+    device_role = settings.DEVICE_ROLE
     device_permissions = {
         'plot.plot': DevicePermission(
             model='plot.plot',
@@ -152,13 +156,11 @@ class SurveyAppConfig(BaseSurveyAppConfig):
             S('bcpp-survey.bcpp-year-3.ahs.test_community'),
             S('bcpp-survey.bcpp-year-3.ess.test_community')]
     else:
-        # FIXME: update for production to only included bcpp-year-3
         current_surveys = [
-            S('bcpp-survey.bcpp-year-1.bhs.test_community'),
-            S('bcpp-survey.bcpp-year-2.ahs.test_community'),
-            S('bcpp-survey.bcpp-year-3.ahs.test_community'),
-            S('bcpp-survey.bcpp-year-3.ess.test_community')]
-    current_survey_schedule = 'bcpp-survey.bcpp-year-3.test_community'
+            S('bcpp-survey.bcpp-year-1.bhs.{}'.format(settings.CURRENT_MAP_AREA)),
+            S('bcpp-survey.bcpp-year-2.ahs.{}'.format(settings.CURRENT_MAP_AREA)),
+            S('bcpp-survey.bcpp-year-3.ahs.{}'.format(settings.CURRENT_MAP_AREA)),
+            S('bcpp-survey.bcpp-year-3.ess.{}'.format(settings.CURRENT_MAP_AREA))]
 
 
 class EdcMapAppConfig(BaseEdcMapAppConfig):
@@ -211,18 +213,14 @@ class EdcTimepointAppConfig(BaseEdcTimepointAppConfig):
 
 class EdcSyncAppConfig(BaseEdcSyncAppConfig):
     edc_sync_files_using = True
-    role = CLIENT
-    server_ip = '192.168.1.85'
+    server_ip = config['edc_sync'].get('server_ip')
 
 
 class EdcSyncFilesAppConfig(BaseEdcSyncFilesAppConfig):
     edc_sync_files_using = True
-    config_subfolder_name = 'bcpp'
-    role = CLIENT
-    #
-    user = 'django'
-    host = '192.168.1.85'
-    password = None
+    remote_host = config['edc_sync_files'].get('remote_host')
+    user = config['edc_sync_files'].get('user')
+    usb_volume = config['edc_sync_files'].get('usb_volume')
     source_folder = os.path.join(
         settings.MEDIA_ROOT, 'transactions', 'outgoing')
     destination_folder = os.path.join(
