@@ -9,7 +9,6 @@ https://docs.djangoproject.com/en/1.10/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.10/ref/settings/
 """
-
 import configparser
 import os
 import sys
@@ -29,7 +28,7 @@ if DEBUG:
     ALLOWED_HOSTS = []
 else:
     ETC_DIR = '/etc'
-    ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '192.168.1.66']
+    ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 sys.stdout.write(style.SUCCESS('Reading config from {}\n'.format(ETC_DIR)))
 
