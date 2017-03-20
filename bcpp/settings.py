@@ -9,28 +9,37 @@ https://docs.djangoproject.com/en/1.10/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.10/ref/settings/
 """
-
+import configparser
 import os
 import sys
+
 from pathlib import PurePath
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+from django.core.management.color import color_style
+style = color_style()
+
+APP_NAME = 'bcpp'
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-ETC_DIR = str(PurePath(BASE_DIR).parent.joinpath('etc'))
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '9-%tjc_ov-=t6-fefrys4n@izkj4y8oewah6uf2p9q%*!ub%)^'
-
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '192.168.1.66']
+CONFIG_FILE = '{}.conf'.format(APP_NAME)
+if DEBUG:
+    ETC_DIR = str(PurePath(BASE_DIR).joinpath('etc'))
+    ALLOWED_HOSTS = []
+else:
+    ETC_DIR = '/etc'
+    ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
+sys.stdout.write(style.SUCCESS('Reading config from {}\n'.format(ETC_DIR)))
+
+config = configparser.RawConfigParser()
+config.read(os.path.join(ETC_DIR, CONFIG_FILE))
+
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = config['django'].get('secret_key', 'blah$blah$blah')
+# SECRET_KEY = '9-%tjc_ov-=t6-fefrys4n@izkj4y8oewah6uf2p9q%*!ub%)^'
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -101,7 +110,6 @@ if 'test' in sys.argv:
     }
 if 'test' in sys.argv:
     PASSWORD_HASHERS = ('django_plainpasswordhasher.PlainPasswordHasher', )
-if 'test' in sys.argv:
     DEFAULT_FILE_STORAGE = 'inmemorystorage.InMemoryStorage'
 
 MIDDLEWARE = [
@@ -115,7 +123,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'bcpp.urls'
+ROOT_URLCONF = '{}.urls'.format(APP_NAME)
 
 TEMPLATES = [
     {
@@ -134,27 +142,19 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'bcpp.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/1.10/ref/settings/#databases
-
+WSGI_APPLICATION = '{}.wsgi.application'.format(APP_NAME)
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'edc',
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
-        'USER': 'root',
-        'PASSWORD': 'cc3721b',
-        'TEST': {'NAME': 'testbcpp'}
-    }
+        'OPTIONS': {
+            'read_default_file': os.path.join(ETC_DIR, CONFIG_FILE),
+        },
+        'HOST': '',
+        'PORT': '',
+        'ATOMIC_REQUESTS': True,
+    },
 }
-
-# Password validation
-# https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -192,29 +192,8 @@ USE_L10N = True
 
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.10/howto/static-files/
-STATIC_ROOT = os.path.join(BASE_DIR, 'bcpp', 'static')
-STATIC_URL = '/static/'
-
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'
-KEY_PATH = os.path.join(BASE_DIR, 'crypto_fields')
-
-DEVICE_ID = '99'
-
-
-CURRENT_MAP_AREA = ''
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
-
-if 'test' in sys.argv:
-    CURRENT_MAP_AREA = 'test_community'
-else:
-    CURRENT_MAP_AREA = 'test_community'
-
 CORS_ORIGIN_ALLOW_ALL = True
-
 REST_FRAMEWORK = {
     'PAGE_SIZE': 1,
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -222,4 +201,20 @@ REST_FRAMEWORK = {
     ),
 }
 
-LABEL_PRINTER = 'home_label_printer'
+STATIC_ROOT = os.path.join(BASE_DIR, APP_NAME, 'static')
+STATIC_URL = '/static/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
+# etc ini file attributes
+if config['django_crypto_fields'].get('key_path'):
+    KEY_PATH = os.path.join(
+        ETC_DIR, config['django_crypto_fields'].get('key_path'))
+else:
+    KEY_PATH = os.path.join(BASE_DIR, 'crypto_fields')
+CURRENT_MAP_AREA = config['edc_map'].get('map_area', 'test_community')
+DEVICE_ID = config['edc_device'].get('device_id', '99')
+DEVICE_ROLE = config['edc_device'].get('role')
+LABEL_PRINTER = config['edc_label'].get('label_printer', 'label_printer')
+SURVEY_GROUP_NAME = config['survey'].get('group_name')
+SURVEY_SCHEDULE_NAME = config['survey'].get('schedule_name')
