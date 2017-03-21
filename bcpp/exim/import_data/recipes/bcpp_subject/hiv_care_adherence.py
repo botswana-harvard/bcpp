@@ -1,4 +1,4 @@
-from edc_constants.constants import DWTA, NO
+# from edc_constants.constants import DWTA, NO
 
 from ...model_recipe import ModelRecipe
 from ...recipe import site_recipes
@@ -18,8 +18,8 @@ df_apply_functions = {
     'arv_stop': lambda row: common_choices(row['arv_stop']),
     'adherence_4_day': lambda row: common_choices(row['adherence_4_day']),
     'adherence_4_wk': lambda row: common_choices(row['adherence_4_wk']),
-    'ever_taken_arv': lambda row: NO if row['ever_taken_arv'] == DWTA else row['ever_taken_arv'],
-    'on_arv': lambda row: NO if row['on_arv'] == DWTA else row['on_arv'],
+    # 'ever_taken_arv': lambda row: NO if row['ever_taken_arv'] == DWTA else row['ever_taken_arv'],
+    # 'on_arv': lambda row: NO if row['on_arv'] == DWTA else row['on_arv'],
 }
 
 site_recipes.register(ModelRecipe(
