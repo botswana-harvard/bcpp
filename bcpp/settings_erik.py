@@ -16,7 +16,7 @@ import sys
 
 from pathlib import PurePath
 from django.core.management.color import color_style
-from django.utils import timezone
+
 style = color_style()
 
 APP_NAME = 'bcpp'
@@ -24,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 DEBUG = True
 
-CONFIG_FILE = '{}.conf'.format(APP_NAME)
+CONFIG_FILE = 'bcpp_migrated.conf'
 if DEBUG:
     ETC_DIR = str(PurePath(BASE_DIR).joinpath('etc'))
     ALLOWED_HOSTS = []
