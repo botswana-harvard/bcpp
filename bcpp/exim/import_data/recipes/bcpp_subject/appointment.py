@@ -55,6 +55,8 @@ def appt_type(row):
         return 'home'
     return row['appt_type']
 
+ahs
+
 
 def timepoint(row):
     if visit_code(row) in [C0, T0]:

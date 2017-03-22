@@ -152,9 +152,6 @@ DATABASES = {
         'OPTIONS': {
             'read_default_file': os.path.join(ETC_DIR, CONFIG_FILE),
         },
-        'HOST': '',
-        'PORT': '',
-        'ATOMIC_REQUESTS': True,
     },
 }
 
