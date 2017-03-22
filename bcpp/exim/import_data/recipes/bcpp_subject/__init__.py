@@ -40,3 +40,4 @@ from .residency_mobility import *
 from .resource_utilization import *
 from .subject_requisition import *
 # from .enrollment import Enroll
+from .demographics import *
