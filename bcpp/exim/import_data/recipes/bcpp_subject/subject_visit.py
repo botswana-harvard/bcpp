@@ -4,7 +4,6 @@ from ...model_recipe import ModelRecipe
 from ...recipe import site_recipes
 from ..household.household_structure import survey_schedule
 
-
 df_drop_columns = ['info_source_other']
 
 df_add_columns = ['survey_schedule']
