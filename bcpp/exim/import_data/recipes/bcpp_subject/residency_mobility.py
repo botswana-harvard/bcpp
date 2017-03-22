@@ -2,7 +2,7 @@
 from ...model_recipe import ModelRecipe
 from ...recipe import site_recipes
 from .common_choices import common_choices
-from edc_constants.constants import YES, NO, DWTA
+from edc_constants.constants import YES, NO
 
 
 def permanent_resident(value):
@@ -10,8 +10,6 @@ def permanent_resident(value):
     if value == 'True':
         return YES
     elif value == 'False':
-        return NO
-    elif value == DWTA:
         return NO
     return value
 
