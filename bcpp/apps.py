@@ -80,6 +80,11 @@ class EdcProtocolAppConfig(BaseEdcProtocolAppConfig):
 class PlotAppConfig(BasePlotAppConfig):
     base_template_name = 'bcpp/base.html'
 
+    @property
+    def add_plot_map_areas(self):
+        from edc_map.site_mappers import site_mappers
+        return [site_mappers.current_map_area]
+
 
 class HouseholdAppConfig(BaseHouseholdAppConfig):
     base_template_name = 'bcpp/base.html'
@@ -143,7 +148,7 @@ class EdcDeviceAppConfig(BaseEdcDeviceAppConfig):
     device_permissions = {
         'plot.plot': DevicePermission(
             model='plot.plot',
-            create_roles=[SERVER, CENTRAL_SERVER],
+            create_roles=[CENTRAL_SERVER, CLIENT],
             change_roles=[SERVER, CENTRAL_SERVER, CLIENT])
     }
 
