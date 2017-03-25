@@ -235,7 +235,7 @@ class EdcSyncFilesAppConfig(BaseEdcSyncFilesAppConfig):
     source_folder = os.path.join(
         settings.MEDIA_ROOT, 'transactions', 'outgoing')
     destination_folder = os.path.join(
-        settings.MEDIA_ROOT, 'transactions', 'outgoing')
+        settings.MEDIA_ROOT, 'transactions', 'incoming')
     archive_folder = os.path.join(
         settings.MEDIA_ROOT, 'transactions', 'archive')
 
