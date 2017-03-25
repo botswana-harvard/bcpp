@@ -9,6 +9,12 @@ from ...model_recipe import ModelRecipe
 from ...recipe import site_recipes
 
 
+"""UPDATE plot_plot as A
+LEFT JOIN bhp066.bcpp_household_plot as B ON A.id=B.id
+SET A.selected=B.selected;
+"""
+
+
 def fix_status(row):
     if row['status'] == 'bcpp_clinic':
         return np.NaN
