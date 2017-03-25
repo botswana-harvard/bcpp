@@ -109,6 +109,11 @@ class EdcLabAppConfig(BaseEdcLabAppConfig):
     requisition_model = 'bcpp_subject.subjectrequisition'
     result_model = 'edc_lab.result'
 
+    @property
+    def study_site_name(self):
+        from edc_map.site_mappers import site_mappers
+        return site_mappers.current_map_area
+
 
 class EdcBaseAppConfig(BaseEdcBaseAppConfig):
     project_name = 'BCPP'
