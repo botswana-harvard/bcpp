@@ -35,7 +35,7 @@
 <h3>
 	<a href="{% url enumeration_listboard_url_name %}" class="btn btn-default btn-lg">
 	   <i class="fa fa-sitemap fa-lg"></i> Household</a>
-	<a data-toggle="modal" data-target="#anonymousModal" href="#" class="btn btn-default btn-lg">
+	<a data-toggle="modal" data-target="#anonymousModal" href="#" class="btn btn-default btn-lg {% if not ANONYMOUS_ENABLED %}disabled{% endif %}">
 	   <i class="fa fa-user-secret fa-lg"></i> Anonymous</a>		
 </h3>
 
