@@ -179,6 +179,7 @@ class EdcMapAppConfig(BaseEdcMapAppConfig):
     landmark_model = 'bcpp.landmark'
     verify_point_on_save = False
     zoom_levels = ['14', '15', '16', '17', '18']
+    identifier_field_attr = 'plot_identifier'
 
 
 class EdcVisitTrackingAppConfig(BaseEdcVisitTrackingAppConfig):

@@ -41,9 +41,7 @@ class TestPlotMapper(Mapper):
     pair = 0
     regions = None  # SECTIONS
     sections = None  # SUB_SECTIONS
-
     landmarks = TEST_LANDMARKS
-
     center_lat = -24.557709
     center_lon = 25.807963
     radius = 100.5
@@ -81,7 +79,6 @@ class DigawanaPlotMapper(Mapper):
     center_lon = 25.556502
     radius = 3.5
     landmarks = DIGAWANA_LANDMARKS
-
     intervention = True
 
 site_mappers.register(DigawanaPlotMapper)
@@ -96,7 +93,6 @@ class GumarePlotMapper(Mapper):
     sections = []
     intervention = True
     landmarks = GUMARE_LANDMARKS
-
     center_lat = -19.362483
     center_lon = 22.165860
     radius = 5.5
