@@ -9,6 +9,7 @@ config = [
     ('enumeration', 'enumeration', 'fa-sitemap', 'listboard_url_name'),
     ('member', 'members', 'fa-users', 'listboard_url_name'),
     ('bcpp_subject', 'subjects', 'fa-user-circle-o', 'listboard_url_name'),
+    # ('bcpp_subject', 'follow-up', 'fa-comments-o', 'listboard_url_name'),
     ('edc_lab', None, 'fa-flask', 'home_url_name')
 ]
 for app_config_name, label, fa_icon, app_config_attr in config:

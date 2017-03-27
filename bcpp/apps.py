@@ -109,6 +109,11 @@ class EdcLabAppConfig(BaseEdcLabAppConfig):
     requisition_model = 'bcpp_subject.subjectrequisition'
     result_model = 'edc_lab.result'
 
+    @property
+    def study_site_name(self):
+        from edc_map.site_mappers import site_mappers
+        return site_mappers.current_map_area
+
 
 class EdcBaseAppConfig(BaseEdcBaseAppConfig):
     project_name = 'BCPP'
@@ -174,6 +179,7 @@ class EdcMapAppConfig(BaseEdcMapAppConfig):
     landmark_model = 'bcpp.landmark'
     verify_point_on_save = False
     zoom_levels = ['14', '15', '16', '17', '18']
+    identifier_field_attr = 'plot_identifier'
 
 
 class EdcVisitTrackingAppConfig(BaseEdcVisitTrackingAppConfig):
@@ -219,6 +225,7 @@ class EdcTimepointAppConfig(BaseEdcTimepointAppConfig):
 class EdcSyncAppConfig(BaseEdcSyncAppConfig):
     edc_sync_files_using = True
     server_ip = config['edc_sync'].get('server_ip')
+    base_template_name = 'bcpp/base.html'
 
 
 class EdcSyncFilesAppConfig(BaseEdcSyncFilesAppConfig):
@@ -229,7 +236,7 @@ class EdcSyncFilesAppConfig(BaseEdcSyncFilesAppConfig):
     source_folder = os.path.join(
         settings.MEDIA_ROOT, 'transactions', 'outgoing')
     destination_folder = os.path.join(
-        settings.MEDIA_ROOT, 'transactions', 'outgoing')
+        settings.MEDIA_ROOT, 'transactions', 'incoming')
     archive_folder = os.path.join(
         settings.MEDIA_ROOT, 'transactions', 'archive')
 
