@@ -54,6 +54,7 @@ urlpatterns = [
     url('member/', include('member.urls')),
     url('enumeration/', include('enumeration.urls')),
     url('subject/', include('bcpp_subject.urls')),
+    url('follow/', include('bcpp_follow.urls')),
     url(r'^appointment/',
         include('edc_appointment.urls')),
     url(r'^edc/', include('edc_base.urls')),

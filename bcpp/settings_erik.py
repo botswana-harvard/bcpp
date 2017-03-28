@@ -79,6 +79,7 @@ INSTALLED_APPS = [
     'bcpp.apps.MemberAppConfig',
     'bcpp.apps.EnumerationAppConfig',
     'bcpp.apps.BcppSubjectAppConfig',
+    'bcpp.apps.BcppFollowAppConfig',
     'bcpp.apps.PlotAppConfig',
     'bcpp.apps.EdcSyncAppConfig',
     'bcpp.apps.EdcSyncFilesAppConfig',
