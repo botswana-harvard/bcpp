@@ -185,6 +185,7 @@ class EdcMapAppConfig(BaseEdcMapAppConfig):
     verify_point_on_save = False
     zoom_levels = ['14', '15', '16', '17', '18']
     identifier_field_attr = 'plot_identifier'
+    extra_filter_field_attr = 'enrolled'  # Extra filter boolean attribute name.
 
 
 class EdcVisitTrackingAppConfig(BaseEdcVisitTrackingAppConfig):
