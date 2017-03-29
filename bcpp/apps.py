@@ -34,6 +34,7 @@ from edc_visit_tracking.apps import AppConfig as BaseEdcVisitTrackingAppConfig
 from edc_visit_tracking.constants import SCHEDULED, UNSCHEDULED, LOST_VISIT
 
 from bcpp_subject.apps import AppConfig as BaseBcppSubjectAppConfig
+from bcpp_follow.apps import AppConfig as BaseBcppFollowAppConfig
 from enumeration.apps import AppConfig as BaseEnumerationAppConfig
 from household.apps import AppConfig as BaseHouseholdAppConfig
 from member.apps import AppConfig as BaseMemberAppConfig
@@ -101,6 +102,10 @@ class EnumerationAppConfig(BaseEnumerationAppConfig):
 
 
 class BcppSubjectAppConfig(BaseBcppSubjectAppConfig):
+    base_template_name = 'bcpp/base.html'
+
+
+class BcppFollowAppConfig(BaseBcppFollowAppConfig):
     base_template_name = 'bcpp/base.html'
 
 
