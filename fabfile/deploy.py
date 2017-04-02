@@ -16,10 +16,11 @@ FABRIC_CONFIG_PATH = os.path.join(BASE_DIR, 'fabfile', 'fabric.conf')
 
 
 @task
-def deploy_local():
+def deploy_local(tag=None, skip_clone=None):
     execute(prepare_local_for_deploy,
             project_repo_url='https://github.com/botswana-harvard/bcpp.git',
-            tag='0.1.8',
+            tag=tag or '0.1.8',
+            skip_clone=skip_clone,
             target_os=MACOSX)
 
 
