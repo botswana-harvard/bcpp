@@ -1,3 +1,6 @@
+media/
+logs/
+.DS_Store
 git_pull.sh
 etc/
 .project
