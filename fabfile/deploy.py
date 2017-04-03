@@ -1,20 +1,22 @@
 import os
 
-from fabric.api import execute, task, env, put, sudo, cd
+from fabric.api import execute, task, env, put, sudo, cd, lcd, local
 from fabric.contrib.files import sed, exists
 from fabric.decorators import roles
 
 from bcpp_fabric.new.fabfile import (
     prepare_deploy, deploy, update_fabric_env,
     update_fabric_env_device_ids, update_fabric_env_hosts, update_fabric_env_key_volumes,
-    mount_dmg, update_fabric_env_skip_prompts, prepare_deployment_host)
+    mount_dmg, prepare_deployment_host)
 from bcpp_fabric.new.fabfile.constants import MACOSX
-from bcpp_fabric.new.fabfile.utils import get_hosts, get_device_ids
+from bcpp_fabric.new.fabfile.utils import get_hosts, get_device_ids,\
+    create_venv
 
 from .patterns import hostname_pattern
 from .roledefs import roledefs
 
 CONFIG_FILENAME = 'bcpp.conf'
+DOWNLOADS_DIR = '~/Downloads'
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 HOST_CONFIG_PATH = os.path.join(BASE_DIR, 'fabfile', 'etc')
@@ -28,25 +30,32 @@ env.device_ids = get_device_ids()
 
 @task
 @roles('deployment_hosts')
-def deployment_host(release=None, skip_clone=None, use_branch=None, download_path=None):
+def deployment_host(release=None, skip_clone=None, use_branch=None, downloads_dir=None):
     execute(prepare_deployment_host,
             project_repo_url='https://github.com/botswana-harvard/bcpp.git',
             release=release,
             skip_clone=skip_clone,
             use_branch=use_branch,
             target_os=MACOSX)
-    path = os.path.join(
-        env.deployment_root, 'downloads')
-    put(os.path.join(path, env.python_package),
-        os.path.join(env.deployment_root, env.python_package))
+    put_python_package(path=downloads_dir)
+    create_venv(name=env.project_appname,
+                venv_dir=os.path.join(env.deployment_root, 'venv'),
+                create_env=True,
+                update_requirements=True)
 
 
-@task
-@roles('deployment_hosts')
 def put_python_package(path=None):
-    path = os.path.expanduser(path)
-    put(os.path.join(path, env.python_package),
-        os.path.join(env.deployment_root, env.python_package))
+    """Puts the python package in the deployment downloads folder.
+
+    If does not exist locally in ~/Downloads will download first.
+    """
+    local_path = os.path.expanduser(path or DOWNLOADS_DIR)
+    if env.target_os == MACOSX:
+        if not os.path.exists(os.path.join(local_path, env.python_package)):
+            with lcd(env.deployment_download_dir):
+                local('wget {}'.format(env.python_package_url))
+    put(os.path.join(local_path, env.python_package),
+        os.path.join(env.deployment_download_dir, env.python_package))
 
 
 @task
@@ -73,7 +82,6 @@ def deploy_client(config_path=None, user=None, map_area=None):
     update_fabric_env_device_ids()
     update_fabric_env_hosts()
     update_fabric_env_key_volumes()
-    update_fabric_env_skip_prompts()
     execute(prepare_deploy, config_path=FABRIC_CONFIG_PATH, user=user)
     execute(put_project_conf)
     execute(update_project_conf, map_area=map_area)
