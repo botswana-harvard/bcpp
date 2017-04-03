@@ -9,10 +9,10 @@ from bcpp_fabric.new.fabfile import (
     update_fabric_env_device_ids, update_fabric_env_hosts, update_fabric_env_key_volumes,
     mount_dmg, update_fabric_env_skip_prompts, prepare_deployment_host)
 from bcpp_fabric.new.fabfile.constants import MACOSX
-from bcpp_fabric.new.fabfile.utils import get_hosts
+from bcpp_fabric.new.fabfile.utils import get_hosts, get_device_ids
 
+from .patterns import hostname_pattern
 from .roledefs import roledefs
-from fabfile.patterns import hostname_pattern
 
 CONFIG_FILENAME = 'bcpp.conf'
 
@@ -23,6 +23,7 @@ FABRIC_CONFIG_PATH = os.path.join(BASE_DIR, 'fabfile', 'fabric.conf')
 env.hosts = get_hosts(path=HOST_CONFIG_PATH)
 env.roledefs = roledefs
 env.hostname_pattern = hostname_pattern
+env.device_ids = get_device_ids()
 
 
 @task
