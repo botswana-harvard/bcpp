@@ -1,3 +1,4 @@
+git+https://github.com/botswana-harvard/bcpp-follow.git@master#egg=bcpp_follow
 git+https://github.com/botswana-harvard/bcpp-lab.git@master#egg=bcpp_lab
 git+https://github.com/botswana-harvard/bcpp-subject.git@master#egg=bcpp_subject
 git+https://github.com/botswana-harvard/edc-appointment.git@master#egg=edc_appointment
@@ -6,7 +7,6 @@ git+https://github.com/botswana-harvard/edc-consent.git@master#egg=edc_consent
 git+https://github.com/botswana-harvard/edc-constants.git@master#egg=edc_constants
 git+https://github.com/botswana-harvard/edc-dashboard.git@master#egg=edc_dashboard
 git+https://github.com/botswana-harvard/edc-device.git@master#egg=edc_device
-git+https://github.com/botswana-harvard/edc-field-label.git@master#egg=edc_field_label
 git+https://github.com/botswana-harvard/edc-identifier.git@master#egg=edc_identifier
 git+https://github.com/botswana-harvard/edc-lab.git@master#egg=edc_lab
 git+https://github.com/botswana-harvard/edc-label.git@master#egg=edc_label
@@ -30,6 +30,3 @@ git+https://github.com/botswana-harvard/plot.git@master#egg=plot
 git+https://github.com/botswana-harvard/survey.git@master#egg=survey
 git+https://github.com/erikvw/django-crypto-fields.git@master#egg=django_crypto_fields
 git+https://github.com/erikvw/django-revision.git@master#egg=django_revision
-
-# make sure pip is updated!
-# git+https://github.com/xhtml2pdf/xhtml2pdf.git
