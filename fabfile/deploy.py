@@ -12,6 +12,7 @@ from bcpp_fabric.new.fabfile.constants import MACOSX
 from bcpp_fabric.new.fabfile.utils import get_hosts
 
 from .roledefs import roledefs
+from fabfile.patterns import hostname_pattern
 
 CONFIG_FILENAME = 'bcpp.conf'
 
@@ -21,6 +22,7 @@ FABRIC_CONFIG_PATH = os.path.join(BASE_DIR, 'fabfile', 'fabric.conf')
 
 env.hosts = get_hosts(path=HOST_CONFIG_PATH)
 env.roledefs = roledefs
+env.hostname_pattern = hostname_pattern
 
 
 @task
