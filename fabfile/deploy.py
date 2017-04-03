@@ -17,10 +17,10 @@ from .roledefs import roledefs
 CONFIG_FILENAME = 'bcpp.conf'
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-HOST_CONFIG_PATH = os.path.join(BASE_DIR, 'fabfile', 'hosts.conf')
-FABRIC_CONFIG_PATH = os.path.join(BASE_DIR, 'fabfile', 'fabric.conf')
+HOST_CONFIG_PATH = os.path.join(BASE_DIR, 'fabfile', 'etc')
+FABRIC_CONFIG_PATH = os.path.join(BASE_DIR, 'fabfile', 'conf', 'fabric.conf')
 
-env.hosts = get_hosts(path=HOST_CONFIG_PATH)
+env.hosts = get_hosts(path=HOST_CONFIG_PATH, gpg_filename='hosts.conf.gpg')
 env.roledefs = roledefs
 env.hostname_pattern = hostname_pattern
 env.device_ids = get_device_ids()
@@ -28,13 +28,25 @@ env.device_ids = get_device_ids()
 
 @task
 @roles('deployment_hosts')
-def deployment_host(release=None, skip_clone=None, use_branch=None):
+def deployment_host(release=None, skip_clone=None, use_branch=None, download_path=None):
     execute(prepare_deployment_host,
             project_repo_url='https://github.com/botswana-harvard/bcpp.git',
-            release=release or '0.1.8',
+            release=release,
             skip_clone=skip_clone,
             use_branch=use_branch,
             target_os=MACOSX)
+    path = os.path.join(
+        env.deployment_root, 'downloads')
+    put(os.path.join(path, env.python_package),
+        os.path.join(env.deployment_root, env.python_package))
+
+
+@task
+@roles('deployment_hosts')
+def put_python_package(path=None):
+    path = os.path.expanduser(path)
+    put(os.path.join(path, env.python_package),
+        os.path.join(env.deployment_root, env.python_package))
 
 
 @task
