@@ -1,27 +1,20 @@
 
-1. place release conf files in a folder
+encrypt the secrets.conf
 
-    -- my_folder
-        |-- bcpp.conf
-        |-- device_ids.conf
-        |-- secrets.conf
-
-samples of each of these exist in `bcpp_fabric`
-
-2. create a secure tarball: 
-
-    cd my_folder    
-
-    tar czvpf bcpp.conf secrets.conf device_ids.conf | gpg --symmetric --cipher-algo aes256 -o
-    conf.tar.gz.gpg
+    gpg -o secrets.conf.gpg --cipher-algo AES256 --symmetric secrets.conf
     
-3. save the passphrase.
+save the passphrase.
 
-4. copy the updated tarball to bcpp/fabric and commit to the repo.
+decrypt
+
+    gpg -d secrets.conf.gpg > secrets.conf
     
-5. to use or update:
+encrypt the hosts.conf
 
-    gpg -d conf.tar.gz.gpg | tar xzvf -
+    gpg -o hosts.conf.gpg --cipher-algo AES256 --symmetric hosts.conf
     
-make your updates and create a new tarball and commit.
+save the passphrase.
 
+decrypt
+
+    gpg -d hosts.conf.gpg > hosts.conf

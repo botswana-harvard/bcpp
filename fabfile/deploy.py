@@ -2,25 +2,35 @@ import os
 
 from fabric.api import execute, task, env, put, sudo, cd
 from fabric.contrib.files import sed, exists
+from fabric.decorators import roles
 
 from bcpp_fabric.new.fabfile import (
     prepare_deploy, deploy, update_fabric_env,
     update_fabric_env_device_ids, update_fabric_env_hosts, update_fabric_env_key_volumes,
-    mount_dmg, update_fabric_env_skip_prompts, prepare_local_for_deploy)
+    mount_dmg, update_fabric_env_skip_prompts, prepare_deployment_host)
 from bcpp_fabric.new.fabfile.constants import MACOSX
+from bcpp_fabric.new.fabfile.utils import get_hosts
+
+from .roledefs import roledefs
 
 CONFIG_FILENAME = 'bcpp.conf'
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+HOST_CONFIG_PATH = os.path.join(BASE_DIR, 'fabfile', 'hosts.conf')
 FABRIC_CONFIG_PATH = os.path.join(BASE_DIR, 'fabfile', 'fabric.conf')
+
+env.hosts = get_hosts(path=HOST_CONFIG_PATH)
+env.roledefs = roledefs
 
 
 @task
-def deploy_local(tag=None, skip_clone=None):
-    execute(prepare_local_for_deploy,
+@roles('deployment_hosts')
+def deployment_host(release=None, skip_clone=None, use_branch=None):
+    execute(prepare_deployment_host,
             project_repo_url='https://github.com/botswana-harvard/bcpp.git',
-            tag=tag or '0.1.8',
+            release=release or '0.1.8',
             skip_clone=skip_clone,
+            use_branch=use_branch,
             target_os=MACOSX)
 
 
