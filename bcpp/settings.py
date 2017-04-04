@@ -13,8 +13,8 @@ import configparser
 import os
 import sys
 
-from pathlib import PurePath
 from django.core.management.color import color_style
+from pathlib import PurePath
 style = color_style()
 
 APP_NAME = 'bcpp'

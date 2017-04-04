@@ -1,6 +1,7 @@
 import os
+from pathlib import PurePath
 
-from fabric.api import execute, task, env, put, sudo, cd, lcd, local
+from fabric.api import execute, task, env, put, sudo, cd, run, lcd
 from fabric.contrib.files import sed, exists
 from fabric.decorators import roles
 
@@ -8,12 +9,14 @@ from bcpp_fabric.new.fabfile import (
     prepare_deploy, deploy, update_fabric_env,
     update_fabric_env_device_ids, update_fabric_env_hosts, update_fabric_env_key_volumes,
     mount_dmg, prepare_deployment_host)
-from bcpp_fabric.new.fabfile.constants import MACOSX
-from bcpp_fabric.new.fabfile.utils import get_hosts, get_device_ids,\
-    create_venv
+from bcpp_fabric.new.fabfile.utils import (
+    get_hosts, get_device_ids,
+    create_venv, install_venv, download_pip_archives, get_archive_name)
 
 from .patterns import hostname_pattern
 from .roledefs import roledefs
+from bcpp_fabric.new.fabfile.deployment_host.deploy import update_env_secrets
+from fabric.utils import abort
 
 CONFIG_FILENAME = 'bcpp.conf'
 DOWNLOADS_DIR = '~/Downloads'
@@ -22,40 +25,29 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 HOST_CONFIG_PATH = os.path.join(BASE_DIR, 'fabfile', 'etc')
 FABRIC_CONFIG_PATH = os.path.join(BASE_DIR, 'fabfile', 'conf', 'fabric.conf')
 
-env.hosts = get_hosts(path=HOST_CONFIG_PATH, gpg_filename='hosts.conf.gpg')
+# env.hosts = get_hosts(path=HOST_CONFIG_PATH, gpg_filename='hosts.conf.gpg')
 env.roledefs = roledefs
 env.hostname_pattern = hostname_pattern
-env.device_ids = get_device_ids()
+# env.device_ids = get_device_ids()
 
 
 @task
 @roles('deployment_hosts')
-def deployment_host(release=None, skip_clone=None, use_branch=None, downloads_dir=None):
+def deployment_host(bootstrap_path=None, release=None, skip_clone=None, use_branch=None):
     execute(prepare_deployment_host,
-            project_repo_url='https://github.com/botswana-harvard/bcpp.git',
+            bootstrap_path=bootstrap_path,
             release=release,
             skip_clone=skip_clone,
-            use_branch=use_branch,
-            target_os=MACOSX)
-    put_python_package(path=downloads_dir)
+            use_branch=use_branch)
     create_venv(name=env.project_appname,
                 venv_dir=os.path.join(env.deployment_root, 'venv'),
                 create_env=True,
-                update_requirements=True)
-
-
-def put_python_package(path=None):
-    """Puts the python package in the deployment downloads folder.
-
-    If does not exist locally in ~/Downloads will download first.
-    """
-    local_path = os.path.expanduser(path or DOWNLOADS_DIR)
-    if env.target_os == MACOSX:
-        if not os.path.exists(os.path.join(local_path, env.python_package)):
-            with lcd(env.deployment_download_dir):
-                local('wget {}'.format(env.python_package_url))
-    put(os.path.join(local_path, env.python_package),
-        os.path.join(env.deployment_download_dir, env.python_package))
+                update_requirements=False)
+    with cd(str(PurePath(env.deployment_root).parent)):
+        path = PurePath(env.deployment_root).parts[-1:][0]
+        archive_name = get_archive_name(
+            deployment_root=env.deployment_root, release=release)
+        run('tar -cjf {archive_name} {path}'.format(archive_name=archive_name, path=path))
 
 
 @task
@@ -73,10 +65,32 @@ def mysql():
     pass
 
 
-@task()
-def deploy_client(config_path=None, user=None, map_area=None):
-    if not map_area:
-        map_area = input('Enter the map_area:')
+@task
+def deploy_client(project_appname=None, deployment_root=None, release=None, map_area=None, user=None):
+    if not project_appname:
+        abort('Specify the project_appname (e.g. bcpp)')
+    if not deployment_root:
+        abort('Specify the deployment_root')
+    if not release:
+        abort('Specify the release')
+    env.map_area = map_area
+    env.deployment_root = deployment_root
+    env.project_appname = project_appname
+    path = str(PurePath(env.deployment_root).parent)
+    run('mkdir -p {path}'.format(path=str(PurePath(env.deployment_root).parent)))
+    path = str(PurePath(env.deployment_root).parent)
+    archive_name = get_archive_name(
+        deployment_root=deployment_root, release=release)
+    put(local_path=os.path.join(path, archive_name), remote_path=path)
+    with cd(path):
+        run('tar -xjf {archive_name}'.format(archive_name=archive_name))
+    install_venv(venv_name=project_appname)
+    update_env_secrets()
+    update_fabric_env()
+
+
+@task
+def deploy_client2(config_path=None, user=None, map_area=None):
     env.map_area = map_area
     update_fabric_env(fabric_config_path=FABRIC_CONFIG_PATH)
     update_fabric_env_device_ids()
@@ -88,7 +102,6 @@ def deploy_client(config_path=None, user=None, map_area=None):
     execute(update_settings)
     execute(deploy, config_path=FABRIC_CONFIG_PATH,
             user=user, update_environment=False)
-    execute(put_key_volume)
     env.prompts = {'Enter disk image passphrase:': env.key_volume_password}
     execute(mount_dmg, dmg_filename=env.dmg_filename,
             dmg_path=env.dmg_path)
@@ -138,14 +151,3 @@ def update_project_conf(config_filename=None, map_area=None):
     sed(remote_copy, 'map_area \=.*',
         'map_area \= {}'.format(env.map_area or ''),
         use_sudo=True)
-
-
-@task
-def put_key_volume(config_filename=None, map_area=None):
-    """Copies the key volume file to remote etc_dir.
-    """
-    config_filename = config_filename or CONFIG_FILENAME
-    local_copy = os.path.join(os.path.expanduser(
-        env.deployment_root), env.dmg_filename)
-    remote_copy = os.path.join(env.etc_dir, env.dmg_filename)
-    put(local_copy, remote_copy, use_sudo=True)
