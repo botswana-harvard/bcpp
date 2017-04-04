@@ -1,22 +1,23 @@
 import os
 from pathlib import PurePath
 
-from fabric.api import execute, task, env, put, sudo, cd, run, lcd
+from fabric.api import execute, task, env, put, sudo, cd, run
 from fabric.contrib.files import sed, exists
 from fabric.decorators import roles
+from fabric.utils import abort
 
 from bcpp_fabric.new.fabfile import (
     prepare_deploy, deploy, update_fabric_env,
-    update_fabric_env_device_ids, update_fabric_env_hosts, update_fabric_env_key_volumes,
+    update_fabric_env_device_ids, update_fabric_env_hosts,
+    update_fabric_env_key_volumes,
     mount_dmg, prepare_deployment_host)
 from bcpp_fabric.new.fabfile.utils import (
-    get_hosts, get_device_ids,
-    create_venv, install_venv, download_pip_archives, get_archive_name)
+    get_hosts, get_device_ids, update_env_secrets,
+    create_venv, pip_install_from_cache, get_archive_name, bootstrap_env)
 
 from .patterns import hostname_pattern
 from .roledefs import roledefs
-from bcpp_fabric.new.fabfile.deployment_host.deploy import update_env_secrets
-from fabric.utils import abort
+from bcpp_fabric.new.fabfile.repositories import get_repo_name
 
 CONFIG_FILENAME = 'bcpp.conf'
 DOWNLOADS_DIR = '~/Downloads'
@@ -25,7 +26,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 HOST_CONFIG_PATH = os.path.join(BASE_DIR, 'fabfile', 'etc')
 FABRIC_CONFIG_PATH = os.path.join(BASE_DIR, 'fabfile', 'conf', 'fabric.conf')
 
-# env.hosts = get_hosts(path=HOST_CONFIG_PATH, gpg_filename='hosts.conf.gpg')
+env.hosts = get_hosts(path=HOST_CONFIG_PATH, gpg_filename='hosts.conf.gpg')
 env.roledefs = roledefs
 env.hostname_pattern = hostname_pattern
 # env.device_ids = get_device_ids()
@@ -39,15 +40,6 @@ def deployment_host(bootstrap_path=None, release=None, skip_clone=None, use_bran
             release=release,
             skip_clone=skip_clone,
             use_branch=use_branch)
-    create_venv(name=env.project_appname,
-                venv_dir=os.path.join(env.deployment_root, 'venv'),
-                create_env=True,
-                update_requirements=False)
-    with cd(str(PurePath(env.deployment_root).parent)):
-        path = PurePath(env.deployment_root).parts[-1:][0]
-        archive_name = get_archive_name(
-            deployment_root=env.deployment_root, release=release)
-        run('tar -cjf {archive_name} {path}'.format(archive_name=archive_name, path=path))
 
 
 @task
@@ -66,27 +58,36 @@ def mysql():
 
 
 @task
-def deploy_client(project_appname=None, deployment_root=None, release=None, map_area=None, user=None):
-    if not project_appname:
-        abort('Specify the project_appname (e.g. bcpp)')
-    if not deployment_root:
-        abort('Specify the deployment_root')
+def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None):
+    """Deploy clients from the deployment host.
+
+    Assumes you have already prepared the deployment host
+    """
+    bootstrap_env(path=bootstrap_path, filename='bootstrap_client.conf')
     if not release:
         abort('Specify the release')
+    if not release:
+        abort('Specify the map_area')
+    env.project_release = release
     env.map_area = map_area
-    env.deployment_root = deployment_root
-    env.project_appname = project_appname
-    path = str(PurePath(env.deployment_root).parent)
+    env.project_repo_name = get_repo_name(env.project_repo_url)
+    env.project_repo_root = os.path.join(
+        env.deployment_root, env.project_repo_name)
+    env.fabric_config_root = os.path.join(env.project_repo_root, 'fabfile')
+
     run('mkdir -p {path}'.format(path=str(PurePath(env.deployment_root).parent)))
     path = str(PurePath(env.deployment_root).parent)
-    archive_name = get_archive_name(
-        deployment_root=deployment_root, release=release)
+    archive_name = get_archive_name()
     put(local_path=os.path.join(path, archive_name), remote_path=path)
     with cd(path):
         run('tar -xjf {archive_name}'.format(archive_name=archive_name))
-    install_venv(venv_name=project_appname)
     update_env_secrets()
     update_fabric_env()
+    create_venv(name=env.venv_name,
+                venv_dir=env.venv_dir,
+                create_env=True,
+                update_requirements=False)
+    pip_install_from_cache()
 
 
 @task
