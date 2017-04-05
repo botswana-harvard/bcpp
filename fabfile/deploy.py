@@ -36,7 +36,7 @@ env.hosts, env.passwords = get_hosts(
 env.hostname_pattern = hostname_pattern
 # env.device_ids = get_device_ids()
 
-pprint(env.hosts)
+print(env.roles, env.hosts)
 # pprint(env.passwords)
 
 env.skip_bad_hosts = True
@@ -44,7 +44,6 @@ env.session = uuid.uuid4().hex
 
 
 @task
-@roles('deployment_hosts')
 def deployment_host(bootstrap_path=None, release=None, skip_clone=None, use_branch=None):
     execute(prepare_deployment_host,
             bootstrap_path=bootstrap_path,
