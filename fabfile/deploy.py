@@ -4,9 +4,9 @@ import os
 from datetime import datetime
 from pathlib import PurePath
 
-from fabric.api import execute, task, env, put, sudo, cd, run, lcd, local
+from fabric.api import execute, task, env, put, sudo, cd, run, lcd, local, warn
+from fabric.colors import yellow
 from fabric.contrib.files import sed, exists
-from fabric.decorators import roles
 from fabric.utils import abort
 
 from bcpp_fabric.new.fabfile import (
@@ -51,21 +51,18 @@ env.session = uuid.uuid4().hex
 
 
 @task
-def deployment_host(bootstrap_path=None, release=None, skip_clone=None, use_branch=None):
+def deployment_host(bootstrap_path=None, release=None, skip_clone=None, use_branch=None, bootstrap_branch=None):
     execute(prepare_deployment_host,
             bootstrap_path=bootstrap_path,
             release=release,
             skip_clone=skip_clone,
-            use_branch=use_branch)
+            use_branch=use_branch,
+            bootstrap_branch=bootstrap_branch)
 
 
 @task
-def deploy_centralserver():
-    with lcd(BASE_DIR):
-        result = local('git status')
-        results = result.split('\n')
-        if results[0] != 'On branch master':
-            abort(results[0])
+def deploy_centralserver(local_branch=None):
+    pass
 
 
 @task
@@ -79,12 +76,16 @@ def mysql():
 
 
 @task
-def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None):
+def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
+                  bootstrap_branch=None):
     """Deploy clients from the deployment host.
 
     Assumes you have already prepared the deployment host
     """
-    bootstrap_env(path=bootstrap_path, filename='bootstrap_client.conf')
+    bootstrap_env(
+        path=bootstrap_path,
+        filename='bootstrap_client.conf',
+        bootstrap_branch=bootstrap_branch)
     if not release:
         abort('Specify the release')
     if not map_area:
