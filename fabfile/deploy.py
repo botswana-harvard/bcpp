@@ -4,7 +4,7 @@ import os
 from datetime import datetime
 from pathlib import PurePath
 
-from fabric.api import execute, task, env, put, sudo, cd, run
+from fabric.api import execute, task, env, put, sudo, cd, run, lcd, local
 from fabric.contrib.files import sed, exists
 from fabric.decorators import roles
 from fabric.utils import abort
@@ -20,11 +20,10 @@ from bcpp_fabric.new.fabfile.utils import (
     bootstrap_env, install_gpg, test_connection, gpg)
 from bcpp_fabric.new.fabfile.repositories import get_repo_name
 from bcpp_fabric.new.fabfile.mysql import install_mysql
+from bcpp_fabric.new.fabfile.nginx import install_nginx
 
 from .patterns import hostname_pattern
 from .roledefs import roledefs
-from pprint import pprint
-from bcpp_fabric.new.fabfile.nginx import install_nginx
 
 CONFIG_FILENAME = 'bcpp.conf'
 DOWNLOADS_DIR = '~/Downloads'
@@ -33,9 +32,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ETC_CONFIG_PATH = os.path.join(BASE_DIR, 'fabfile', 'etc')
 FABRIC_CONFIG_PATH = os.path.join(BASE_DIR, 'fabfile', 'conf', 'fabric.conf')
 
-env.log_filename = '~/fabric_{}.txt'.format(
-    datetime.now().strftime('%Y%m%d%H%I'))
-print('log_filename', env.log_filename)
+env.log_folder = os.path.expanduser('~/fabric/{}'.format(
+    datetime.now().strftime('%Y%m%d%H%M%S')))
+os.makedirs(env.log_folder)
+print('log_folder', env.log_folder)
 update_env_secrets(path=ETC_CONFIG_PATH)
 env.roledefs = roledefs
 env.hosts, env.passwords = get_hosts(
@@ -43,10 +43,10 @@ env.hosts, env.passwords = get_hosts(
 env.hostname_pattern = hostname_pattern
 env.device_ids = get_device_ids()
 
-print(env.roles, env.hosts)
-# pprint(env.passwords)
+with open(os.path.join(env.log_folder, 'hosts.txt'), 'a') as f:
+    f.write('{}\n'.format(',\n'.join([h for h in env.hosts])))
 
-env.skip_bad_hosts = True
+# env.skip_bad_hosts = True
 env.session = uuid.uuid4().hex
 
 
@@ -61,7 +61,11 @@ def deployment_host(bootstrap_path=None, release=None, skip_clone=None, use_bran
 
 @task
 def deploy_centralserver():
-    pass
+    with lcd(BASE_DIR):
+        result = local('git status')
+        results = result.split('\n')
+        if results[0] != 'On branch master':
+            abort(results[0])
 
 
 @task
@@ -75,7 +79,7 @@ def mysql():
 
 
 @task
-def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None, use_gpg=None):
+def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None):
     """Deploy clients from the deployment host.
 
     Assumes you have already prepared the deployment host
@@ -83,7 +87,7 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None, u
     bootstrap_env(path=bootstrap_path, filename='bootstrap_client.conf')
     if not release:
         abort('Specify the release')
-    if not release:
+    if not map_area:
         abort('Specify the map_area')
     env.project_release = release
     env.map_area = map_area
@@ -93,7 +97,6 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None, u
     env.fabric_config_root = os.path.join(env.project_repo_root, 'fabfile')
     env.fabric_config_path = os.path.join(
         env.fabric_config_root, 'conf', env.fabric_conf)
-
     run('mkdir -p {path}'.format(path=str(PurePath(env.deployment_root).parent)))
     path = str(PurePath(env.deployment_root).parent)
     archive_name = get_archive_name()
@@ -101,8 +104,6 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None, u
     with cd(path):
         run('tar -xjf {archive_name}'.format(archive_name=archive_name))
     update_fabric_env()
-    # if not use_gpg:
-    #    run('brew install gnupg gnupg2')
     install_mysql()
     install_nginx()
     create_venv(name=env.venv_name,
