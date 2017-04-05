@@ -13,8 +13,8 @@ import configparser
 import os
 import sys
 
-from pathlib import PurePath
 from django.core.management.color import color_style
+from pathlib import PurePath
 style = color_style()
 
 APP_NAME = 'bcpp'
@@ -27,13 +27,14 @@ if DEBUG:
     ETC_DIR = str(PurePath(BASE_DIR).joinpath('etc'))
     ALLOWED_HOSTS = []
 else:
-    ETC_DIR = '/etc'
+    ETC_DIR = '/etc/'
     ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
-sys.stdout.write(style.SUCCESS('Reading config from {}\n'.format(ETC_DIR)))
+CONFIG_PATH = os.path.join(ETC_DIR, APP_NAME, CONFIG_FILE)
+sys.stdout.write(style.SUCCESS('Reading config from {}\n'.format(CONFIG_PATH)))
 
 config = configparser.RawConfigParser()
-config.read(os.path.join(ETC_DIR, CONFIG_FILE))
+config.read(os.path.join(CONFIG_PATH))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config['django'].get('secret_key', 'blah$blah$blah')
