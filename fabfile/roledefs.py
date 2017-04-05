@@ -5,4 +5,5 @@ roledefs = {
     'lenstweletau': ['bcpp0{}'.format(i + 25) for i in range(0, 15)],
     'mmathethe': ['bcpp0{}'.format(i + 40) for i in range(0, 15)],
     'letlhakeng': ['bcpp0{}'.format(i + 55) for i in range(0, 15)],
+    'testhosts': ['bcpp071', 'bcpp072', 'bcpp079', 'bcpp074', 'bcpp073'],
 }

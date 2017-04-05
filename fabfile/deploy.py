@@ -1,3 +1,4 @@
+import uuid
 import os
 from pathlib import PurePath
 
@@ -8,16 +9,19 @@ from fabric.utils import abort
 
 from bcpp_fabric.new.fabfile import (
     prepare_deploy, deploy, update_fabric_env,
-    update_fabric_env_device_ids, update_fabric_env_hosts,
+    update_fabric_env_device_ids,
     update_fabric_env_key_volumes,
     mount_dmg, prepare_deployment_host)
 from bcpp_fabric.new.fabfile.utils import (
     get_hosts, get_device_ids, update_env_secrets,
-    create_venv, pip_install_from_cache, get_archive_name, bootstrap_env)
+    create_venv, pip_install_from_cache, get_archive_name,
+    bootstrap_env, install_gpg, test_connection, gpg)
+from bcpp_fabric.new.fabfile.repositories import get_repo_name
+from bcpp_fabric.new.fabfile.mysql import install_mysql
 
 from .patterns import hostname_pattern
 from .roledefs import roledefs
-from bcpp_fabric.new.fabfile.repositories import get_repo_name
+from pprint import pprint
 
 CONFIG_FILENAME = 'bcpp.conf'
 DOWNLOADS_DIR = '~/Downloads'
@@ -26,10 +30,17 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 HOST_CONFIG_PATH = os.path.join(BASE_DIR, 'fabfile', 'etc')
 FABRIC_CONFIG_PATH = os.path.join(BASE_DIR, 'fabfile', 'conf', 'fabric.conf')
 
-env.hosts = get_hosts(path=HOST_CONFIG_PATH, gpg_filename='hosts.conf.gpg')
 env.roledefs = roledefs
+env.hosts, env.passwords = get_hosts(
+    path=HOST_CONFIG_PATH, gpg_filename='hosts.conf.gpg')
 env.hostname_pattern = hostname_pattern
 # env.device_ids = get_device_ids()
+
+pprint(env.hosts)
+# pprint(env.passwords)
+
+env.skip_bad_hosts = True
+env.session = uuid.uuid4().hex
 
 
 @task
@@ -74,6 +85,8 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None):
     env.project_repo_root = os.path.join(
         env.deployment_root, env.project_repo_name)
     env.fabric_config_root = os.path.join(env.project_repo_root, 'fabfile')
+    env.fabric_config_path = os.path.join(
+        env.fabric_config_root, 'conf', env.fabric_conf)
 
     run('mkdir -p {path}'.format(path=str(PurePath(env.deployment_root).parent)))
     path = str(PurePath(env.deployment_root).parent)
@@ -81,8 +94,10 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None):
     put(local_path=os.path.join(path, archive_name), remote_path=path)
     with cd(path):
         run('tar -xjf {archive_name}'.format(archive_name=archive_name))
-    update_env_secrets()
     update_fabric_env()
+    run('brew install gnupg gnupg2')
+    install_mysql()
+    update_env_secrets()
     create_venv(name=env.venv_name,
                 venv_dir=env.venv_dir,
                 create_env=True,
@@ -90,22 +105,22 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None):
     pip_install_from_cache()
 
 
-@task
-def deploy_client2(config_path=None, user=None, map_area=None):
-    env.map_area = map_area
-    update_fabric_env(fabric_config_path=FABRIC_CONFIG_PATH)
-    update_fabric_env_device_ids()
-    update_fabric_env_hosts()
-    update_fabric_env_key_volumes()
-    execute(prepare_deploy, config_path=FABRIC_CONFIG_PATH, user=user)
-    execute(put_project_conf)
-    execute(update_project_conf, map_area=map_area)
-    execute(update_settings)
-    execute(deploy, config_path=FABRIC_CONFIG_PATH,
-            user=user, update_environment=False)
-    env.prompts = {'Enter disk image passphrase:': env.key_volume_password}
-    execute(mount_dmg, dmg_filename=env.dmg_filename,
-            dmg_path=env.dmg_path)
+# @task
+# def deploy_client2(config_path=None, user=None, map_area=None):
+#     env.map_area = map_area
+#     update_fabric_env(fabric_config_path=FABRIC_CONFIG_PATH)
+#     update_fabric_env_device_ids()
+#     update_fabric_env_hosts()
+#     update_fabric_env_key_volumes()
+#     execute(prepare_deploy, config_path=FABRIC_CONFIG_PATH, user=user)
+#     execute(put_project_conf)
+#     execute(update_project_conf, map_area=map_area)
+#     execute(update_settings)
+#     execute(deploy, config_path=FABRIC_CONFIG_PATH,
+#             user=user, update_environment=False)
+#     env.prompts = {'Enter disk image passphrase:': env.key_volume_password}
+#     execute(mount_dmg, dmg_filename=env.dmg_filename,
+#             dmg_path=env.dmg_path)
 
 
 @task
