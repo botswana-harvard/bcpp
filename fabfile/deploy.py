@@ -17,7 +17,7 @@ from bcpp_fabric.new.fabfile import (
 from bcpp_fabric.new.fabfile.utils import (
     get_hosts, get_device_ids, update_env_secrets,
     create_venv, pip_install_from_cache, get_archive_name,
-    bootstrap_env, install_gpg, test_connection, gpg)
+    bootstrap_env, install_gpg, test_connection, gpg, ssh_copy_id)
 from bcpp_fabric.new.fabfile.repositories import get_repo_name
 from bcpp_fabric.new.fabfile.mysql import install_mysql
 from bcpp_fabric.new.fabfile.nginx import install_nginx
@@ -47,11 +47,11 @@ with open(os.path.join(env.log_folder, 'hosts.txt'), 'a') as f:
     f.write('{}\n'.format(',\n'.join([h for h in env.hosts])))
 
 # env.skip_bad_hosts = True
-env.session = uuid.uuid4().hex
 
 
 @task
-def deployment_host(bootstrap_path=None, release=None, skip_clone=None, use_branch=None, bootstrap_branch=None):
+def deployment_host(bootstrap_path=None, release=None, skip_clone=None,
+                    use_branch=None, bootstrap_branch=None):
     execute(prepare_deployment_host,
             bootstrap_path=bootstrap_path,
             release=release,
@@ -90,6 +90,7 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
         abort('Specify the release')
     if not map_area:
         abort('Specify the map_area')
+    local('ssh_copy_id {}'.format(env.host_string))
     env.project_release = release
     env.map_area = map_area
     env.project_repo_name = get_repo_name(env.project_repo_url)
