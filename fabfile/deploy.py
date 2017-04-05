@@ -1,5 +1,7 @@
 import uuid
 import os
+
+from datetime import datetime
 from pathlib import PurePath
 
 from fabric.api import execute, task, env, put, sudo, cd, run
@@ -27,14 +29,18 @@ CONFIG_FILENAME = 'bcpp.conf'
 DOWNLOADS_DIR = '~/Downloads'
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-HOST_CONFIG_PATH = os.path.join(BASE_DIR, 'fabfile', 'etc')
+ETC_CONFIG_PATH = os.path.join(BASE_DIR, 'fabfile', 'etc')
 FABRIC_CONFIG_PATH = os.path.join(BASE_DIR, 'fabfile', 'conf', 'fabric.conf')
 
+env.log_filename = '~/fabric_{}.txt'.format(
+    datetime.now().strftime('%Y%m%d%h%i'))
+print('log_filename', env.log_filename)
+update_env_secrets(path=ETC_CONFIG_PATH)
 env.roledefs = roledefs
 env.hosts, env.passwords = get_hosts(
-    path=HOST_CONFIG_PATH, gpg_filename='hosts.conf.gpg')
+    path=ETC_CONFIG_PATH, gpg_filename='hosts.conf.gpg')
 env.hostname_pattern = hostname_pattern
-# env.device_ids = get_device_ids()
+env.device_ids = get_device_ids()
 
 print(env.roles, env.hosts)
 # pprint(env.passwords)
@@ -68,7 +74,7 @@ def mysql():
 
 
 @task
-def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None):
+def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None, use_gpg=None):
     """Deploy clients from the deployment host.
 
     Assumes you have already prepared the deployment host
@@ -94,9 +100,9 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None):
     with cd(path):
         run('tar -xjf {archive_name}'.format(archive_name=archive_name))
     update_fabric_env()
-    run('brew install gnupg gnupg2')
+    if not use_gpg:
+        run('brew install gnupg gnupg2')
     install_mysql()
-    update_env_secrets()
     create_venv(name=env.venv_name,
                 venv_dir=env.venv_dir,
                 create_env=True,

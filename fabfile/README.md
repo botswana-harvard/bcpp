@@ -29,6 +29,12 @@ Using the bootstrap.conf in the bcpp repo:
 
 ## deploy clients
 
+Test connections, OS version, MYSQL version and nginx for `lentsweletau`:
+
+    fab -R lentsweletau deploy.deploy_client:bootstrap_path=/Users/erikvw/source/bcpp/fabfile/conf/
+
+After tests inspect `~/lentsweletau.txt`
+
 Deploy a client from the deployment host:
 
     fab -H <hostname> deploy.deploy_client:bootstrap_path=/Users/erikvw/source/bcpp/fabfile/conf/
