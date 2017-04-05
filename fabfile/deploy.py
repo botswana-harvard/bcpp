@@ -33,7 +33,7 @@ ETC_CONFIG_PATH = os.path.join(BASE_DIR, 'fabfile', 'etc')
 FABRIC_CONFIG_PATH = os.path.join(BASE_DIR, 'fabfile', 'conf', 'fabric.conf')
 
 env.log_filename = '~/fabric_{}.txt'.format(
-    datetime.now().strftime('%Y%m%d%h%i'))
+    datetime.now().strftime('%Y%m%d%H%I'))
 print('log_filename', env.log_filename)
 update_env_secrets(path=ETC_CONFIG_PATH)
 env.roledefs = roledefs
