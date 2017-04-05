@@ -24,6 +24,7 @@ from bcpp_fabric.new.fabfile.mysql import install_mysql
 from .patterns import hostname_pattern
 from .roledefs import roledefs
 from pprint import pprint
+from bcpp_fabric.new.fabfile.nginx import install_nginx
 
 CONFIG_FILENAME = 'bcpp.conf'
 DOWNLOADS_DIR = '~/Downloads'
@@ -100,9 +101,10 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None, u
     with cd(path):
         run('tar -xjf {archive_name}'.format(archive_name=archive_name))
     update_fabric_env()
-    if not use_gpg:
-        run('brew install gnupg gnupg2')
+    # if not use_gpg:
+    #    run('brew install gnupg gnupg2')
     install_mysql()
+    install_nginx()
     create_venv(name=env.venv_name,
                 venv_dir=env.venv_dir,
                 create_env=True,
