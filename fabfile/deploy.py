@@ -8,6 +8,7 @@ from fabric.api import execute, task, env, put, sudo, cd, run, lcd, local, warn
 from fabric.colors import yellow
 from fabric.contrib.files import sed, exists
 from fabric.utils import abort
+from fabric.contrib import django
 
 from bcpp_fabric.new.fabfile import (
     prepare_deploy, deploy, update_fabric_env,
@@ -24,6 +25,9 @@ from bcpp_fabric.new.fabfile.nginx import install_nginx
 
 from .patterns import hostname_pattern
 from .roledefs import roledefs
+
+
+django.settings_module('bcpp.settings')
 
 CONFIG_FILENAME = 'bcpp.conf'
 DOWNLOADS_DIR = '~/Downloads'
