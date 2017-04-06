@@ -36,8 +36,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ETC_CONFIG_PATH = os.path.join(BASE_DIR, 'fabfile', 'etc')
 FABRIC_CONFIG_PATH = os.path.join(BASE_DIR, 'fabfile', 'conf', 'fabric.conf')
 
-env.log_folder = os.path.expanduser('~/fabric/{}'.format(
-    datetime.now().strftime('%Y%m%d%H%M%S')))
+timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
+env.log_folder = os.path.expanduser('~/fabric/{}'.format(timestamp))
 os.makedirs(env.log_folder)
 print('log_folder', env.log_folder)
 update_env_secrets(path=ETC_CONFIG_PATH)
@@ -54,12 +54,13 @@ with open(os.path.join(env.log_folder, 'hosts.txt'), 'a') as f:
 
 
 @task
-def deployment_host(bootstrap_path=None, release=None, skip_clone=None,
+def deployment_host(bootstrap_path=None, release=None, skip_clone=None, skip_pip_download=None,
                     use_branch=None, bootstrap_branch=None):
     execute(prepare_deployment_host,
             bootstrap_path=bootstrap_path,
             release=release,
             skip_clone=skip_clone,
+            skip_pip_download=skip_pip_download,
             use_branch=use_branch,
             bootstrap_branch=bootstrap_branch)
 
@@ -94,7 +95,6 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
         abort('Specify the release')
     if not map_area:
         abort('Specify the map_area')
-    local('ssh_copy_id {}'.format(env.host_string))
     env.project_release = release
     env.map_area = map_area
     env.project_repo_name = get_repo_name(env.project_repo_url)
@@ -103,15 +103,53 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
     env.fabric_config_root = os.path.join(env.project_repo_root, 'fabfile')
     env.fabric_config_path = os.path.join(
         env.fabric_config_root, 'conf', env.fabric_conf)
+    run('rm -rf {path}'.format(path=env.deployment_root), warn_only=True)
     run('mkdir -p {path}'.format(path=str(PurePath(env.deployment_root).parent)))
     path = str(PurePath(env.deployment_root).parent)
-    archive_name = get_archive_name()
-    put(local_path=os.path.join(path, archive_name), remote_path=path)
+    deployment_archive_name = get_archive_name()
+    put(local_path=os.path.join(path, deployment_archive_name), remote_path=path)
     with cd(path):
-        run('tar -xjf {archive_name}'.format(archive_name=archive_name))
+        run('tar -xjf {deployment_archive_name}'.format(
+            deployment_archive_name=deployment_archive_name))
+
     update_fabric_env()
+
+    # copy repo to source
+    if exists(env.remote_source_root):
+        with cd(env.remote_source_root):
+            run('tar -cjf {project_appname}_{timestamp}.tar.gz {project_appname}'.format(
+                project_appname=env.project_appname,
+                timestamp=timestamp))
+        remote_media = os.path.join(env.remote_source_root, 'media')
+        if exists(remote_media):
+            run('cp -R {old_remote_media}/ {new_remote_media}'.format(
+                old_remote_media=remote_media,
+                new_remote_media=env.media_root))
+        remote_static = os.path.join(
+            env.remote_source_root, env.project_repo_name, 'static')
+        if exists(remote_static):
+            run('cp -R {remote_static}/ {static_root}'.format(
+                remote_static=remote_static,
+                static_root=env.static_root))
+        run('rm -rf {remote_source_root}'.format(
+            remote_source_root=env.remote_source_root))
+        run('cp -R {source} {destination}'.format(
+            source=os.path.join(env.deployment_root, env.project_repo_name),
+            destination=env.remote_source_root))
+        with cd(env.project_repo_root):
+            run('git checkout master')
+    if not exists(env.static_root):
+        run('mkdir {static_root}'.format(
+            static_root=env.static_root), warn_only=True)
+    if not exists(env.media_root):
+        run('mkdir {media_root}'.format(
+            media_root=env.media_root), warn_only=True)
+
+    # copy bcpp.conf
     install_mysql()
-    install_nginx()
+
+    install_nginx(skip_bootstrap=True)
+
     create_venv(name=env.venv_name,
                 venv_dir=env.venv_dir,
                 create_env=True,
