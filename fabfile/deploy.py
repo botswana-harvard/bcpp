@@ -182,9 +182,10 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
     put(os.path.expanduser(project_conf),
         '/etc/{project_appname}/'.format(
             project_appname=env.project_appname), use_sudo=True)
-    put(os.path.expanduser(os.path.join(env.deployment_dmg_dir, env.dmg_filename),
-                           '/etc/{project_appname}/'.format(
-        project_appname=env.project_appname), use_sudo=True))
+    # crypto_keys
+    put(os.path.expanduser(os.path.join(env.fabric_config_root, 'etc', env.dmg_filename)),
+        '/etc/{project_appname}/'.format(
+        project_appname=env.project_appname), use_sudo=True)
 
     # copy key.dmg
 

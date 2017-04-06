@@ -25,10 +25,9 @@ DEBUG = True
 CONFIG_FILE = '{}.conf'.format(APP_NAME)
 if DEBUG:
     ETC_DIR = str(PurePath(BASE_DIR).joinpath('etc'))
-    ALLOWED_HOSTS = []
 else:
-    ETC_DIR = '/etc/'
-    ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+    ETC_DIR = '/etc/bcpp'
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 CONFIG_PATH = os.path.join(ETC_DIR, APP_NAME, CONFIG_FILE)
 sys.stdout.write(style.SUCCESS('Reading config from {}\n'.format(CONFIG_PATH)))
