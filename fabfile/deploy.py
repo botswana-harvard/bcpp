@@ -25,6 +25,7 @@ from bcpp_fabric.new.fabfile.nginx import install_nginx
 
 from .patterns import hostname_pattern
 from .roledefs import roledefs
+from bcpp_fabric.new.fabfile.gunicorn.tasks import install_gunicorn
 
 
 django.settings_module('bcpp.settings')
@@ -163,16 +164,29 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
         run('mkdir {media_root}'.format(
             media_root=env.media_root), warn_only=True)
 
-    # copy bcpp.conf
-
     install_mysql()
+
+    # install_gunicorn()
 
     install_nginx(skip_bootstrap=True)
 
-    # install_virtualenv()
+    # create_venv()
 
-    # make_virtualenv()
-    create_venv()
+    # copy bcpp.conf and keys
+    project_conf = os.path.join(
+        env.fabric_config_root, 'conf', env.project_conf)
+    if not exists('/etc/{project_appname}'.format(
+            project_appname=env.project_appname)):
+        sudo('mkdir /etc/{project_appname}'.format(
+            project_appname=env.project_appname))
+    put(os.path.expanduser(project_conf),
+        '/etc/{project_appname}/'.format(
+            project_appname=env.project_appname), use_sudo=True)
+    put(os.path.expanduser(os.path.join(env.deployment_dmg_dir, env.dmg_filename),
+                           '/etc/{project_appname}/'.format(
+        project_appname=env.project_appname), use_sudo=True))
+
+    # copy key.dmg
 
 
 # @task
