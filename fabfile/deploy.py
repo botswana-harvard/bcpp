@@ -167,11 +167,11 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
     install_mysql()
     # mysql copy archive, backup, drop create, timezone, restore
 
-    install_gunicorn()
+    # install_gunicorn()
 
     install_nginx(skip_bootstrap=True)
 
-    create_venv()
+    # create_venv()
 
     # copy bcpp.conf into etc/{project_app_name}/
     put_project_conf()
@@ -204,8 +204,8 @@ def put_project_conf(project_conf=None, map_area=None):
     """Copies the projects <appname>.conf file to remote etc_dir.
     """
     project_conf = project_conf or env.project_conf
-    local_copy = os.path.join(os.path.expanduser(
-        env.deployment_root), project_conf)
+    local_copy = os.path.expanduser(os.path.join(
+        env.fabric_config_root, 'conf', project_conf))
     remote_copy = os.path.join(env.etc_dir, project_conf)
     if not exists(env.etc_dir):
         sudo('mkdir {etc_dir}'.format(etc_dir=env.etc_dir))
@@ -214,7 +214,7 @@ def put_project_conf(project_conf=None, map_area=None):
         'device_id \= {}'.format(env.device_ids.get(env.host)),
         use_sudo=True)
     sed(remote_copy, 'role \=.*',
-        'role \= {}'.format(env.device_roles.get(env.host)),
+        'role \= {}'.format('env.device_roles.get(env.host)'),
         use_sudo=True)
     sed(remote_copy, 'key_path \=.*',
         'key_path \= {}'.format(env.key_path),
@@ -226,7 +226,7 @@ def put_project_conf(project_conf=None, map_area=None):
         'database \= {}'.format(env.dbname),
         use_sudo=True)
     sed(remote_copy, 'password \=.*',
-        'password \= {}'.format(env.dbpassword),
+        'password \= {}'.format(env.dbpasswd),
         use_sudo=True)
 
 
@@ -235,8 +235,8 @@ def update_bcpp_conf(project_conf=None, map_area=None):
     """Updates the bcpp.conf file on the remote host.
     """
     project_conf = project_conf or env.project_conf
-    local_copy = os.path.join(os.path.expanduser(
-        env.deployment_root), project_conf)
+    local_copy = os.path.expanduser(os.path.join(
+        env.fabric_config_root, project_conf))
     remote_copy = os.path.join(env.etc_dir, project_conf)
     if not exists(env.etc_dir):
         sudo('mkdir {etc_dir}'.format(etc_dir=env.etc_dir))
