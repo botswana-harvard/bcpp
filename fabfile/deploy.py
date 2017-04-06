@@ -236,7 +236,7 @@ def update_bcpp_conf(project_conf=None, map_area=None):
     """
     project_conf = project_conf or env.project_conf
     local_copy = os.path.expanduser(os.path.join(
-        env.fabric_config_root, project_conf))
+        env.fabric_config_root, 'conf', project_conf))
     remote_copy = os.path.join(env.etc_dir, project_conf)
     if not exists(env.etc_dir):
         sudo('mkdir {etc_dir}'.format(etc_dir=env.etc_dir))
