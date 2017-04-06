@@ -86,6 +86,8 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
     """Deploy clients from the deployment host.
 
     Assumes you have already prepared the deployment host
+
+    Will use conf files on deployment
     """
     bootstrap_env(
         path=bootstrap_path,
@@ -108,36 +110,41 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
     path = str(PurePath(env.deployment_root).parent)
     deployment_archive_name = get_archive_name()
     put(local_path=os.path.join(path, deployment_archive_name), remote_path=path)
+    print(path)
     with cd(path):
         run('tar -xjf {deployment_archive_name}'.format(
             deployment_archive_name=deployment_archive_name))
 
     update_fabric_env()
 
+    run('mkdir -p {remote_source_root}'.format(
+        remote_source_root=env.remote_source_root), warn_only=True)
+    abort(env.remote_source_root)
     # copy repo to source
-    if exists(env.remote_source_root):
-        with cd(env.remote_source_root):
-            run('tar -cjf {project_appname}_{timestamp}.tar.gz {project_appname}'.format(
-                project_appname=env.project_appname,
-                timestamp=timestamp))
-        remote_media = os.path.join(env.remote_source_root, 'media')
-        if exists(remote_media):
-            run('cp -R {old_remote_media}/ {new_remote_media}'.format(
-                old_remote_media=remote_media,
-                new_remote_media=env.media_root))
-        remote_static = os.path.join(
-            env.remote_source_root, env.project_repo_name, 'static')
-        if exists(remote_static):
-            run('cp -R {remote_static}/ {static_root}'.format(
-                remote_static=remote_static,
-                static_root=env.static_root))
-        run('rm -rf {remote_source_root}'.format(
-            remote_source_root=env.remote_source_root))
-        run('cp -R {source} {destination}'.format(
-            source=os.path.join(env.deployment_root, env.project_repo_name),
-            destination=env.remote_source_root))
-        with cd(env.project_repo_root):
-            run('git checkout master')
+    with cd(env.remote_source_root):
+        run('tar -cjf {project_appname}_{timestamp}.tar.gz {project_appname}'.format(
+            project_appname=env.project_appname,
+            timestamp=timestamp), warn_only=True)
+    remote_media = os.path.join(env.remote_source_root, 'media')
+    if exists(remote_media):
+        run('cp -R {old_remote_media}/ {new_remote_media}'.format(
+            old_remote_media=remote_media,
+            new_remote_media=env.media_root))
+    remote_static = os.path.join(
+        env.remote_source_root, env.project_repo_name, 'static')
+    if exists(remote_static):
+        run('cp -R {remote_static}/ {static_root}'.format(
+            remote_static=remote_static,
+            static_root=env.static_root))
+    run('rm -rf {remote_source_root}'.format(
+        remote_source_root=env.remote_source_root))
+    msg = ('cp -R {source} {destination}'.format(
+        source=os.path.join(env.deployment_root,
+                            env.project_appname, env.project_repo_name),
+        destination=env.remote_source_root))
+    abort(msg)
+    with cd(env.project_repo_root):
+        run('git checkout master')
     if not exists(env.static_root):
         run('mkdir {static_root}'.format(
             static_root=env.static_root), warn_only=True)
