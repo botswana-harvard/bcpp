@@ -4,7 +4,7 @@ import os
 from datetime import datetime
 from pathlib import PurePath
 
-from fabric.api import execute, task, env, put, sudo, cd, run, lcd, local, warn
+from fabric.api import execute, task, env, put, sudo, cd, run, lcd, local, warn, prefix
 from fabric.colors import yellow
 from fabric.contrib.files import sed, exists
 from fabric.utils import abort
@@ -165,47 +165,30 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
             media_root=env.media_root), warn_only=True)
 
     install_mysql()
+    # mysql copy archive, backup, drop create, timezone, restore
 
-    # install_gunicorn()
+    install_gunicorn()
 
     install_nginx(skip_bootstrap=True)
 
-    # create_venv()
+    create_venv()
 
-    # copy bcpp.conf and keys
-    project_conf = os.path.join(
-        env.fabric_config_root, 'conf', env.project_conf)
-    if not exists('/etc/{project_appname}'.format(
-            project_appname=env.project_appname)):
-        sudo('mkdir /etc/{project_appname}'.format(
-            project_appname=env.project_appname))
-    put(os.path.expanduser(project_conf),
-        '/etc/{project_appname}/'.format(
-            project_appname=env.project_appname), use_sudo=True)
-    # crypto_keys
+    # copy bcpp.conf into etc/{project_app_name}/
+    put_project_conf()
+    update_bcpp_conf()
+    # crypto_keys DMG into etc/{project_app_name}/
     put(os.path.expanduser(os.path.join(env.fabric_config_root, 'etc', env.dmg_filename)),
         '/etc/{project_appname}/'.format(
         project_appname=env.project_appname), use_sudo=True)
 
-    # copy key.dmg
+    # scripts (e.g. mount dmg)
 
+    with cd(env.project_repo_root):
+        with prefix('workon {venv_name}'.format(env.venv_name)):
+            run('python manage.py collectstatic')
+            run('python manage.py collectstatic_js_reverse')
 
-# @task
-# def deploy_client2(config_path=None, user=None, map_area=None):
-#     env.map_area = map_area
-#     update_fabric_env(fabric_config_path=FABRIC_CONFIG_PATH)
-#     update_fabric_env_device_ids()
-#     update_fabric_env_hosts()
-#     update_fabric_env_key_volumes()
-#     execute(prepare_deploy, config_path=FABRIC_CONFIG_PATH, user=user)
-#     execute(put_project_conf)
-#     execute(update_project_conf, map_area=map_area)
-#     execute(update_settings)
-#     execute(deploy, config_path=FABRIC_CONFIG_PATH,
-#             user=user, update_environment=False)
-#     env.prompts = {'Enter disk image passphrase:': env.key_volume_password}
-#     execute(mount_dmg, dmg_filename=env.dmg_filename,
-#             dmg_path=env.dmg_path)
+    # start gunicorn / nginx
 
 
 @task
@@ -217,13 +200,13 @@ def update_settings():
 
 
 @task
-def put_project_conf(config_filename=None, map_area=None):
+def put_project_conf(project_conf=None, map_area=None):
     """Copies the projects <appname>.conf file to remote etc_dir.
     """
-    config_filename = config_filename or CONFIG_FILENAME
+    project_conf = project_conf or env.project_conf
     local_copy = os.path.join(os.path.expanduser(
-        env.deployment_root), config_filename)
-    remote_copy = os.path.join(env.etc_dir, config_filename)
+        env.deployment_root), project_conf)
+    remote_copy = os.path.join(env.etc_dir, project_conf)
     if not exists(env.etc_dir):
         sudo('mkdir {etc_dir}'.format(etc_dir=env.etc_dir))
     put(local_copy, remote_copy, use_sudo=True)
@@ -236,16 +219,25 @@ def put_project_conf(config_filename=None, map_area=None):
     sed(remote_copy, 'key_path \=.*',
         'key_path \= {}'.format(env.key_path),
         use_sudo=True)
+    sed(remote_copy, 'secret_key \=.*',
+        'secret_key \= {}'.format(env.secret_key),
+        use_sudo=True)
+    sed(remote_copy, 'database \=.*',
+        'database \= {}'.format(env.dbname),
+        use_sudo=True)
+    sed(remote_copy, 'password \=.*',
+        'password \= {}'.format(env.dbpassword),
+        use_sudo=True)
 
 
 @task
-def update_project_conf(config_filename=None, map_area=None):
+def update_bcpp_conf(project_conf=None, map_area=None):
     """Updates the bcpp.conf file on the remote host.
     """
-    config_filename = config_filename or CONFIG_FILENAME
+    project_conf = project_conf or env.project_conf
     local_copy = os.path.join(os.path.expanduser(
-        env.deployment_root), config_filename)
-    remote_copy = os.path.join(env.etc_dir, config_filename)
+        env.deployment_root), project_conf)
+    remote_copy = os.path.join(env.etc_dir, project_conf)
     if not exists(env.etc_dir):
         sudo('mkdir {etc_dir}'.format(etc_dir=env.etc_dir))
     put(local_copy, remote_copy, use_sudo=True)
