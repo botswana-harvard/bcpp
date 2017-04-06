@@ -12,12 +12,12 @@ from fabric.contrib import django
 
 from bcpp_fabric.new.fabfile import (
     prepare_deploy, deploy, update_fabric_env,
-    update_fabric_env_device_ids,
-    update_fabric_env_key_volumes,
-    mount_dmg, prepare_deployment_host)
+    mount_dmg, prepare_deployment_host, pip_install_from_cache,
+    pip_install_requirements_from_cache, create_virtualenv)
+from bcpp_fabric.new.fabfile.env import update_env_secrets
+from bcpp_fabric.new.fabfile.pip import pip_download_core
 from bcpp_fabric.new.fabfile.utils import (
-    get_hosts, get_device_ids, update_env_secrets,
-    create_venv, pip_install_from_cache, get_archive_name,
+    get_hosts, get_device_ids, get_archive_name,
     bootstrap_env, install_gpg, test_connection, gpg, ssh_copy_id)
 from bcpp_fabric.new.fabfile.repositories import get_repo_name
 from bcpp_fabric.new.fabfile.mysql import install_mysql
@@ -107,24 +107,29 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
         env.fabric_config_root, 'conf', env.fabric_conf)
     run('rm -rf {path}'.format(path=env.deployment_root), warn_only=True)
     run('mkdir -p {path}'.format(path=str(PurePath(env.deployment_root).parent)))
+
+    # remote deployment folder / archive
     path = str(PurePath(env.deployment_root).parent)
     deployment_archive_name = get_archive_name()
+    if exists(os.path.join(path, deployment_archive_name)):
+        run('rm {path}'.format(path=os.path.join(path, deployment_archive_name)))
     put(local_path=os.path.join(path, deployment_archive_name), remote_path=path)
-    print(path)
     with cd(path):
         run('tar -xjf {deployment_archive_name}'.format(
             deployment_archive_name=deployment_archive_name))
 
     update_fabric_env()
 
-    run('mkdir -p {remote_source_root}'.format(
-        remote_source_root=env.remote_source_root), warn_only=True)
-    abort(env.remote_source_root)
-    # copy repo to source
-    with cd(env.remote_source_root):
-        run('tar -cjf {project_appname}_{timestamp}.tar.gz {project_appname}'.format(
-            project_appname=env.project_appname,
-            timestamp=timestamp), warn_only=True)
+    # archve existing source
+    if exists(os.path.join(env.remote_source_root, env.project_repo_name)):
+        with cd(env.remote_source_root):
+            run('tar -cjf {project_appname}_{timestamp}.tar.gz {project_appname}'.format(
+                project_appname=env.project_appname,
+                timestamp=timestamp))
+    else:
+        run('mkdir -p {remote_source_root}'.format(
+            remote_source_root=env.remote_source_root), warn_only=True)
+
     remote_media = os.path.join(env.remote_source_root, 'media')
     if exists(remote_media):
         run('cp -R {old_remote_media}/ {new_remote_media}'.format(
@@ -138,13 +143,19 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
             static_root=env.static_root))
     run('rm -rf {remote_source_root}'.format(
         remote_source_root=env.remote_source_root))
-    msg = ('cp -R {source} {destination}'.format(
-        source=os.path.join(env.deployment_root,
-                            env.project_appname, env.project_repo_name),
-        destination=env.remote_source_root))
-    abort(msg)
-    with cd(env.project_repo_root):
-        run('git checkout master')
+
+    # copy repo from deployment to source
+    destination = env.remote_source_root
+    if not exists(destination):
+        run('mkdir -p {destination}'.format(destination=destination))
+    run('cp -R {source} {destination}/'.format(
+        source=os.path.join(env.deployment_root, env.project_appname),
+        destination=destination))
+
+    with cd(os.path.join(env.project_repo_root)):
+        run('git checkout master && cp fabfile/conf/bcpp.conf /etc/bcpp/')
+
+    # make static and media
     if not exists(env.static_root):
         run('mkdir {static_root}'.format(
             static_root=env.static_root), warn_only=True)
@@ -153,15 +164,16 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
             media_root=env.media_root), warn_only=True)
 
     # copy bcpp.conf
+
     install_mysql()
 
     install_nginx(skip_bootstrap=True)
 
-    create_venv(name=env.venv_name,
-                venv_dir=env.venv_dir,
-                create_env=True,
-                update_requirements=False)
-    pip_install_from_cache()
+    create_virtualenv(name=env.venv_name,
+                      venv_dir=env.venv_dir,
+                      create_env=True,
+                      update_requirements=False)
+    # pip_install_requirements_from_cache()
 
 
 # @task

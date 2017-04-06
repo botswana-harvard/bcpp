@@ -62,3 +62,8 @@ Deploy clients by role from the deployment host:
     fab -P -R <role> deploy.deploy_client:bootstrap_path=/Users/erikvw/source/bcpp/fabfile/conf/
 
 See `roledefs.py` in `bcpp.fabfile` for configured roles. Currently is by `map_area`.
+
+
+Example:
+
+    fab -H 192.168.157.16 deploy_client:bootstrap_path=/Users/erikvw/source/bcpp/fabfile/conf/,release=develop,bootstrap_branch=develop,map_area=lentsweletau --user=django
