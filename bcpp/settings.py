@@ -200,9 +200,11 @@ REST_FRAMEWORK = {
     ),
 }
 
-STATIC_ROOT = os.path.join(BASE_DIR, APP_NAME, 'static')
+STATIC_ROOT = config['django'].get(
+    'static_root', os.path.join(BASE_DIR, APP_NAME, 'static'))
 STATIC_URL = '/static/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = config['django'].get(
+    'media_root', os.path.join(BASE_DIR, APP_NAME, 'media'))
 MEDIA_URL = '/media/'
 
 # etc ini file attributes
