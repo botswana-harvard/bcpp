@@ -13,7 +13,8 @@ from fabric.contrib import django
 from bcpp_fabric.new.fabfile import (
     prepare_deploy, deploy, update_fabric_env,
     mount_dmg, prepare_deployment_host, pip_install_from_cache,
-    pip_install_requirements_from_cache, make_virtualenv, install_virtualenv)
+    pip_install_requirements_from_cache, make_virtualenv,
+    install_virtualenv, create_venv)
 from bcpp_fabric.new.fabfile.env import update_env_secrets
 from bcpp_fabric.new.fabfile.utils import (
     get_hosts, get_device_ids, get_archive_name,
@@ -168,9 +169,10 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
 
     install_nginx(skip_bootstrap=True)
 
-    install_virtualenv()
+    # install_virtualenv()
 
-    make_virtualenv()
+    # make_virtualenv()
+    create_venv()
 
 
 # @task
