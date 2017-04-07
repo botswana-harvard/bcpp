@@ -30,4 +30,3 @@ git+https://github.com/botswana-harvard/plot.git@master#egg=plot
 git+https://github.com/botswana-harvard/survey.git@master#egg=survey
 git+https://github.com/erikvw/django-crypto-fields.git@master#egg=django_crypto_fields
 git+https://github.com/erikvw/django-revision.git@master#egg=django_revision
-git+https://github.com/benoitc/gunicorn.git@master#egg=gunicorn
