@@ -171,7 +171,7 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
 
     install_nginx(skip_bootstrap=True)
 
-    # create_venv()
+    create_venv()
 
     # copy bcpp.conf into etc/{project_app_name}/
     put_project_conf()
@@ -219,7 +219,7 @@ def put_project_conf(project_conf=None, map_area=None):
     sed(remote_copy, 'key_path \=.*',
         'key_path \= {}'.format(env.key_path),
         use_sudo=True)
-    sed(remote_copy, 'secret_key \=.*',
+    sed(remote_copy, 'secret_key =.*',
         'secret_key \= {}'.format(env.secret_key),
         use_sudo=True)
     sed(remote_copy, 'database \=.*',
@@ -235,12 +235,9 @@ def update_bcpp_conf(project_conf=None, map_area=None):
     """Updates the bcpp.conf file on the remote host.
     """
     project_conf = project_conf or env.project_conf
-    local_copy = os.path.expanduser(os.path.join(
-        env.fabric_config_root, 'conf', project_conf))
     remote_copy = os.path.join(env.etc_dir, project_conf)
     if not exists(env.etc_dir):
         sudo('mkdir {etc_dir}'.format(etc_dir=env.etc_dir))
-    put(local_copy, remote_copy, use_sudo=True)
     sed(remote_copy, 'map_area \=.*',
         'map_area \= {}'.format(env.map_area or ''),
         use_sudo=True)
