@@ -181,6 +181,7 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
         '/etc/{project_appname}/'.format(
         project_appname=env.project_appname), use_sudo=True)
 
+    update_settings()
     # scripts (e.g. mount dmg)
 
     with cd(env.project_repo_root):
@@ -191,9 +192,8 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
     # start gunicorn / nginx
 
 
-@task
 def update_settings():
-    with cd(os.path.join(env.remote_source_root, env.project_appname, env.project_appname)):
+    with cd(os.path.join(env.remote_source_root, env.project_repo_name, env.project_appname)):
         sed('settings.py', 'DEBUG \=.*', 'DEBUG \= False')
         sed('settings.py', 'ANONYMOUS_ENABLED \=.*',
             'ANONYMOUS_ENABLED \= False')
