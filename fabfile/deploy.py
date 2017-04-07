@@ -184,7 +184,7 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
     # scripts (e.g. mount dmg)
 
     with cd(env.project_repo_root):
-        with prefix('workon {venv_name}'.format(env.venv_name)):
+        with prefix('workon {venv_name}'.format(venv_name=env.venv_name)):
             run('python manage.py collectstatic')
             run('python manage.py collectstatic_js_reverse')
 
