@@ -47,7 +47,7 @@ from .navbars import navbars
 style = color_style()
 ANONYMOUS_CONSENT_GROUP = 'anonymous'
 config = configparser.RawConfigParser()
-config.read(os.path.join(settings.ETC_DIR, settings.CONFIG_FILE))
+config.read(os.path.join(settings.CONFIG_PATH))
 
 
 class AppConfig(DjangoAppConfig):
