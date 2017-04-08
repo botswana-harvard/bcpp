@@ -180,7 +180,6 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
             media_root=env.media_root), warn_only=True)
 
     install_mysql()
-    # mysql copy archive, backup, drop create, timezone, restore
 
     install_python3()
 
