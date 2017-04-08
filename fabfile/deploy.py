@@ -191,10 +191,10 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
     # copy bcpp.conf into etc/{project_app_name}/
     put_project_conf()
     update_bcpp_conf()
+
     # crypto_keys DMG into etc/{project_app_name}/
     put(os.path.expanduser(os.path.join(env.fabric_config_root, 'etc', env.dmg_filename)),
-        '/etc/{project_appname}/'.format(
-        project_appname=env.project_appname), use_sudo=True)
+        env.etc_dir, use_sudo=True)
 
     mount_dmg(dmg_path=env.etc_dir, dmg_filename=env.dmg_filename,
               dmg_passphrase=env.crypto_keys_passphrase)
