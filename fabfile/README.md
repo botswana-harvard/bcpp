@@ -72,8 +72,32 @@ Example:
     
 ## deploy
 
+Create a venv
+
+    mkdir ~/.venvs
+    python -m venv bcpp ~/.venvs
+    source ~/.venvs/bcpp/bin/activate
+    pip install Fabric3
+    pip install git+https://github.com/botswana-harvard/bcpp-fabric.git@develop#egg=bcpp_fabric
+    
+
+If releases need to be cut, do so. You will need clones of all the repos onto your local machine.
+
     fab -H localhost git.cut_releases:source_root=/Users/erikvw/source/,project_repo_name=bcpp,requirements_file=requirements_production.txt --user=erikvw
 
-    fab -H localhost deploy.deployment_host:bootstrap_path=/Users/erikvw/source/bcpp/fabfile/conf/,release=0.1.13
+Deploy to the deployment host. This can be localhost or any host:
 
+    fab -H localhost deploy.deployment_host:bootstrap_path=/Users/erikvw/source/bcpp/fabfile/conf/,release=0.1.19
+
+From the deployment, specify the `release` and `map_area` and change the `bootstrap_path` path to match yours:
+
+    fab -H bcpp077 deploy.deploy_client:bootstrap_path=/Users/erikvw/source/bcpp/fabfile/conf/,release=0.1.19,map_area=lentsweletau --user=django
+
+If you run a second time and don't want/need to restore the DB again:
     
+    skip_db_restore=True
+
+if you want/need to skip rebuilding the venv:
+
+    skip_venv=True
+
