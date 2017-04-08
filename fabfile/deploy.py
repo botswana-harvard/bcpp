@@ -184,7 +184,7 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
     install_python3()
 
     if not exists(env.log_root):
-        sudo('mkdir -p {log_root}'.format(log_root=env.log_root))
+        run('mkdir -p {log_root}'.format(log_root=env.log_root))
     install_nginx(skip_bootstrap=True)
     install_gunicorn()
 
@@ -204,6 +204,7 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
               dmg_passphrase=env.crypto_keys_passphrase)
 
     with cd(os.path.join(env.remote_source_root, env.project_repo_name)):
+        run('git checkout master')
         result = run(
             'git diff --name-status master..{release}'.format(release=release))
         if result:
