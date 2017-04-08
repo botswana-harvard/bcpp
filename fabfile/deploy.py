@@ -222,7 +222,7 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
             run('python manage.py collectstatic')
             run('python manage.py collectstatic_js_reverse')
 
-    run('launchctl load -F /Library/LaunchDaemons/nginx.plist')
+    sudo('launchctl load -F /Library/LaunchDaemons/nginx.plist')
     run('launchctl load -F /Library/LaunchDaemons/gunicorn.plist')
 
 
