@@ -145,15 +145,15 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
         run('mkdir -p {remote_source_root}'.format(
             remote_source_root=env.remote_source_root), warn_only=True)
 
-    remote_media = os.path.join(env.remote_source_root, 'media')
-    if exists(remote_media):
-        run('cp -R {old_remote_media}/ {new_remote_media}'.format(
-            old_remote_media=remote_media,
+    old_remote_media = os.path.join(env.remote_source_root, 'media')
+    if exists(old_remote_media):
+        run('mv {old_remote_media} {new_remote_media}'.format(
+            old_remote_media=old_remote_media,
             new_remote_media=env.media_root))
     remote_static = os.path.join(
         env.remote_source_root, env.project_repo_name, 'static')
     if exists(remote_static):
-        run('cp -R {remote_static}/ {static_root}'.format(
+        run('mv {remote_static}/ {static_root}'.format(
             remote_static=remote_static,
             static_root=env.static_root))
     run('rm -rf {remote_source_root}'.format(
@@ -163,7 +163,7 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
     destination = env.remote_source_root
     if not exists(destination):
         run('mkdir -p {destination}'.format(destination=destination))
-    run('cp -R {source} {destination}/'.format(
+    run('rsync -pthrvz --delete {source} {destination}'.format(
         source=os.path.join(env.deployment_root, env.project_appname),
         destination=destination))
 
@@ -182,9 +182,11 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
     # mysql copy archive, backup, drop create, timezone, restore
 
     install_python3()
-    # install_gunicorn()
 
+    if not exists(env.log_root):
+        run('mkdir -p {log_root}'.format(log_root=env.log_root))
     install_nginx(skip_bootstrap=True)
+    install_gunicorn()
 
     create_venv()
 
@@ -194,19 +196,21 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
 
     # crypto_keys DMG into etc/{project_app_name}/
     put(os.path.expanduser(os.path.join(env.fabric_config_root, 'etc', env.dmg_filename)),
-        env.etc_dir, use_sudo=True)
+        env.etc_dir,
+        use_sudo=True)
 
+    # mount dmg
     mount_dmg(dmg_path=env.etc_dir, dmg_filename=env.dmg_filename,
               dmg_passphrase=env.crypto_keys_passphrase)
 
     with cd(os.path.join(env.remote_source_root, env.project_repo_name)):
+        run('git checkout master')
         result = run(
             'git diff --name-status master..{release}'.format(release=release))
         if result:
             warn('master is not at {release}'.format(release=release))
 
     update_settings()
-    # scripts (e.g. mount dmg)
 
     with cd(os.path.join(env.remote_source_root, env.project_repo_name)):
         with prefix('workon {venv_name}'.format(venv_name=env.venv_name)):
@@ -214,7 +218,8 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
             run('python manage.py collectstatic_js_reverse')
 
     install_protocol_database()
-    # start gunicorn / nginx
+    run('launchctl load -F /Library/LaunchDaemons/nginx.plist')
+    run('launchctl load -F /Library/LaunchDaemons/gunicorn.plist')
 
 
 @task
