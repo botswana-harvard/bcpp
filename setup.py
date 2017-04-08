@@ -22,6 +22,7 @@ setup(
     long_description=README,
     zip_safe=False,
     keywords='django bcpp survey',
+    install_requires=['Fabric3', 'gunicorn'],
     classifiers=[
         'Environment :: Web Environment',
         'Framework :: Django',

@@ -57,6 +57,10 @@ with open(os.path.join(env.log_folder, 'hosts.txt'), 'a') as f:
 @task
 def deployment_host(bootstrap_path=None, release=None, skip_clone=None, skip_pip_download=None,
                     use_branch=None, bootstrap_branch=None):
+    """
+    Example:
+        fab -H localhost deploy.deployment_host:bootstrap_path=/Users/erikvw/source/bcpp/fabfile/conf/,release=develop,use_branch=True,bootstrap_branch=develop,skip_pip_download=True,skip_clone=True
+    """
     execute(prepare_deployment_host,
             bootstrap_path=bootstrap_path,
             release=release,
@@ -83,12 +87,17 @@ def mysql():
 
 @task
 def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
-                  bootstrap_branch=None):
+                  bootstrap_branch=None, database=None):
     """Deploy clients from the deployment host.
 
     Assumes you have already prepared the deployment host
 
     Will use conf files on deployment
+
+    Example:
+        fab -H 10.113.201.56 deploy_client:bootstrap_path=/Users/erikvw/source/bcpp/fabfile/conf/,release=develop,bootstrap_branch=develop,map_area=lentsweletau --user=django    
+        fab -P -R testhosts deploy_client:release=develop,bootstrap_branch=develop,map_area=lentsweletau,bootstrap_path=/Users/erikvw/source/bcpp/fabfile/conf/ --user=django    
+
     """
     bootstrap_env(
         path=bootstrap_path,
@@ -118,7 +127,12 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
     with cd(path):
         run('tar -xjf {deployment_archive_name}'.format(
             deployment_archive_name=deployment_archive_name))
-
+#     if database:
+#         run('scp -C {database} {path}'.format(
+#             database=database,
+#             path=str(PurePath(env.deployment_root).parent)))
+#     else:
+#         warn('No database specified')
     update_fabric_env()
 
     # archve existing source
