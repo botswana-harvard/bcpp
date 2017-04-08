@@ -149,7 +149,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'OPTIONS': {
-            'read_default_file': os.path.join(ETC_DIR, APP_NAME, CONFIG_FILE),
+            'read_default_file': os.path.join(ETC_DIR, APP_NAME, 'my.cnf'),
         },
     },
 }
