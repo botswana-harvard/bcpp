@@ -121,6 +121,8 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
 
     rsync_deployment_root()
 
+    update_fabric_env()
+
     update_brew_cache()
 
     put_bash_profile()
@@ -130,7 +132,6 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
 #             path=str(PurePath(env.deployment_root).parent)))
 #     else:
 #         warn('No database specified')
-    update_fabric_env()
 
     # archve existing source
     if exists(os.path.join(env.remote_source_root, env.project_repo_name)):
