@@ -88,7 +88,7 @@ def mysql():
 
 @task
 def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
-                  bootstrap_branch=None, database=None, skip_rsync_deployment=None):
+                  bootstrap_branch=None, database=None):
     """Deploy clients from the deployment host.
 
     Assumes you have already prepared the deployment host
@@ -117,8 +117,7 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
     env.fabric_config_path = os.path.join(
         env.fabric_config_root, 'conf', env.fabric_conf)
 
-    if not skip_rsync_deployment:
-        rsync_deployment_root()
+    rsync_deployment_root()
 #     if database:
 #         run('scp -C {database} {path}'.format(
 #             database=database,
@@ -206,10 +205,10 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
 
 
 def rsync_deployment_root():
-    run('rm -rf {path}'.format(path=env.deployment_root), warn_only=True)
-    run('mkdir -p {path}'.format(path=str(PurePath(env.deployment_root).parent)))
-    local_path = '{}/'.format(os.path.expanduser(env.deployment_root))
-    remote_path = env.deployment_root
+    remote_path = str(PurePath(env.deployment_root).parent)
+    if not exists(remote_path):
+        run('mkdir -p {path}'.format(path=remote_path))
+    local_path = '{}'.format(os.path.expanduser(env.deployment_root))
     rsync_project(local_dir=local_path, remote_dir=remote_path)
 
 
