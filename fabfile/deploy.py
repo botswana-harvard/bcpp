@@ -11,15 +11,17 @@ from fabric.utils import abort
 from fabric.contrib import django
 
 from bcpp_fabric.new.fabfile import (
-    prepare_deploy, deploy, update_fabric_env,
+    update_fabric_env,
     mount_dmg, prepare_deployment_host, pip_install_from_cache,
     pip_install_requirements_from_cache, make_virtualenv,
     install_virtualenv, create_venv,
-    install_mysql, install_protocol_database)
+    install_mysql, install_protocol_database, prompts)
+from bcpp_fabric.new.fabfile.conf import put_project_conf
 from bcpp_fabric.new.fabfile.env import update_env_secrets
 from bcpp_fabric.new.fabfile.utils import (
-    get_hosts, get_device_ids, get_archive_name,
-    bootstrap_env, install_gpg, test_connection, gpg, ssh_copy_id)
+    get_hosts, get_device_ids, update_settings, rsync_deployment_root,
+    bootstrap_env, put_bash_profile, test_connection, ssh_copy_id,
+    install_python3)
 from bcpp_fabric.new.fabfile.repositories import get_repo_name
 from bcpp_fabric.new.fabfile.nginx import install_nginx
 
@@ -27,6 +29,7 @@ from .patterns import hostname_pattern
 from .roledefs import roledefs
 from bcpp_fabric.new.fabfile.gunicorn.tasks import install_gunicorn
 from fabric.contrib.project import rsync_project
+from bcpp_fabric.new.fabfile.brew.tasks import update_brew_cache
 
 
 django.settings_module('bcpp.settings')
@@ -48,6 +51,7 @@ env.hosts, env.passwords = get_hosts(
     path=ETC_CONFIG_PATH, gpg_filename='hosts.conf.gpg')
 env.hostname_pattern = hostname_pattern
 env.device_ids = get_device_ids()
+env.prompts = prompts
 
 with open(os.path.join(env.log_folder, 'hosts.txt'), 'a') as f:
     f.write('{}\n'.format(',\n'.join([h for h in env.hosts])))
@@ -88,7 +92,7 @@ def mysql():
 
 @task
 def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
-                  bootstrap_branch=None, database=None, skip_rsync_deployment=None):
+                  bootstrap_branch=None, database=None):
     """Deploy clients from the deployment host.
 
     Assumes you have already prepared the deployment host
@@ -96,8 +100,8 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
     Will use conf files on deployment
 
     Example:
-        fab -H 10.113.201.56 deploy_client:bootstrap_path=/Users/erikvw/source/bcpp/fabfile/conf/,release=develop,bootstrap_branch=develop,map_area=lentsweletau --user=django    
-        fab -P -R testhosts deploy_client:release=develop,bootstrap_branch=develop,map_area=lentsweletau,bootstrap_path=/Users/erikvw/source/bcpp/fabfile/conf/ --user=django    
+        fab -H 10.113.201.56 deploy_client:bootstrap_path=/Users/erikvw/source/bcpp/fabfile/conf/,release=develop,bootstrap_branch=develop,map_area=lentsweletau --user=django
+        fab -P -R testhosts deploy_client:release=develop,bootstrap_branch=develop,map_area=lentsweletau,bootstrap_path=/Users/erikvw/source/bcpp/fabfile/conf/ --user=django
 
     """
     bootstrap_env(
@@ -117,15 +121,19 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
     env.fabric_config_path = os.path.join(
         env.fabric_config_root, 'conf', env.fabric_conf)
 
-    if not skip_rsync_deployment:
-        rsync_deployment_root()
+    rsync_deployment_root()
+
+    update_fabric_env()
+
+    update_brew_cache()
+
+    put_bash_profile()
 #     if database:
 #         run('scp -C {database} {path}'.format(
 #             database=database,
 #             path=str(PurePath(env.deployment_root).parent)))
 #     else:
 #         warn('No database specified')
-    update_fabric_env()
 
     # archve existing source
     if exists(os.path.join(env.remote_source_root, env.project_repo_name)):
@@ -173,6 +181,7 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
     install_mysql()
     # mysql copy archive, backup, drop create, timezone, restore
 
+    install_python3()
     # install_gunicorn()
 
     install_nginx(skip_bootstrap=True)
@@ -186,6 +195,9 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
     put(os.path.expanduser(os.path.join(env.fabric_config_root, 'etc', env.dmg_filename)),
         '/etc/{project_appname}/'.format(
         project_appname=env.project_appname), use_sudo=True)
+
+    mount_dmg(dmg_path=env.etc_dir, dmg_filename=env.dmg_filename,
+              dmg_passphrase=env.crypto_keys_passphrase)
 
     with cd(os.path.join(env.remote_source_root, env.project_repo_name)):
         result = run(
@@ -203,52 +215,6 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
 
     install_protocol_database()
     # start gunicorn / nginx
-
-
-def rsync_deployment_root():
-    run('rm -rf {path}'.format(path=env.deployment_root), warn_only=True)
-    run('mkdir -p {path}'.format(path=str(PurePath(env.deployment_root).parent)))
-    local_path = '{}/'.format(os.path.expanduser(env.deployment_root))
-    remote_path = env.deployment_root
-    rsync_project(local_dir=local_path, remote_dir=remote_path)
-
-
-def update_settings():
-    with cd(os.path.join(env.remote_source_root, env.project_repo_name, env.project_appname)):
-        sed('settings.py', 'DEBUG \=.*', 'DEBUG \= False')
-        sed('settings.py', 'ANONYMOUS_ENABLED \=.*',
-            'ANONYMOUS_ENABLED \= False')
-
-
-@task
-def put_project_conf(project_conf=None, map_area=None):
-    """Copies the projects <appname>.conf file to remote etc_dir.
-    """
-    project_conf = project_conf or env.project_conf
-    local_copy = os.path.expanduser(os.path.join(
-        env.fabric_config_root, 'conf', project_conf))
-    remote_copy = os.path.join(env.etc_dir, project_conf)
-    if not exists(env.etc_dir):
-        sudo('mkdir {etc_dir}'.format(etc_dir=env.etc_dir))
-    put(local_copy, remote_copy, use_sudo=True)
-    sed(remote_copy, 'device_id \=.*',
-        'device_id \= {}'.format(env.device_ids.get(env.host)),
-        use_sudo=True)
-    sed(remote_copy, 'role \=.*',
-        'role \= {}'.format('env.device_roles.get(env.host)'),
-        use_sudo=True)
-    sed(remote_copy, 'key_path \=.*',
-        'key_path \= {}'.format(env.key_path),
-        use_sudo=True)
-    sed(remote_copy, 'secret_key =.*',
-        'secret_key \= {}'.format(env.secret_key),
-        use_sudo=True)
-    sed(remote_copy, 'database \=.*',
-        'database \= {}'.format(env.dbname),
-        use_sudo=True)
-    sed(remote_copy, 'password \=.*',
-        'password \= {}'.format(env.dbpasswd),
-        use_sudo=True)
 
 
 @task
