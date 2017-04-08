@@ -188,9 +188,10 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
         project_appname=env.project_appname), use_sudo=True)
 
     with cd(os.path.join(env.remote_source_root, env.project_repo_name)):
-        result = run('git diff --name-status master..0.1.9')
+        result = run(
+            'git diff --name-status master..{release}'.format(release=release))
         if result:
-            abort('master is not at 0.1.9')
+            warn('master is not at {release}'.format(release=release))
 
     update_settings()
     # scripts (e.g. mount dmg)
