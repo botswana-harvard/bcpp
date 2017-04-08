@@ -182,9 +182,11 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
     # mysql copy archive, backup, drop create, timezone, restore
 
     install_python3()
-    # install_gunicorn()
 
+    if not exists(env.log_root):
+        sudo('mkdir -p {log_root}'.format(log_root=env.log_root))
     install_nginx(skip_bootstrap=True)
+    install_gunicorn()
 
     create_venv()
 
@@ -194,8 +196,10 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
 
     # crypto_keys DMG into etc/{project_app_name}/
     put(os.path.expanduser(os.path.join(env.fabric_config_root, 'etc', env.dmg_filename)),
-        env.etc_dir, use_sudo=True)
+        env.etc_dir,
+        use_sudo=True)
 
+    # mount dmg
     mount_dmg(dmg_path=env.etc_dir, dmg_filename=env.dmg_filename,
               dmg_passphrase=env.crypto_keys_passphrase)
 
@@ -206,15 +210,15 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
             warn('master is not at {release}'.format(release=release))
 
     update_settings()
-    # scripts (e.g. mount dmg)
 
     with cd(os.path.join(env.remote_source_root, env.project_repo_name)):
         with prefix('workon {venv_name}'.format(venv_name=env.venv_name)):
             run('python manage.py collectstatic')
             run('python manage.py collectstatic_js_reverse')
 
-    install_protocol_database()
-    # start gunicorn / nginx
+    # install_protocol_database()
+    run('launchctl load -F /Library/LaunchDaemons/nginx.plist')
+    run('launchctl load -F /Library/LaunchDaemons/gunicorn.plist')
 
 
 @task
