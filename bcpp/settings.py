@@ -25,10 +25,9 @@ DEBUG = True
 CONFIG_FILE = '{}.conf'.format(APP_NAME)
 if DEBUG:
     ETC_DIR = str(PurePath(BASE_DIR).joinpath('etc'))
-    ALLOWED_HOSTS = []
 else:
-    ETC_DIR = '/etc/'
-    ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+    ETC_DIR = '/etc'
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 CONFIG_PATH = os.path.join(ETC_DIR, APP_NAME, CONFIG_FILE)
 sys.stdout.write(style.SUCCESS('Reading config from {}\n'.format(CONFIG_PATH)))
@@ -200,9 +199,11 @@ REST_FRAMEWORK = {
     ),
 }
 
-STATIC_ROOT = os.path.join(BASE_DIR, APP_NAME, 'static')
+STATIC_ROOT = config['django'].get(
+    'static_root', os.path.join(BASE_DIR, APP_NAME, 'static'))
 STATIC_URL = '/static/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = config['django'].get(
+    'media_root', os.path.join(BASE_DIR, APP_NAME, 'media'))
 MEDIA_URL = '/media/'
 
 # etc ini file attributes

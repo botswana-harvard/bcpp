@@ -26,6 +26,24 @@ Using the bootstrap.conf in the bcpp repo:
     
     fab -H localhost deploy.deployment_host:bootstrap_path=/Users/erikvw/source/bcpp/fabfile/conf/
     
+### options
+
+`bootstrap_path` path to the `bootstrap.conf`. Usually `~/deployment/bcpp/bcpp/fabfile/conf/` where project repo is `bcppp`
+
+`bootstrap_branch` git branch for `bootstrap.conf`. (Default `master`)
+
+`release` release tag to deploy from. (Default: `None`)
+
+`use_branch` force deployment from a branch instead of a release tag. (Default `False`)
+
+`skip_pip_download` skips building the pip cache. (Default: `False`)
+
+Example:
+ 
+    fab -H localhost deploy.deployment_host:\
+    bootstrap_path=~/deployment/bcpp/bcpp/fabfile/conf/,\
+    bootstrap_branch=develop,use_branch=True,\
+    release=develop,skip_pip_download=True
 
 ## deploy clients
 
@@ -44,3 +62,8 @@ Deploy clients by role from the deployment host:
     fab -P -R <role> deploy.deploy_client:bootstrap_path=/Users/erikvw/source/bcpp/fabfile/conf/
 
 See `roledefs.py` in `bcpp.fabfile` for configured roles. Currently is by `map_area`.
+
+
+Example:
+
+    fab -H 192.168.157.16 deploy_client:bootstrap_path=/Users/erikvw/source/bcpp/fabfile/conf/,release=develop,bootstrap_branch=develop,map_area=lentsweletau --user=django
