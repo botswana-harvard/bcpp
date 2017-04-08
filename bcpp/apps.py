@@ -239,7 +239,7 @@ class EdcSyncAppConfig(BaseEdcSyncAppConfig):
 class EdcSyncFilesAppConfig(BaseEdcSyncFilesAppConfig):
     edc_sync_files_using = True
     remote_host = config['edc_sync_files'].get('remote_host')
-    user = config['edc_sync_files'].get('user')
+    user = config['edc_sync_files'].get('sync_user')
     usb_volume = config['edc_sync_files'].get('usb_volume')
     source_folder = os.path.join(
         settings.MEDIA_ROOT, 'transactions', 'outgoing')

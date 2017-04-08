@@ -108,6 +108,7 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
         path=bootstrap_path,
         filename='bootstrap_client.conf',
         bootstrap_branch=bootstrap_branch)
+    print(env.device_role)
     if not release:
         abort('Specify the release')
     if not map_area:

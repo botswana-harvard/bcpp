@@ -149,7 +149,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'OPTIONS': {
-            'read_default_file': os.path.join(ETC_DIR, CONFIG_FILE),
+            'read_default_file': os.path.join(ETC_DIR, APP_NAME, 'my.cnf'),
         },
     },
 }
@@ -208,8 +208,7 @@ MEDIA_URL = '/media/'
 
 # etc ini file attributes
 if config['django_crypto_fields'].get('key_path'):
-    KEY_PATH = os.path.join(
-        ETC_DIR, config['django_crypto_fields'].get('key_path'))
+    KEY_PATH = config['django_crypto_fields'].get('key_path')
 else:
     KEY_PATH = os.path.join(BASE_DIR, 'crypto_fields')
 CURRENT_MAP_AREA = config['edc_map'].get('map_area', 'test_community')
