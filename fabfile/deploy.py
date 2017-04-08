@@ -92,7 +92,8 @@ def mysql():
 
 @task
 def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
-                  bootstrap_branch=None, database=None):
+                  bootstrap_branch=None, database=None, skip_db_restore=None,
+                  skip_venv=None):
     """Deploy clients from the deployment host.
 
     Assumes you have already prepared the deployment host
@@ -108,7 +109,6 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
         path=bootstrap_path,
         filename='bootstrap_client.conf',
         bootstrap_branch=bootstrap_branch)
-    print(env.device_role)
     if not release:
         abort('Specify the release')
     if not map_area:
@@ -189,7 +189,8 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
     install_nginx(skip_bootstrap=True)
     install_gunicorn()
 
-    create_venv()
+    if not skip_venv:
+        create_venv()
 
     # copy bcpp.conf into etc/{project_app_name}/
     put_project_conf()
@@ -213,12 +214,14 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
 
     update_settings()
 
+    if not skip_db_restore:
+        install_protocol_database()
+
     with cd(os.path.join(env.remote_source_root, env.project_repo_name)):
         with prefix('workon {venv_name}'.format(venv_name=env.venv_name)):
             run('python manage.py collectstatic')
             run('python manage.py collectstatic_js_reverse')
 
-    install_protocol_database()
     run('launchctl load -F /Library/LaunchDaemons/nginx.plist')
     run('launchctl load -F /Library/LaunchDaemons/gunicorn.plist')
 
