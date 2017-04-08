@@ -19,7 +19,8 @@ from bcpp_fabric.new.fabfile import (
 from bcpp_fabric.new.fabfile.env import update_env_secrets
 from bcpp_fabric.new.fabfile.utils import (
     get_hosts, get_device_ids, get_archive_name,
-    bootstrap_env, install_gpg, test_connection, gpg, ssh_copy_id)
+    bootstrap_env, install_gpg, test_connection, gpg, ssh_copy_id,
+    install_python3)
 from bcpp_fabric.new.fabfile.repositories import get_repo_name
 from bcpp_fabric.new.fabfile.nginx import install_nginx
 
@@ -27,6 +28,7 @@ from .patterns import hostname_pattern
 from .roledefs import roledefs
 from bcpp_fabric.new.fabfile.gunicorn.tasks import install_gunicorn
 from fabric.contrib.project import rsync_project
+from bcpp_fabric.new.fabfile.brew.tasks import update_brew_cache
 
 
 django.settings_module('bcpp.settings')
@@ -118,6 +120,10 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
         env.fabric_config_root, 'conf', env.fabric_conf)
 
     rsync_deployment_root()
+
+    update_brew_cache()
+
+    put_bash_profile()
 #     if database:
 #         run('scp -C {database} {path}'.format(
 #             database=database,
@@ -172,6 +178,7 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
     install_mysql()
     # mysql copy archive, backup, drop create, timezone, restore
 
+    install_python3()
     # install_gunicorn()
 
     install_nginx(skip_bootstrap=True)
@@ -219,7 +226,6 @@ def update_settings():
             'ANONYMOUS_ENABLED \= False')
 
 
-@task
 def put_project_conf(project_conf=None, map_area=None):
     """Copies the projects <appname>.conf file to remote etc_dir.
     """
@@ -261,3 +267,15 @@ def update_bcpp_conf(project_conf=None, map_area=None):
     sed(remote_copy, 'map_area \=.*',
         'map_area \= {}'.format(env.map_area or ''),
         use_sudo=True)
+
+
+def put_bash_profile():
+    """Copies the bash_profile.
+    """
+    local_copy = os.path.expanduser(os.path.join(
+        env.fabric_config_root, 'conf', 'bash_profile'))
+    remote_copy = '~/.bash_profile'
+    put(local_copy, remote_copy)
+    result = run('source ~/.bash_profile')
+    if result:
+        abort(result)
