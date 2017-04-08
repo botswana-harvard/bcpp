@@ -67,3 +67,13 @@ See `roledefs.py` in `bcpp.fabfile` for configured roles. Currently is by `map_a
 Example:
 
     fab -H 192.168.157.16 deploy_client:bootstrap_path=/Users/erikvw/source/bcpp/fabfile/conf/,release=develop,bootstrap_branch=develop,map_area=lentsweletau --user=django
+
+    
+    
+## deploy
+
+    fab -H localhost git.cut_releases:source_root=/Users/erikvw/source/,project_repo_name=bcpp,requirements_file=requirements_production.txt --user=erikvw
+
+    fab -H localhost deploy.deployment_host:bootstrap_path=/Users/erikvw/source/bcpp/fabfile/conf/,release=0.1.13
+
+    

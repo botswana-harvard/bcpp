@@ -145,15 +145,15 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
         run('mkdir -p {remote_source_root}'.format(
             remote_source_root=env.remote_source_root), warn_only=True)
 
-    remote_media = os.path.join(env.remote_source_root, 'media')
-    if exists(remote_media):
-        run('cp -R {old_remote_media}/ {new_remote_media}'.format(
-            old_remote_media=remote_media,
+    old_remote_media = os.path.join(env.remote_source_root, 'media')
+    if exists(old_remote_media):
+        run('mv {old_remote_media} {new_remote_media}'.format(
+            old_remote_media=old_remote_media,
             new_remote_media=env.media_root))
     remote_static = os.path.join(
         env.remote_source_root, env.project_repo_name, 'static')
     if exists(remote_static):
-        run('cp -R {remote_static}/ {static_root}'.format(
+        run('mv {remote_static}/ {static_root}'.format(
             remote_static=remote_static,
             static_root=env.static_root))
     run('rm -rf {remote_source_root}'.format(
@@ -163,7 +163,7 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
     destination = env.remote_source_root
     if not exists(destination):
         run('mkdir -p {destination}'.format(destination=destination))
-    run('cp -R {source} {destination}/'.format(
+    run('rsync -pthrvz --delete {source} {destination}'.format(
         source=os.path.join(env.deployment_root, env.project_appname),
         destination=destination))
 
@@ -216,7 +216,7 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
             run('python manage.py collectstatic')
             run('python manage.py collectstatic_js_reverse')
 
-    # install_protocol_database()
+    install_protocol_database()
     run('launchctl load -F /Library/LaunchDaemons/nginx.plist')
     run('launchctl load -F /Library/LaunchDaemons/gunicorn.plist')
 
