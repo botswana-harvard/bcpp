@@ -14,18 +14,19 @@ from bcpp_fabric.new.fabfile import (
     prepare_deploy, deploy, update_fabric_env,
     mount_dmg, prepare_deployment_host, pip_install_from_cache,
     pip_install_requirements_from_cache, make_virtualenv,
-    install_virtualenv, create_venv)
+    install_virtualenv, create_venv,
+    install_mysql, install_protocol_database)
 from bcpp_fabric.new.fabfile.env import update_env_secrets
 from bcpp_fabric.new.fabfile.utils import (
     get_hosts, get_device_ids, get_archive_name,
     bootstrap_env, install_gpg, test_connection, gpg, ssh_copy_id)
 from bcpp_fabric.new.fabfile.repositories import get_repo_name
-from bcpp_fabric.new.fabfile.mysql import install_mysql
 from bcpp_fabric.new.fabfile.nginx import install_nginx
 
 from .patterns import hostname_pattern
 from .roledefs import roledefs
 from bcpp_fabric.new.fabfile.gunicorn.tasks import install_gunicorn
+from fabric.contrib.project import rsync_project
 
 
 django.settings_module('bcpp.settings')
@@ -87,7 +88,7 @@ def mysql():
 
 @task
 def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
-                  bootstrap_branch=None, database=None):
+                  bootstrap_branch=None, database=None, skip_rsync_deployment=None):
     """Deploy clients from the deployment host.
 
     Assumes you have already prepared the deployment host
@@ -115,18 +116,9 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
     env.fabric_config_root = os.path.join(env.project_repo_root, 'fabfile')
     env.fabric_config_path = os.path.join(
         env.fabric_config_root, 'conf', env.fabric_conf)
-    run('rm -rf {path}'.format(path=env.deployment_root), warn_only=True)
-    run('mkdir -p {path}'.format(path=str(PurePath(env.deployment_root).parent)))
 
-    # remote deployment folder / archive
-    path = str(PurePath(env.deployment_root).parent)
-    deployment_archive_name = get_archive_name()
-    if exists(os.path.join(path, deployment_archive_name)):
-        run('rm {path}'.format(path=os.path.join(path, deployment_archive_name)))
-    put(local_path=os.path.join(path, deployment_archive_name), remote_path=path)
-    with cd(path):
-        run('tar -xjf {deployment_archive_name}'.format(
-            deployment_archive_name=deployment_archive_name))
+    if not skip_rsync_deployment:
+        rsync_deployment_root()
 #     if database:
 #         run('scp -C {database} {path}'.format(
 #             database=database,
@@ -168,7 +160,7 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
         destination=destination))
 
     with cd(os.path.join(env.project_repo_root)):
-        run('git checkout master && cp fabfile/conf/bcpp.conf /etc/bcpp/')
+        run('git checkout master')
 
     # make static and media
     if not exists(env.static_root):
@@ -195,6 +187,11 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
         '/etc/{project_appname}/'.format(
         project_appname=env.project_appname), use_sudo=True)
 
+    with cd(os.path.join(env.remote_source_root, env.project_repo_name)):
+        result = run('git diff --name-status master..0.1.9')
+        if result:
+            abort('master is not at 0.1.9')
+
     update_settings()
     # scripts (e.g. mount dmg)
 
@@ -203,7 +200,16 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
             run('python manage.py collectstatic')
             run('python manage.py collectstatic_js_reverse')
 
+    install_protocol_database()
     # start gunicorn / nginx
+
+
+def rsync_deployment_root():
+    run('rm -rf {path}'.format(path=env.deployment_root), warn_only=True)
+    run('mkdir -p {path}'.format(path=str(PurePath(env.deployment_root).parent)))
+    local_path = '{}/'.format(os.path.expanduser(env.deployment_root))
+    remote_path = env.deployment_root
+    rsync_project(local_dir=local_path, remote_dir=remote_path)
 
 
 def update_settings():
