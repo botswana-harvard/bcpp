@@ -1,3 +1,4 @@
+media
 fabfile/hosts.conf
 fabfile/secrets.conf
 fabfile/passwords.conf

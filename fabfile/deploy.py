@@ -16,6 +16,7 @@ from bcpp_fabric.new.fabfile import (
     pip_install_requirements_from_cache, make_virtualenv,
     install_virtualenv, create_venv,
     install_mysql, install_protocol_database, prompts)
+from bcpp_fabric.new.fabfile.brew import update_brew_task
 from bcpp_fabric.new.fabfile.conf import put_project_conf
 from bcpp_fabric.new.fabfile.environment import update_env_secrets
 from bcpp_fabric.new.fabfile.utils import (
@@ -23,7 +24,7 @@ from bcpp_fabric.new.fabfile.utils import (
     bootstrap_env, put_bash_profile, test_connection, ssh_copy_id,
     install_python3, test_connection2)
 from bcpp_fabric.new.fabfile.repositories import get_repo_name
-from bcpp_fabric.new.fabfile.nginx import install_nginx
+from bcpp_fabric.new.fabfile.nginx import install_nginx, install_nginx_task
 
 from .patterns import hostname_pattern
 from .roledefs import roledefs
@@ -127,7 +128,7 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
 
     update_fabric_env()
 
-    update_brew_cache()
+    update_brew_cache(no_auto_update=True)
 
     put_bash_profile()
 #     if database:
@@ -186,8 +187,9 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
     put_project_conf()
     update_bcpp_conf()
 
-    if not exists(env.log_root):
-        run('mkdir -p {log_root}'.format(log_root=env.log_root))
+    if env.log_root and exists(env.log_root):
+        sudo('rm -rf {log_root}'.format(log_root=env.log_root), warn_only=True)
+    run('mkdir -p {log_root}'.format(log_root=env.log_root))
     install_nginx(skip_bootstrap=True)
     install_gunicorn()
 
@@ -220,8 +222,8 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
     sudo('launchctl unload -F /Library/LaunchDaemons/nginx.plist', warn_only=True)
     sudo('nginx -s stop', warn_only=True)
     run('launchctl unload -F /Library/LaunchDaemons/gunicorn.plist', warn_only=True)
-    sudo('ps auxww | grep gunicorn | awk \'{print $2}\' | xargs kill -9',
-         warn_only=True)
+#     sudo('ps aux | grep gunicorn | awk \'{print $2}\' | xargs kill -9',
+#          warn_only=True)
     sudo('launchctl load -F /Library/LaunchDaemons/nginx.plist')
     run('launchctl load -F /Library/LaunchDaemons/gunicorn.plist')
 
@@ -237,3 +239,14 @@ def update_bcpp_conf(project_conf=None, map_area=None):
     sed(remote_copy, 'map_area \=.*',
         'map_area \= {}'.format(env.map_area or ''),
         use_sudo=True)
+
+
+@task
+def relaunch_nginx():
+    sudo('launchctl unload -F /Library/LaunchDaemons/nginx.plist', warn_only=True)
+    sudo('nginx -s stop', warn_only=True)
+    run('launchctl unload -F /Library/LaunchDaemons/gunicorn.plist', warn_only=True)
+    sudo('ps auxww | grep gunicorn | awk \'{print $2}\' | xargs kill -9',
+         warn_only=True)
+    sudo('launchctl load -F /Library/LaunchDaemons/nginx.plist')
+    run('launchctl load -F /Library/LaunchDaemons/gunicorn.plist')
