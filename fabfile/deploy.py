@@ -7,6 +7,7 @@ from pathlib import PurePath
 from fabric.api import execute, task, env, put, sudo, cd, run, lcd, local, warn, prefix
 from fabric.colors import yellow
 from fabric.contrib.files import sed, exists
+from fabric.contrib.project import rsync_project
 from fabric.utils import abort
 from fabric.contrib import django
 
@@ -16,7 +17,7 @@ from bcpp_fabric.new.fabfile import (
     pip_install_requirements_from_cache, make_virtualenv,
     install_virtualenv, create_venv,
     install_mysql, install_protocol_database, prompts)
-from bcpp_fabric.new.fabfile.brew import update_brew_task
+from bcpp_fabric.new.fabfile.brew import update_brew_task, update_brew_cache
 from bcpp_fabric.new.fabfile.conf import put_project_conf
 from bcpp_fabric.new.fabfile.environment import update_env_secrets
 from bcpp_fabric.new.fabfile.utils import (
@@ -25,12 +26,10 @@ from bcpp_fabric.new.fabfile.utils import (
     install_python3, test_connection2)
 from bcpp_fabric.new.fabfile.repositories import get_repo_name
 from bcpp_fabric.new.fabfile.nginx import install_nginx, install_nginx_task
+from bcpp_fabric.new.fabfile.gunicorn import install_gunicorn_task, install_gunicorn
 
 from .patterns import hostname_pattern
 from .roledefs import roledefs
-from bcpp_fabric.new.fabfile.gunicorn.tasks import install_gunicorn
-from fabric.contrib.project import rsync_project
-from bcpp_fabric.new.fabfile.brew.tasks import update_brew_cache
 
 
 django.settings_module('bcpp.settings')
@@ -242,7 +241,7 @@ def update_bcpp_conf(project_conf=None, map_area=None):
 
 
 @task
-def relaunch_nginx():
+def relaunch_web():
     sudo('launchctl unload -F /Library/LaunchDaemons/nginx.plist', warn_only=True)
     sudo('nginx -s stop', warn_only=True)
     run('launchctl unload -F /Library/LaunchDaemons/gunicorn.plist', warn_only=True)
