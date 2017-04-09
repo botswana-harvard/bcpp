@@ -17,7 +17,7 @@ from bcpp_fabric.new.fabfile import (
     install_virtualenv, create_venv,
     install_mysql, install_protocol_database, prompts)
 from bcpp_fabric.new.fabfile.conf import put_project_conf
-from bcpp_fabric.new.fabfile.env import update_env_secrets
+from bcpp_fabric.new.fabfile.environment import update_env_secrets
 from bcpp_fabric.new.fabfile.utils import (
     get_hosts, get_device_ids, update_settings, rsync_deployment_root,
     bootstrap_env, put_bash_profile, test_connection, ssh_copy_id,
