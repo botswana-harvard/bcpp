@@ -93,7 +93,7 @@ def mysql():
 @task
 def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
                   bootstrap_branch=None, database=None, skip_db_restore=None,
-                  skip_venv=None):
+                  skip_venv=None, device_role=None, device_id=None):
     """Deploy clients from the deployment host.
 
     Assumes you have already prepared the deployment host
@@ -109,6 +109,7 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
         path=bootstrap_path,
         filename='bootstrap_client.conf',
         bootstrap_branch=bootstrap_branch)
+    env.device_role = device_role or env.device_role
     if not release:
         abort('Specify the release')
     if not map_area:
@@ -136,13 +137,7 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
 #     else:
 #         warn('No database specified')
 
-    # archve existing source
-    if exists(os.path.join(env.remote_source_root, env.project_repo_name)):
-        with cd(env.remote_source_root):
-            run('tar -cjf {project_appname}_{timestamp}.tar.gz {project_appname}'.format(
-                project_appname=env.project_appname,
-                timestamp=timestamp))
-    else:
+    if not exists(os.path.join(env.remote_source_root, env.project_repo_name)):
         run('mkdir -p {remote_source_root}'.format(
             remote_source_root=env.remote_source_root), warn_only=True)
 
@@ -157,7 +152,7 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
         run('mv {remote_static}/ {static_root}'.format(
             remote_static=remote_static,
             static_root=env.static_root))
-    run('rm -rf {remote_source_root}'.format(
+    sudo('rm -rf {remote_source_root}'.format(
         remote_source_root=env.remote_source_root))
 
     # copy repo from deployment to source
@@ -183,17 +178,18 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
 
     install_python3()
 
-    if not exists(env.log_root):
-        run('mkdir -p {log_root}'.format(log_root=env.log_root))
-    install_nginx(skip_bootstrap=True)
-    install_gunicorn()
-
     if not skip_venv:
         create_venv()
 
     # copy bcpp.conf into etc/{project_app_name}/
+    env.device_id = device_id
     put_project_conf()
     update_bcpp_conf()
+
+    if not exists(env.log_root):
+        run('mkdir -p {log_root}'.format(log_root=env.log_root))
+    install_nginx(skip_bootstrap=True)
+    install_gunicorn()
 
     # crypto_keys DMG into etc/{project_app_name}/
     put(os.path.expanduser(os.path.join(env.fabric_config_root, 'etc', env.dmg_filename)),
@@ -221,6 +217,11 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
             run('python manage.py collectstatic')
             run('python manage.py collectstatic_js_reverse')
 
+    sudo('launchctl unload -F /Library/LaunchDaemons/nginx.plist', warn_only=True)
+    sudo('nginx -s stop', warn_only=True)
+    run('launchctl unload -F /Library/LaunchDaemons/gunicorn.plist', warn_only=True)
+    sudo('ps auxww | grep gunicorn | awk \'{print $2}\' | xargs kill -9',
+         warn_only=True)
     sudo('launchctl load -F /Library/LaunchDaemons/nginx.plist')
     run('launchctl load -F /Library/LaunchDaemons/gunicorn.plist')
 
