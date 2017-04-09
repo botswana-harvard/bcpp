@@ -5,7 +5,7 @@ from datetime import datetime
 from pathlib import PurePath
 
 from fabric.api import execute, task, env, put, sudo, cd, run, lcd, local, warn, prefix
-from fabric.colors import yellow
+from fabric.colors import yellow, blue
 from fabric.contrib.files import sed, exists
 from fabric.contrib.project import rsync_project
 from fabric.utils import abort
@@ -141,17 +141,10 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
         run('mkdir -p {remote_source_root}'.format(
             remote_source_root=env.remote_source_root), warn_only=True)
 
-    old_remote_media = os.path.join(env.remote_source_root, 'media')
+    old_remote_media = os.path.join(
+        env.remote_source_root, env.project_repo_name, 'media')
     if exists(old_remote_media):
-        run('mv {old_remote_media} {new_remote_media}'.format(
-            old_remote_media=old_remote_media,
-            new_remote_media=env.media_root))
-    remote_static = os.path.join(
-        env.remote_source_root, env.project_repo_name, 'static')
-    if exists(remote_static):
-        run('mv {remote_static}/ {static_root}'.format(
-            remote_static=remote_static,
-            static_root=env.static_root))
+        run(f'rsync -pthrvz --remove-source-files {old_remote_media} ~/', warn_only=True)
     sudo('rm -rf {remote_source_root}'.format(
         remote_source_root=env.remote_source_root))
 
@@ -225,6 +218,7 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
 #          warn_only=True)
     sudo('launchctl load -F /Library/LaunchDaemons/nginx.plist')
     run('launchctl load -F /Library/LaunchDaemons/gunicorn.plist')
+    run('curl http://localhost')
 
 
 @task
@@ -249,3 +243,76 @@ def relaunch_web():
          warn_only=True)
     sudo('launchctl load -F /Library/LaunchDaemons/nginx.plist')
     run('launchctl load -F /Library/LaunchDaemons/gunicorn.plist')
+
+
+@task
+def install_protocol_database_task(bootstrap_path=None, bootstrap_branch=None, db_archive_name=None, skip_backup=None):
+    """Overwrites the client DB.
+    """
+    bootstrap_env(
+        path=bootstrap_path,
+        filename='bootstrap_client.conf',
+        bootstrap_branch=bootstrap_branch)
+
+    rsync_deployment_root()
+
+    update_fabric_env()
+
+    install_protocol_database(
+        db_archive_name=db_archive_name, skip_backup=skip_backup)
+
+
+@task
+def validate(release=None, pull=None):
+    result = run('workon bcpp', warn_only=True)
+    if result:
+        warn(yellow(f'{env.host}: {result}'))
+    else:
+        result = run('workon bcpp && python --version', warn_only=True)
+        if result != 'Python 3.6.1':
+            warn(yellow(f'{env.host}: {result}'))
+        else:
+            with cd('~/source/bcpp'):
+                result = run('git tag')
+                if release not in result:
+                    result = run('git describe --abbrev=0 --tags')
+                    warn(yellow(f'{env.host}: bcpp tag not found. Got {result}'))
+                    if pull:
+                        run('git pull')
+            result = run('curl http://localhost')
+            if 'Bad Gateway' in result:
+                warn(yellow(f'{env.host}: bad gateway'))
+            else:
+                result = run(
+                    'curl http://localhost/static/bcpp/label_templates/aliquot.lbl')
+                if '404 Not Found' in result:
+                    warn(yellow(f'{env.host}: 404 Not Found'))
+                else:
+                    if not exists('~/media/edc_map') or not exists('~/media/transactions'):
+                        warn(yellow(f'{env.host}: Media folder not ready'))
+                    else:
+                        warn(blue(f'{env.host}: OK'))
+
+
+@task
+def move_media_folder(bootstrap_path=None, bootstrap_branch=None, use_local_fabric_conf=True):
+    """Moves media folder out of the source repo.
+    """
+    bootstrap_env(
+        path=bootstrap_path,
+        filename='bootstrap_client.conf',
+        bootstrap_branch=bootstrap_branch)
+
+    update_fabric_env(use_local_fabric_conf=use_local_fabric_conf)
+
+    old_remote_media = os.path.join(
+        env.remote_source_root, env.project_repo_name, 'media')
+    if exists(old_remote_media):
+        run(f'rsync -pthrvz --remove-source-files {old_remote_media} ~/', warn_only=True)
+
+
+@task
+def fetch_map_images_task():
+    with cd('~/source/bcpp'):
+        with prefix('source ~/.venvs/bcpp/bin/activate'):
+            run('python manage.py fetch_map_images plot.plot 10')
