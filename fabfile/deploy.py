@@ -21,7 +21,7 @@ from bcpp_fabric.new.fabfile.environment import update_env_secrets
 from bcpp_fabric.new.fabfile.utils import (
     get_hosts, get_device_ids, update_settings, rsync_deployment_root,
     bootstrap_env, put_bash_profile, test_connection, ssh_copy_id,
-    install_python3)
+    install_python3, test_connection2)
 from bcpp_fabric.new.fabfile.repositories import get_repo_name
 from bcpp_fabric.new.fabfile.nginx import install_nginx
 
