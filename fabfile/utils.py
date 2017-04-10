@@ -12,6 +12,10 @@ from fabric.contrib.project import rsync_project
 @task
 def restore_media_folder(bootstrap_path=None, bootstrap_branch=None, use_local_fabric_conf=True):
     """Restores media/edc_map from the external backup
+
+    For example:
+
+        fab -P -R mmankgodi utils.restore_media_folder:bootstrap_path=/Users/erikvw/source/bcpp/fabfile/conf/,bootstrap_branch=develop,use_local_fabric_conf=True --user=django
     """
     bootstrap_env(
         path=bootstrap_path,
