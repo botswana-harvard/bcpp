@@ -1,14 +1,5 @@
 export PS1="\u@\h:\w$ "
 
-function frameworkpython {
-    if [[ ! -z "$VIRTUAL_ENV" ]]; then
-        PYTHONHOME=$VIRTUAL_ENV /usr/local/bin/python "$@"
-    else
-        /usr/local/bin/python "$@"
-    fi
-}
-
-
 function parse_git_branch() {
  git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\*\1/'
 }
@@ -24,5 +15,7 @@ alias git_tags="git log --tags --simplify-by-decoration --pretty='format:%ai %d'
 EDITOR=/usr/bin/nano
 
 export TERM=xterm-color
+
+export PATH="/usr/local/bin:$PATH"
 
 workon () { source ~/.venvs/"$@"/bin/activate; }
