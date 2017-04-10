@@ -24,6 +24,7 @@ from bcpp_fabric.new.fabfile.gunicorn import install_gunicorn
 
 from .patterns import hostname_pattern
 from .roledefs import roledefs
+from bcpp_fabric.new.fabfile.constants import MACOSX, LINUX
 
 
 django.settings_module('bcpp.settings')
@@ -115,13 +116,12 @@ def deploy_client(**kwargs):
 
 
 def deploy(conf_filename=None, bootstrap_path=None, release=None, map_area=None, user=None,
-           bootstrap_branch=None, database=None, skip_db_restore=None,
-           skip_venv=None, device_role=None, device_id=None):
+           bootstrap_branch=None, skip_update=None, skip_db=None, skip_repo=None,
+           skip_venv=None, skip_mysql=None, skip_python=None, skip_web=None):
     bootstrap_env(
         path=bootstrap_path,
         filename=conf_filename,
         bootstrap_branch=bootstrap_branch)
-    env.device_role = device_role or env.device_role
     if not release:
         abort('Specify the release')
     if not map_area:
@@ -140,7 +140,11 @@ def deploy(conf_filename=None, bootstrap_path=None, release=None, map_area=None,
 
     update_fabric_env()
 
-    update_brew_cache(no_auto_update=True)
+    if not skip_update:
+        if env.target_os == MACOSX:
+            update_brew_cache(no_auto_update=True)
+        elif env.target_os == LINUX:
+            sudo('apt-get update')
 
     put_bash_profile()
 
@@ -148,18 +152,18 @@ def deploy(conf_filename=None, bootstrap_path=None, release=None, map_area=None,
         run('mkdir -p {remote_source_root}'.format(
             remote_source_root=env.remote_source_root), warn_only=True)
 
-    # move media folder out of project repo
-    move_media_folder()
-    sudo('rm -rf {remote_source_root}'.format(
-        remote_source_root=env.remote_source_root))
-
-    # copy repo from deployment to source
-    destination = env.remote_source_root
-    if not exists(destination):
-        run('mkdir -p {destination}'.format(destination=destination))
-    run('rsync -pthrvz --delete {source} {destination}'.format(
-        source=os.path.join(env.deployment_root, env.project_appname),
-        destination=destination))
+    if not skip_repo:
+        # move media folder out of project repo
+        move_media_folder()
+        sudo('rm -rf {remote_source_root}'.format(
+            remote_source_root=env.remote_source_root))
+        # copy repo from deployment to source
+        destination = env.remote_source_root
+        if not exists(destination):
+            run('mkdir -p {destination}'.format(destination=destination))
+        run('rsync -pthrvz --delete {source} {destination}'.format(
+            source=os.path.join(env.deployment_root, env.project_appname),
+            destination=destination))
 
     with cd(os.path.join(env.project_repo_root)):
         run('git checkout master')
@@ -172,23 +176,26 @@ def deploy(conf_filename=None, bootstrap_path=None, release=None, map_area=None,
         run('mkdir {media_root}'.format(
             media_root=env.media_root), warn_only=True)
 
-    install_mysql()
+    if not skip_mysql:
+        install_mysql()
 
-    install_python3()
+    if not skip_python:
+        install_python3()
 
     if not skip_venv:
         create_venv()
 
     # copy bcpp.conf into etc/{project_app_name}/
-    env.device_id = device_id
     put_project_conf()
     update_bcpp_conf()
 
-    if env.log_root and exists(env.log_root):
-        sudo('rm -rf {log_root}'.format(log_root=env.log_root), warn_only=True)
-    run('mkdir -p {log_root}'.format(log_root=env.log_root))
-    install_nginx(skip_bootstrap=True)
-    install_gunicorn()
+    if not skip_web:
+        if env.log_root and exists(env.log_root):
+            sudo('rm -rf {log_root}'.format(log_root=env.log_root),
+                 warn_only=True)
+        run('mkdir -p {log_root}'.format(log_root=env.log_root))
+        install_nginx(skip_bootstrap=True)
+        install_gunicorn()
 
     # crypto_keys DMG into etc/{project_app_name}/
     put(os.path.expanduser(os.path.join(env.fabric_config_root, 'etc', env.dmg_filename)),
@@ -208,7 +215,7 @@ def deploy(conf_filename=None, bootstrap_path=None, release=None, map_area=None,
 
     update_settings()
 
-    if not skip_db_restore:
+    if not skip_db:
         install_protocol_database()
 
     with cd(os.path.join(env.remote_source_root, env.project_repo_name)):
