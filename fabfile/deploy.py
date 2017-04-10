@@ -19,11 +19,12 @@ from bcpp_fabric.new.fabfile.constants import MACOSX, LINUX
 from bcpp_fabric.new.fabfile.environment import update_env_secrets
 from bcpp_fabric.new.fabfile.gunicorn import install_gunicorn
 from bcpp_fabric.new.fabfile.nginx import install_nginx
+from bcpp_fabric.new.fabfile.python import install_python3
 from bcpp_fabric.new.fabfile.repositories import get_repo_name
 from bcpp_fabric.new.fabfile.utils import (
     get_hosts, get_device_ids, update_settings, rsync_deployment_root,
     bootstrap_env, put_bash_profile, ssh_copy_id,
-    install_python3, test_connection2, move_media_folder, launch_webserver)
+    test_connection2, move_media_folder, launch_webserver)
 
 from .patterns import hostname_pattern
 from .roledefs import roledefs
