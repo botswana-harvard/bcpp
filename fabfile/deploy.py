@@ -7,25 +7,27 @@ from fabric.contrib.files import sed, exists
 from fabric.utils import abort
 from fabric.contrib import django
 
+from edc_device.constants import CENTRAL_SERVER
+
 from bcpp_fabric.new.fabfile import (
     update_fabric_env,
     mount_dmg, prepare_deployment_host, create_venv,
     install_mysql, install_protocol_database, prompts)
 from bcpp_fabric.new.fabfile.brew import update_brew_cache
 from bcpp_fabric.new.fabfile.conf import put_project_conf
+from bcpp_fabric.new.fabfile.constants import MACOSX, LINUX
 from bcpp_fabric.new.fabfile.environment import update_env_secrets
+from bcpp_fabric.new.fabfile.gunicorn import install_gunicorn
+from bcpp_fabric.new.fabfile.nginx import install_nginx
+from bcpp_fabric.new.fabfile.repositories import get_repo_name
 from bcpp_fabric.new.fabfile.utils import (
     get_hosts, get_device_ids, update_settings, rsync_deployment_root,
     bootstrap_env, put_bash_profile, ssh_copy_id,
-    install_python3, test_connection2, move_media_folder)
-from bcpp_fabric.new.fabfile.repositories import get_repo_name
-from bcpp_fabric.new.fabfile.nginx import install_nginx
-from bcpp_fabric.new.fabfile.gunicorn import install_gunicorn
+    install_python3, test_connection2, move_media_folder, launch_webserver)
 
 from .patterns import hostname_pattern
 from .roledefs import roledefs
-from bcpp_fabric.new.fabfile.constants import MACOSX, LINUX
-
+from .utils import update_bcpp_conf
 
 django.settings_module('bcpp.settings')
 
@@ -126,6 +128,7 @@ def deploy(conf_filename=None, bootstrap_path=None, release=None, map_area=None,
         abort('Specify the release')
     if not map_area:
         abort('Specify the map_area')
+    print(env.target_os)
     env.project_release = release
     env.map_area = map_area
 
@@ -203,8 +206,12 @@ def deploy(conf_filename=None, bootstrap_path=None, release=None, map_area=None,
         use_sudo=True)
 
     # mount dmg
-    mount_dmg(dmg_path=env.etc_dir, dmg_filename=env.dmg_filename,
-              dmg_passphrase=env.crypto_keys_passphrase)
+    if env.device_role == CENTRAL_SERVER:
+        # use dm-crypt?
+        pass
+    else:
+        mount_dmg(dmg_path=env.etc_dir, dmg_filename=env.dmg_filename,
+                  dmg_passphrase=env.crypto_keys_passphrase)
 
     with cd(os.path.join(env.remote_source_root, env.project_repo_name)):
         run('git checkout master')
@@ -223,21 +230,4 @@ def deploy(conf_filename=None, bootstrap_path=None, release=None, map_area=None,
             run('python manage.py collectstatic')
             run('python manage.py collectstatic_js_reverse')
 
-    sudo('launchctl unload -F /Library/LaunchDaemons/nginx.plist', warn_only=True)
-    sudo('nginx -s stop', warn_only=True)
-    run('launchctl unload -F /Library/LaunchDaemons/gunicorn.plist', warn_only=True)
-    sudo('launchctl load -F /Library/LaunchDaemons/nginx.plist')
-    run('launchctl load -F /Library/LaunchDaemons/gunicorn.plist')
-    run('curl http://localhost')
-
-
-def update_bcpp_conf(project_conf=None, map_area=None):
-    """Updates the bcpp.conf file on the remote host.
-    """
-    project_conf = project_conf or env.project_conf
-    remote_copy = os.path.join(env.etc_dir, project_conf)
-    if not exists(env.etc_dir):
-        sudo('mkdir {etc_dir}'.format(etc_dir=env.etc_dir))
-    sed(remote_copy, 'map_area \=.*',
-        'map_area \= {}'.format(env.map_area or ''),
-        use_sudo=True)
+    launch_webserver()

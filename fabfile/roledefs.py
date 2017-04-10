@@ -13,11 +13,25 @@ def get_mmathethe():
     return hosts
 
 
+def get_letlhakeng():
+    hosts = ['bcpp0{}'.format(i + 55) for i in range(0, 15)]
+    hosts.pop(hosts.index('bcpp057'))
+    hosts.pop(hosts.index('bcpp065'))
+    return hosts
+
+
+def get_mmankgodi():
+    hosts = ['bcpp0{}'.format(i + 10) for i in range(0, 15)]
+    hosts.append('bcpp057')
+    hosts.append('bcpp065')
+    return hosts
+
+
 roledefs = {
     'deployment_hosts': ['localhost'],
-    'mmankgodi': ['bcpp0{}'.format(i + 10) for i in range(0, 15)],
+    'mmankgodi': get_mmankgodi(),
     'lentsweletau': get_lenstweletau(),
     'mmathethe': get_mmathethe(),
-    'letlhakeng': ['bcpp0{}'.format(i + 55) for i in range(0, 15)],
+    'letlhakeng': get_letlhakeng(),
     'testhosts': ['bcpp075', 'bcpp076', 'bcpp077', 'bcpp078', 'bcpp080', 'bcpp081'],
 }
