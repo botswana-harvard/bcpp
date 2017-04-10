@@ -23,7 +23,7 @@ from bcpp_fabric.new.fabfile.environment import update_env_secrets
 from bcpp_fabric.new.fabfile.utils import (
     get_hosts, get_device_ids, update_settings, rsync_deployment_root,
     bootstrap_env, put_bash_profile, test_connection, ssh_copy_id,
-    install_python3, test_connection2)
+    install_python3, test_connection2, touch_host)
 from bcpp_fabric.new.fabfile.repositories import get_repo_name
 from bcpp_fabric.new.fabfile.nginx import install_nginx, install_nginx_task
 from bcpp_fabric.new.fabfile.gunicorn import install_gunicorn_task, install_gunicorn
@@ -130,21 +130,13 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
     update_brew_cache(no_auto_update=True)
 
     put_bash_profile()
-#     if database:
-#         run('scp -C {database} {path}'.format(
-#             database=database,
-#             path=str(PurePath(env.deployment_root).parent)))
-#     else:
-#         warn('No database specified')
 
     if not exists(os.path.join(env.remote_source_root, env.project_repo_name)):
         run('mkdir -p {remote_source_root}'.format(
             remote_source_root=env.remote_source_root), warn_only=True)
 
-    old_remote_media = os.path.join(
-        env.remote_source_root, env.project_repo_name, 'media')
-    if exists(old_remote_media):
-        run(f'rsync -pthrvz --remove-source-files {old_remote_media} ~/', warn_only=True)
+    # move media folder out of project repo
+    move_media_folder()
     sudo('rm -rf {remote_source_root}'.format(
         remote_source_root=env.remote_source_root))
 
@@ -295,7 +287,7 @@ def validate(release=None, pull=None):
 
 
 @task
-def move_media_folder(bootstrap_path=None, bootstrap_branch=None, use_local_fabric_conf=True):
+def move_media_folder_task(bootstrap_path=None, bootstrap_branch=None, use_local_fabric_conf=True):
     """Moves media folder out of the source repo.
     """
     bootstrap_env(
@@ -304,7 +296,12 @@ def move_media_folder(bootstrap_path=None, bootstrap_branch=None, use_local_fabr
         bootstrap_branch=bootstrap_branch)
 
     update_fabric_env(use_local_fabric_conf=use_local_fabric_conf)
+    move_media_folder()
 
+
+def move_media_folder():
+    """Moves media folder out of the source repo.
+    """
     old_remote_media = os.path.join(
         env.remote_source_root, env.project_repo_name, 'media')
     if exists(old_remote_media):
