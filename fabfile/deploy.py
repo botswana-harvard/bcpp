@@ -1,32 +1,26 @@
-import uuid
 import os
 
 from datetime import datetime
-from pathlib import PurePath
 
-from fabric.api import execute, task, env, put, sudo, cd, run, lcd, local, warn, prefix
-from fabric.colors import yellow
+from fabric.api import execute, task, env, put, sudo, cd, run, warn, prefix
 from fabric.contrib.files import sed, exists
-from fabric.contrib.project import rsync_project
 from fabric.utils import abort
 from fabric.contrib import django
 
 from bcpp_fabric.new.fabfile import (
     update_fabric_env,
-    mount_dmg, prepare_deployment_host, pip_install_from_cache,
-    pip_install_requirements_from_cache, make_virtualenv,
-    install_virtualenv, create_venv,
+    mount_dmg, prepare_deployment_host, create_venv,
     install_mysql, install_protocol_database, prompts)
-from bcpp_fabric.new.fabfile.brew import update_brew_task, update_brew_cache
+from bcpp_fabric.new.fabfile.brew import update_brew_cache
 from bcpp_fabric.new.fabfile.conf import put_project_conf
 from bcpp_fabric.new.fabfile.environment import update_env_secrets
 from bcpp_fabric.new.fabfile.utils import (
     get_hosts, get_device_ids, update_settings, rsync_deployment_root,
-    bootstrap_env, put_bash_profile, test_connection, ssh_copy_id,
-    install_python3, test_connection2)
+    bootstrap_env, put_bash_profile, ssh_copy_id,
+    install_python3, test_connection2, move_media_folder)
 from bcpp_fabric.new.fabfile.repositories import get_repo_name
-from bcpp_fabric.new.fabfile.nginx import install_nginx, install_nginx_task
-from bcpp_fabric.new.fabfile.gunicorn import install_gunicorn_task, install_gunicorn
+from bcpp_fabric.new.fabfile.nginx import install_nginx
+from bcpp_fabric.new.fabfile.gunicorn import install_gunicorn
 
 from .patterns import hostname_pattern
 from .roledefs import roledefs
@@ -64,7 +58,9 @@ def deployment_host(bootstrap_path=None, release=None, skip_clone=None, skip_pip
                     use_branch=None, bootstrap_branch=None):
     """
     Example:
-        fab -H localhost deploy.deployment_host:bootstrap_path=/Users/erikvw/source/bcpp/fabfile/conf/,release=develop,use_branch=True,bootstrap_branch=develop,skip_pip_download=True,skip_clone=True
+
+        brew update && fab -H localhost deploy.deployment_host:bootstrap_path=/Users/erikvw/source/bcpp/fabfile/conf/,release=develop,use_branch=True,bootstrap_branch=develop,skip_pip_download=True,skip_clone=True
+
     """
     execute(prepare_deployment_host,
             bootstrap_path=bootstrap_path,
@@ -76,38 +72,54 @@ def deployment_host(bootstrap_path=None, release=None, skip_clone=None, skip_pip
 
 
 @task
-def deploy_centralserver(local_branch=None):
-    pass
+def deploy_centralserver(**kwargs):
+    conf_filename = 'bootstrap_centralserver.conf'
+    deploy(conf_filename=conf_filename, **kwargs)
 
 
 @task
-def deploy_communityserver():
-    pass
+def deploy_nodeserver(**kwargs):
+    conf_filename = 'bootstrap_nodeserver.conf'
+    deploy(conf_filename=conf_filename, **kwargs)
 
 
 @task
-def mysql():
-    pass
-
-
-@task
-def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
-                  bootstrap_branch=None, database=None, skip_db_restore=None,
-                  skip_venv=None, device_role=None, device_id=None):
+def deploy_client(**kwargs):
     """Deploy clients from the deployment host.
 
     Assumes you have already prepared the deployment host
 
     Will use conf files on deployment
 
-    Example:
-        fab -H 10.113.201.56 deploy_client:bootstrap_path=/Users/erikvw/source/bcpp/fabfile/conf/,release=develop,bootstrap_branch=develop,map_area=lentsweletau --user=django
-        fab -P -R testhosts deploy_client:release=develop,bootstrap_branch=develop,map_area=lentsweletau,bootstrap_path=/Users/erikvw/source/bcpp/fabfile/conf/ --user=django
+    For example:
+
+    Copy ssh keys:
+
+        fab -P -R mmankgodi deploy.ssh_copy_id:bootstrap_path=/Users/erikvw/source/bcpp/fabfile/conf,bootstrap_branch=develop --user=django
+
+    Deploy:
+
+        fab -H bcpp038 deploy.deploy_client:bootstrap_path=/Users/erikvw/source/bcpp/fabfile/conf/,release=0.1.24,map_area=mmankgodi --user=django
+
+    - OR -
+
+        fab -P -R mmankgodi deploy.deploy_client:bootstrap_path=/Users/erikvw/source/bcpp/fabfile/conf/,release=0.1.24,map_area=mmankgodi --user=django
+
+    Once complete:
+
+        fab -P -R mmankgodi deploy.validate:release=0.1.24 --user=django
 
     """
+    conf_filename = 'bootstrap_client.conf'
+    deploy(conf_filename=conf_filename, **kwargs)
+
+
+def deploy(conf_filename=None, bootstrap_path=None, release=None, map_area=None, user=None,
+           bootstrap_branch=None, database=None, skip_db_restore=None,
+           skip_venv=None, device_role=None, device_id=None):
     bootstrap_env(
         path=bootstrap_path,
-        filename='bootstrap_client.conf',
+        filename=conf_filename,
         bootstrap_branch=bootstrap_branch)
     env.device_role = device_role or env.device_role
     if not release:
@@ -116,6 +128,7 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
         abort('Specify the map_area')
     env.project_release = release
     env.map_area = map_area
+
     env.project_repo_name = get_repo_name(env.project_repo_url)
     env.project_repo_root = os.path.join(
         env.deployment_root, env.project_repo_name)
@@ -130,28 +143,13 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
     update_brew_cache(no_auto_update=True)
 
     put_bash_profile()
-#     if database:
-#         run('scp -C {database} {path}'.format(
-#             database=database,
-#             path=str(PurePath(env.deployment_root).parent)))
-#     else:
-#         warn('No database specified')
 
     if not exists(os.path.join(env.remote_source_root, env.project_repo_name)):
         run('mkdir -p {remote_source_root}'.format(
             remote_source_root=env.remote_source_root), warn_only=True)
 
-    old_remote_media = os.path.join(env.remote_source_root, 'media')
-    if exists(old_remote_media):
-        run('mv {old_remote_media} {new_remote_media}'.format(
-            old_remote_media=old_remote_media,
-            new_remote_media=env.media_root))
-    remote_static = os.path.join(
-        env.remote_source_root, env.project_repo_name, 'static')
-    if exists(remote_static):
-        run('mv {remote_static}/ {static_root}'.format(
-            remote_static=remote_static,
-            static_root=env.static_root))
+    # move media folder out of project repo
+    move_media_folder()
     sudo('rm -rf {remote_source_root}'.format(
         remote_source_root=env.remote_source_root))
 
@@ -221,13 +219,11 @@ def deploy_client(bootstrap_path=None, release=None, map_area=None, user=None,
     sudo('launchctl unload -F /Library/LaunchDaemons/nginx.plist', warn_only=True)
     sudo('nginx -s stop', warn_only=True)
     run('launchctl unload -F /Library/LaunchDaemons/gunicorn.plist', warn_only=True)
-#     sudo('ps aux | grep gunicorn | awk \'{print $2}\' | xargs kill -9',
-#          warn_only=True)
     sudo('launchctl load -F /Library/LaunchDaemons/nginx.plist')
     run('launchctl load -F /Library/LaunchDaemons/gunicorn.plist')
+    run('curl http://localhost')
 
 
-@task
 def update_bcpp_conf(project_conf=None, map_area=None):
     """Updates the bcpp.conf file on the remote host.
     """
@@ -238,14 +234,3 @@ def update_bcpp_conf(project_conf=None, map_area=None):
     sed(remote_copy, 'map_area \=.*',
         'map_area \= {}'.format(env.map_area or ''),
         use_sudo=True)
-
-
-@task
-def relaunch_web():
-    sudo('launchctl unload -F /Library/LaunchDaemons/nginx.plist', warn_only=True)
-    sudo('nginx -s stop', warn_only=True)
-    run('launchctl unload -F /Library/LaunchDaemons/gunicorn.plist', warn_only=True)
-    sudo('ps auxww | grep gunicorn | awk \'{print $2}\' | xargs kill -9',
-         warn_only=True)
-    sudo('launchctl load -F /Library/LaunchDaemons/nginx.plist')
-    run('launchctl load -F /Library/LaunchDaemons/gunicorn.plist')
