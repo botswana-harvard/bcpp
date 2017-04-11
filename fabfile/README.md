@@ -1,25 +1,3 @@
-
-encrypt the secrets.conf
-
-    gpg -o secrets.conf.gpg --cipher-algo AES256 --symmetric secrets.conf
-    
-save the passphrase.
-
-decrypt
-
-    gpg -d secrets.conf.gpg > secrets.conf
-    
-encrypt the hosts.conf
-
-    gpg -o hosts.conf.gpg --cipher-algo AES256 --symmetric hosts.conf
-    
-save the passphrase.
-
-decrypt
-
-    gpg -d hosts.conf.gpg > hosts.conf
-    
-    
 ## set up the deployment host
 
 Using the bootstrap.conf in the bcpp repo:
@@ -67,3 +45,37 @@ See `roledefs.py` in `bcpp.fabfile` for configured roles. Currently is by `map_a
 Example:
 
     fab -H 192.168.157.16 deploy_client:bootstrap_path=/Users/erikvw/source/bcpp/fabfile/conf/,release=develop,bootstrap_branch=develop,map_area=lentsweletau --user=django
+
+    
+    
+## deploy
+
+Create a venv
+
+    mkdir ~/.venvs
+    python -m venv bcpp ~/.venvs
+    source ~/.venvs/bcpp/bin/activate
+    pip install Fabric3
+    pip install git+https://github.com/botswana-harvard/bcpp-fabric.git@develop#egg=bcpp_fabric
+    
+
+If releases need to be cut, do so. You will need clones of all the repos onto your local machine.
+
+    fab -H localhost git.cut_releases:source_root=/Users/erikvw/source/,project_repo_name=bcpp,requirements_file=requirements_production.txt --user=erikvw
+
+Deploy to the deployment host. This can be localhost or any host:
+
+    fab -H localhost deploy.deployment_host:bootstrap_path=/Users/erikvw/source/bcpp/fabfile/conf/,release=0.1.19
+
+From the deployment, specify the `release` and `map_area` and change the `bootstrap_path` path to match yours:
+
+    fab -H bcpp077 deploy.deploy_client:bootstrap_path=/Users/erikvw/source/bcpp/fabfile/conf/,release=0.1.19,map_area=lentsweletau --user=django
+
+If you run a second time and don't want/need to restore the DB again:
+    
+    skip_db_restore=True
+
+if you want/need to skip rebuilding the venv:
+
+    skip_venv=True
+
