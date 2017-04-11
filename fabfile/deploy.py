@@ -120,7 +120,7 @@ def deploy_client(**kwargs):
 
 def deploy(conf_filename=None, bootstrap_path=None, release=None, map_area=None, user=None,
            bootstrap_branch=None, skip_update=None, skip_db=None, skip_repo=None,
-           skip_venv=None, skip_mysql=None, skip_python=None, skip_web=None):
+           skip_venv=None, skip_mysql=None, skip_python=None, skip_web=None, work_online=None):
     bootstrap_env(
         path=bootstrap_path,
         filename=conf_filename,
@@ -187,7 +187,7 @@ def deploy(conf_filename=None, bootstrap_path=None, release=None, map_area=None,
         install_python3()
 
     if not skip_venv:
-        create_venv()
+        create_venv(work_online=work_online)
 
     # copy bcpp.conf into etc/{project_app_name}/
     put_project_conf()
@@ -199,7 +199,7 @@ def deploy(conf_filename=None, bootstrap_path=None, release=None, map_area=None,
                  warn_only=True)
         run('mkdir -p {log_root}'.format(log_root=env.log_root))
         install_nginx(skip_bootstrap=True)
-        install_gunicorn()
+        install_gunicorn(work_online=work_online)
 
     # crypto_keys DMG into etc/{project_app_name}/
     put(os.path.expanduser(os.path.join(env.fabric_config_root, 'etc', env.dmg_filename)),
@@ -231,4 +231,4 @@ def deploy(conf_filename=None, bootstrap_path=None, release=None, map_area=None,
             run('python manage.py collectstatic')
             run('python manage.py collectstatic_js_reverse')
 
-    launch_webserver()
+    launch_webserver(work_online=work_online)
