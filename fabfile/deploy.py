@@ -23,7 +23,7 @@ from bcpp_fabric.new.fabfile.python import install_python3
 from bcpp_fabric.new.fabfile.repositories import get_repo_name
 from bcpp_fabric.new.fabfile.utils import (
     get_hosts, get_device_ids, update_settings, rsync_deployment_root,
-    bootstrap_env, put_bash_profile, ssh_copy_id,
+    bootstrap_env, put_bash_config, ssh_copy_id,
     test_connection2, move_media_folder, launch_webserver)
 
 from .patterns import hostname_pattern
@@ -150,7 +150,7 @@ def deploy(conf_filename=None, bootstrap_path=None, release=None, map_area=None,
         elif env.target_os == LINUX:
             sudo('apt-get update')
 
-    put_bash_profile()
+    put_bash_config()
 
     if not exists(os.path.join(env.remote_source_root, env.project_repo_name)):
         run('mkdir -p {remote_source_root}'.format(
