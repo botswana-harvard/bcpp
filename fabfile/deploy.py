@@ -2,7 +2,7 @@ import os
 
 from datetime import datetime
 
-from fabric.api import execute, task, env, put, sudo, cd, run, warn, prefix
+from fabric.api import execute, task, env, put, sudo, cd, run, warn, prefix, lcd
 from fabric.contrib.files import sed, exists
 from fabric.utils import abort
 from fabric.contrib import django
@@ -11,12 +11,13 @@ from edc_device.constants import CENTRAL_SERVER
 
 from bcpp_fabric.new.fabfile import (
     update_fabric_env,
-    mount_dmg, prepare_deployment_host, create_venv,
+    prepare_deployment_host, create_venv,
     install_mysql, install_protocol_database, prompts)
 from bcpp_fabric.new.fabfile.brew import update_brew_cache
 from bcpp_fabric.new.fabfile.conf import put_project_conf
 from bcpp_fabric.new.fabfile.constants import MACOSX, LINUX
 from bcpp_fabric.new.fabfile.environment import update_env_secrets
+from bcpp_fabric.new.fabfile.files import mount_dmg_locally, dismount_dmg_locally, mount_dmg
 from bcpp_fabric.new.fabfile.gunicorn import install_gunicorn
 from bcpp_fabric.new.fabfile.nginx import install_nginx
 from bcpp_fabric.new.fabfile.python import install_python3
@@ -25,7 +26,7 @@ from bcpp_fabric.new.fabfile.utils import (
     get_hosts, get_device_ids, update_settings, rsync_deployment_root,
     bootstrap_env, put_bash_config, ssh_copy_id,
     test_connection2, move_media_folder, launch_webserver)
-
+from bcpp_fabric.new.fabfile.virtualenv import activate_venv
 from .patterns import hostname_pattern
 from .roledefs import roledefs
 from .utils import update_bcpp_conf
@@ -208,8 +209,13 @@ def deploy(conf_filename=None, bootstrap_path=None, release=None, map_area=None,
 
     # mount dmg
     if env.device_role == CENTRAL_SERVER:
-        # use dm-crypt?
-        pass
+        mount_dmg_locally(dmg_path=env.etc_dir, dmg_filename=env.dmg_filename,
+                          dmg_passphrase=env.crypto_keys_passphrase)
+        if not exists(env.key_path):
+            sudo(f'mkdir -p {env.key_path}')
+        with lcd(env.key_volume):
+            put(local_path='user*', remote_path=f'{env.key_path}/', use_sudo=True)
+        dismount_dmg_locally(volume_name=env.key_volume)
     else:
         mount_dmg(dmg_path=env.etc_dir, dmg_filename=env.dmg_filename,
                   dmg_passphrase=env.crypto_keys_passphrase)
@@ -227,7 +233,7 @@ def deploy(conf_filename=None, bootstrap_path=None, release=None, map_area=None,
         install_protocol_database()
 
     with cd(os.path.join(env.remote_source_root, env.project_repo_name)):
-        with prefix('workon {venv_name}'.format(venv_name=env.venv_name)):
+        with prefix(f'source {activate_venv()}'.format(venv_name=env.venv_name)):
             run('python manage.py collectstatic')
             run('python manage.py collectstatic_js_reverse')
 
