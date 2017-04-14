@@ -32,4 +32,4 @@
 -e /Users/erikvw/source/django-revision
 
 # make sure pip is updated!
-git+https://github.com/xhtml2pdf/xhtml2pdf.git
+# git+https://github.com/xhtml2pdf/xhtml2pdf.git

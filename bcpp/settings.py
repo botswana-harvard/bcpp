@@ -207,10 +207,10 @@ MEDIA_ROOT = config['django'].get(
 MEDIA_URL = '/media/'
 
 # etc ini file attributes
-if config['django_crypto_fields'].get('key_path'):
-    KEY_PATH = config['django_crypto_fields'].get('key_path')
-else:
-    KEY_PATH = os.path.join(BASE_DIR, 'crypto_fields')
+# if DEBUG:
+#     KEY_PATH = os.path.join(BASE_DIR, 'crypto_fields')
+# else:
+KEY_PATH = config['django_crypto_fields'].get('key_path')
 CURRENT_MAP_AREA = config['edc_map'].get('map_area', 'test_community')
 DEVICE_ID = config['edc_device'].get('device_id', '99')
 DEVICE_ROLE = config['edc_device'].get('role')
