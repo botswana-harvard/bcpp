@@ -7,12 +7,12 @@ from fabric.colors import yellow, blue
 from fabric.contrib.files import exists, sed
 from fabric.contrib.project import rsync_project
 
-from bcpp_fabric.new.fabfile.utils import (
+from edc_fabric.fabfile.utils import (
     rsync_deployment_root, ssh_copy_id, test_connection2,
     launch_webserver_task, launch_webserver)
-from bcpp_fabric.new.fabfile.environment import (
+from edc_fabric.fabfile.environment import (
     bootstrap_env, update_fabric_env)
-from bcpp_fabric.new.fabfile.mysql import install_protocol_database
+from edc_fabric.fabfile.mysql import install_protocol_database
 from fabric.operations import sudo
 
 
@@ -33,7 +33,8 @@ def validate(release=None, pull=None):
                 result = run('git tag')
                 if release not in result:
                     result = run('git describe --abbrev=0 --tags')
-                    warn(yellow(f'{env.host}: bcpp tag not found. Got {result}'))
+                    warn(
+                        yellow(f'{env.host}: bcpp tag not found. Got {result}'))
                     if pull:
                         run('git pull')
             result = run('curl http://localhost')

@@ -3,30 +3,31 @@ import os
 from datetime import datetime
 
 from fabric.api import execute, task, env, put, sudo, cd, run, warn, prefix, lcd
-from fabric.contrib.files import sed, exists
+from fabric.contrib.files import exists
 from fabric.utils import abort
 from fabric.contrib import django
 
 from edc_device.constants import CENTRAL_SERVER
 
-from bcpp_fabric.new.fabfile import (
+from edc_fabric.fabfile import (
     update_fabric_env,
     prepare_deployment_host, create_venv,
     install_mysql, install_protocol_database, prompts)
-from bcpp_fabric.new.fabfile.brew import update_brew_cache
-from bcpp_fabric.new.fabfile.conf import put_project_conf
-from bcpp_fabric.new.fabfile.constants import MACOSX, LINUX
-from bcpp_fabric.new.fabfile.environment import update_env_secrets
-from bcpp_fabric.new.fabfile.files import mount_dmg_locally, dismount_dmg_locally, mount_dmg
-from bcpp_fabric.new.fabfile.gunicorn import install_gunicorn
-from bcpp_fabric.new.fabfile.nginx import install_nginx
-from bcpp_fabric.new.fabfile.python import install_python3
-from bcpp_fabric.new.fabfile.repositories import get_repo_name
-from bcpp_fabric.new.fabfile.utils import (
+from edc_fabric.fabfile.brew import update_brew_cache
+from edc_fabric.fabfile.conf import put_project_conf
+from edc_fabric.fabfile.constants import MACOSX, LINUX
+from edc_fabric.fabfile.environment import update_env_secrets
+from edc_fabric.fabfile.files import mount_dmg_locally, dismount_dmg_locally, mount_dmg
+from edc_fabric.fabfile.gunicorn import install_gunicorn
+from edc_fabric.fabfile.nginx import install_nginx
+from edc_fabric.fabfile.python import install_python3
+from edc_fabric.fabfile.repositories import get_repo_name
+from edc_fabric.fabfile.utils import (
     get_hosts, get_device_ids, update_settings, rsync_deployment_root,
     bootstrap_env, put_bash_config, ssh_copy_id,
     test_connection2, move_media_folder, launch_webserver)
-from bcpp_fabric.new.fabfile.virtualenv import activate_venv
+from edc_fabric.fabfile.virtualenv import activate_venv
+
 from .patterns import hostname_pattern
 from .roledefs import roledefs
 from .utils import update_bcpp_conf
@@ -214,7 +215,8 @@ def deploy(conf_filename=None, bootstrap_path=None, release=None, map_area=None,
         if not exists(env.key_path):
             sudo(f'mkdir -p {env.key_path}')
         with lcd(env.key_volume):
-            put(local_path='user*', remote_path=f'{env.key_path}/', use_sudo=True)
+            put(local_path='user*',
+                remote_path=f'{env.key_path}/', use_sudo=True)
         dismount_dmg_locally(volume_name=env.key_volume)
     else:
         mount_dmg(dmg_path=env.etc_dir, dmg_filename=env.dmg_filename,
