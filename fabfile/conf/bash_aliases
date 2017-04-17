@@ -16,6 +16,4 @@ EDITOR=/usr/bin/nano
 
 export TERM=xterm-color
 
-export PATH="/usr/local/bin:$PATH"
-
 workon () { source ~/.venvs/"$@"/bin/activate; }

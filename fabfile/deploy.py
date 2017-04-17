@@ -2,29 +2,35 @@ import os
 
 from datetime import datetime
 
-from fabric.api import execute, task, env, put, sudo, cd, run, warn, prefix
-from fabric.contrib.files import sed, exists
+from fabric.api import execute, task, env, put, sudo, cd, run, warn, prefix, lcd
+from fabric.contrib.files import exists
 from fabric.utils import abort
 from fabric.contrib import django
 
-from bcpp_fabric.new.fabfile import (
+from edc_device.constants import CENTRAL_SERVER
+
+from edc_fabric.fabfile import (
     update_fabric_env,
-    mount_dmg, prepare_deployment_host, create_venv,
+    prepare_deployment_host, create_venv,
     install_mysql, install_protocol_database, prompts)
-from bcpp_fabric.new.fabfile.brew import update_brew_cache
-from bcpp_fabric.new.fabfile.conf import put_project_conf
-from bcpp_fabric.new.fabfile.environment import update_env_secrets
-from bcpp_fabric.new.fabfile.utils import (
+from edc_fabric.fabfile.brew import update_brew_cache
+from edc_fabric.fabfile.conf import put_project_conf
+from edc_fabric.fabfile.constants import MACOSX, LINUX
+from edc_fabric.fabfile.environment import update_env_secrets
+from edc_fabric.fabfile.files import mount_dmg_locally, dismount_dmg_locally, mount_dmg
+from edc_fabric.fabfile.gunicorn import install_gunicorn
+from edc_fabric.fabfile.nginx import install_nginx
+from edc_fabric.fabfile.python import install_python3
+from edc_fabric.fabfile.repositories import get_repo_name
+from edc_fabric.fabfile.utils import (
     get_hosts, get_device_ids, update_settings, rsync_deployment_root,
-    bootstrap_env, put_bash_profile, ssh_copy_id,
-    install_python3, test_connection2, move_media_folder)
-from bcpp_fabric.new.fabfile.repositories import get_repo_name
-from bcpp_fabric.new.fabfile.nginx import install_nginx
-from bcpp_fabric.new.fabfile.gunicorn import install_gunicorn
+    bootstrap_env, put_bash_config, ssh_copy_id,
+    test_connection2, move_media_folder, launch_webserver)
+from edc_fabric.fabfile.virtualenv import activate_venv
 
 from .patterns import hostname_pattern
 from .roledefs import roledefs
-
+from .utils import update_bcpp_conf
 
 django.settings_module('bcpp.settings')
 
@@ -115,17 +121,17 @@ def deploy_client(**kwargs):
 
 
 def deploy(conf_filename=None, bootstrap_path=None, release=None, map_area=None, user=None,
-           bootstrap_branch=None, database=None, skip_db_restore=None,
-           skip_venv=None, device_role=None, device_id=None):
+           bootstrap_branch=None, skip_update=None, skip_db=None, skip_repo=None,
+           skip_venv=None, skip_mysql=None, skip_python=None, skip_web=None, work_online=None):
     bootstrap_env(
         path=bootstrap_path,
         filename=conf_filename,
         bootstrap_branch=bootstrap_branch)
-    env.device_role = device_role or env.device_role
     if not release:
         abort('Specify the release')
     if not map_area:
         abort('Specify the map_area')
+    print(env.target_os)
     env.project_release = release
     env.map_area = map_area
 
@@ -140,26 +146,30 @@ def deploy(conf_filename=None, bootstrap_path=None, release=None, map_area=None,
 
     update_fabric_env()
 
-    update_brew_cache(no_auto_update=True)
+    if not skip_update:
+        if env.target_os == MACOSX:
+            update_brew_cache(no_auto_update=True)
+        elif env.target_os == LINUX:
+            sudo('apt-get update')
 
-    put_bash_profile()
+    put_bash_config()
 
     if not exists(os.path.join(env.remote_source_root, env.project_repo_name)):
         run('mkdir -p {remote_source_root}'.format(
             remote_source_root=env.remote_source_root), warn_only=True)
 
-    # move media folder out of project repo
-    move_media_folder()
-    sudo('rm -rf {remote_source_root}'.format(
-        remote_source_root=env.remote_source_root))
-
-    # copy repo from deployment to source
-    destination = env.remote_source_root
-    if not exists(destination):
-        run('mkdir -p {destination}'.format(destination=destination))
-    run('rsync -pthrvz --delete {source} {destination}'.format(
-        source=os.path.join(env.deployment_root, env.project_appname),
-        destination=destination))
+    if not skip_repo:
+        # move media folder out of project repo
+        move_media_folder()
+        sudo('rm -rf {remote_source_root}'.format(
+            remote_source_root=env.remote_source_root))
+        # copy repo from deployment to source
+        destination = env.remote_source_root
+        if not exists(destination):
+            run('mkdir -p {destination}'.format(destination=destination))
+        run('rsync -pthrvz --delete {source} {destination}'.format(
+            source=os.path.join(env.deployment_root, env.project_appname),
+            destination=destination))
 
     with cd(os.path.join(env.project_repo_root)):
         run('git checkout master')
@@ -172,23 +182,26 @@ def deploy(conf_filename=None, bootstrap_path=None, release=None, map_area=None,
         run('mkdir {media_root}'.format(
             media_root=env.media_root), warn_only=True)
 
-    install_mysql()
+    if not skip_mysql:
+        install_mysql()
 
-    install_python3()
+    if not skip_python:
+        install_python3()
 
     if not skip_venv:
-        create_venv()
+        create_venv(work_online=work_online)
 
     # copy bcpp.conf into etc/{project_app_name}/
-    env.device_id = device_id
     put_project_conf()
     update_bcpp_conf()
 
-    if env.log_root and exists(env.log_root):
-        sudo('rm -rf {log_root}'.format(log_root=env.log_root), warn_only=True)
-    run('mkdir -p {log_root}'.format(log_root=env.log_root))
-    install_nginx(skip_bootstrap=True)
-    install_gunicorn()
+    if not skip_web:
+        if env.log_root and exists(env.log_root):
+            sudo('rm -rf {log_root}'.format(log_root=env.log_root),
+                 warn_only=True)
+        run('mkdir -p {log_root}'.format(log_root=env.log_root))
+        install_nginx(skip_bootstrap=True)
+        install_gunicorn(work_online=work_online)
 
     # crypto_keys DMG into etc/{project_app_name}/
     put(os.path.expanduser(os.path.join(env.fabric_config_root, 'etc', env.dmg_filename)),
@@ -196,8 +209,18 @@ def deploy(conf_filename=None, bootstrap_path=None, release=None, map_area=None,
         use_sudo=True)
 
     # mount dmg
-    mount_dmg(dmg_path=env.etc_dir, dmg_filename=env.dmg_filename,
-              dmg_passphrase=env.crypto_keys_passphrase)
+    if env.device_role == CENTRAL_SERVER:
+        mount_dmg_locally(dmg_path=env.etc_dir, dmg_filename=env.dmg_filename,
+                          dmg_passphrase=env.crypto_keys_passphrase)
+        if not exists(env.key_path):
+            sudo(f'mkdir -p {env.key_path}')
+        with lcd(env.key_volume):
+            put(local_path='user*',
+                remote_path=f'{env.key_path}/', use_sudo=True)
+        dismount_dmg_locally(volume_name=env.key_volume)
+    else:
+        mount_dmg(dmg_path=env.etc_dir, dmg_filename=env.dmg_filename,
+                  dmg_passphrase=env.crypto_keys_passphrase)
 
     with cd(os.path.join(env.remote_source_root, env.project_repo_name)):
         run('git checkout master')
@@ -208,29 +231,12 @@ def deploy(conf_filename=None, bootstrap_path=None, release=None, map_area=None,
 
     update_settings()
 
-    if not skip_db_restore:
+    if not skip_db:
         install_protocol_database()
 
     with cd(os.path.join(env.remote_source_root, env.project_repo_name)):
-        with prefix('workon {venv_name}'.format(venv_name=env.venv_name)):
+        with prefix(f'source {activate_venv()}'.format(venv_name=env.venv_name)):
             run('python manage.py collectstatic')
             run('python manage.py collectstatic_js_reverse')
 
-    sudo('launchctl unload -F /Library/LaunchDaemons/nginx.plist', warn_only=True)
-    sudo('nginx -s stop', warn_only=True)
-    run('launchctl unload -F /Library/LaunchDaemons/gunicorn.plist', warn_only=True)
-    sudo('launchctl load -F /Library/LaunchDaemons/nginx.plist')
-    run('launchctl load -F /Library/LaunchDaemons/gunicorn.plist')
-    run('curl http://localhost')
-
-
-def update_bcpp_conf(project_conf=None, map_area=None):
-    """Updates the bcpp.conf file on the remote host.
-    """
-    project_conf = project_conf or env.project_conf
-    remote_copy = os.path.join(env.etc_dir, project_conf)
-    if not exists(env.etc_dir):
-        sudo('mkdir {etc_dir}'.format(etc_dir=env.etc_dir))
-    sed(remote_copy, 'map_area \=.*',
-        'map_area \= {}'.format(env.map_area or ''),
-        use_sudo=True)
+    launch_webserver(work_online=work_online)

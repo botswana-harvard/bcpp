@@ -7,17 +7,17 @@ from dateutil.relativedelta import MO, TU, WE, TH, FR, SA, SU
 from dateutil.tz import gettz
 
 from django.apps import AppConfig as DjangoAppConfig
-from django.core.management.color import color_style
 from django.conf import settings
+from django.core.management.color import color_style
 
 from edc_appointment.apps import AppConfig as BaseEdcAppointmentAppConfig
 from edc_appointment.facility import Facility
 from edc_base.address import Address
 from edc_base.apps import AppConfig as BaseEdcBaseAppConfig
-from edc_base_test.apps import AppConfig as BaseEdcBaseTestAppConfig
 from edc_base.utils import get_utcnow
-from edc_constants.constants import FAILED_ELIGIBILITY
+from edc_base_test.apps import AppConfig as BaseEdcBaseTestAppConfig
 from edc_consent.apps import AppConfig as BaseEdcConsentAppConfig
+from edc_constants.constants import FAILED_ELIGIBILITY
 from edc_device.apps import AppConfig as BaseEdcDeviceAppConfig, DevicePermission
 from edc_device.constants import SERVER, CENTRAL_SERVER, CLIENT
 from edc_identifier.apps import AppConfig as BaseEdcIdentifierAppConfig
@@ -33,14 +33,14 @@ from edc_timepoint.timepoint import Timepoint
 from edc_visit_tracking.apps import AppConfig as BaseEdcVisitTrackingAppConfig
 from edc_visit_tracking.constants import SCHEDULED, UNSCHEDULED, LOST_VISIT
 
-from bcpp_subject.apps import AppConfig as BaseBcppSubjectAppConfig
 from bcpp_follow.apps import AppConfig as BaseBcppFollowAppConfig
+from bcpp_subject.apps import AppConfig as BaseBcppSubjectAppConfig
 from enumeration.apps import AppConfig as BaseEnumerationAppConfig
 from household.apps import AppConfig as BaseHouseholdAppConfig
 from member.apps import AppConfig as BaseMemberAppConfig
 from plot.apps import AppConfig as BasePlotAppConfig
-from survey.apps import AppConfig as BaseSurveyAppConfig
 from survey import S
+from survey.apps import AppConfig as BaseSurveyAppConfig
 
 from .navbars import navbars
 
@@ -125,7 +125,7 @@ class EdcLabAppConfig(BaseEdcLabAppConfig):
 class EdcBaseAppConfig(BaseEdcBaseAppConfig):
     project_name = 'BCPP'
     institution = 'Botswana-Harvard AIDS Institute Partnership'
-    copyright = '2013-{}'.format(get_utcnow().year)
+    copyright = f'2013-{get_utcnow().year}'
     license = 'GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007'
     physical_address = Address(
         company_name='Botswana-Harvard AIDS Institute Partnership',
@@ -173,11 +173,12 @@ class SurveyAppConfig(BaseSurveyAppConfig):
             S('bcpp-survey.bcpp-year-3.ahs.test_community'),
             S('bcpp-survey.bcpp-year-3.ess.test_community')]
     else:
+        map_area = settings.CURRENT_MAP_AREA
         current_surveys = [
-            S('bcpp-survey.bcpp-year-1.bhs.{}'.format(settings.CURRENT_MAP_AREA)),
-            S('bcpp-survey.bcpp-year-2.ahs.{}'.format(settings.CURRENT_MAP_AREA)),
-            S('bcpp-survey.bcpp-year-3.ahs.{}'.format(settings.CURRENT_MAP_AREA)),
-            S('bcpp-survey.bcpp-year-3.ess.{}'.format(settings.CURRENT_MAP_AREA))]
+            S(f'bcpp-survey.bcpp-year-1.bhs.{map_area}'),
+            S(f'bcpp-survey.bcpp-year-2.ahs.{map_area}'),
+            S(f'bcpp-survey.bcpp-year-3.ahs.{map_area}'),
+            S(f'bcpp-survey.bcpp-year-3.ess.{map_area}')]
 
 
 class EdcMapAppConfig(BaseEdcMapAppConfig):
@@ -187,7 +188,8 @@ class EdcMapAppConfig(BaseEdcMapAppConfig):
     verify_point_on_save = False
     zoom_levels = ['14', '15', '16', '17', '18']
     identifier_field_attr = 'plot_identifier'
-    extra_filter_field_attr = 'enrolled'  # Extra filter boolean attribute name.
+    # Extra filter boolean attribute name.
+    extra_filter_field_attr = 'enrolled'
 
 
 class EdcVisitTrackingAppConfig(BaseEdcVisitTrackingAppConfig):

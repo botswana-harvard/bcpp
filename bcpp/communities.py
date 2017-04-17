@@ -9,10 +9,12 @@ style = color_style()
 Community = namedtuple('Community', 'code name pair intervention')
 
 if 'test' in sys.argv:
-    communities = {'test_community': Community('01', 'test_community', 1, True)}
+    communities = {'test_community': Community(
+        '01', 'test_community', 1, True)}
 else:
     communities = {
         'test_community': Community('99', 'test_community', 99, True),
+        'botswana': Community('00', 'botswana', 0, False),
         'bokaa': Community('17', 'bokaa', 4, False),
         'digawana': Community('12', 'digawana', 1, True),
         'gumare': Community('35', 'gumare', 13, True),

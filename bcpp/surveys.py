@@ -9,6 +9,11 @@ from django.conf import settings
 from survey import site_surveys, Survey, SurveySchedule
 
 from .communities import communities
+from django.core.exceptions import ImproperlyConfigured
+
+if settings.CURRENT_MAP_AREA not in communities:
+    raise ImproperlyConfigured(
+        f'Current map area \'{settings.CURRENT_MAP_AREA}\' not in dictionary of communities.')
 
 tzinfo = gettz(settings.TIME_ZONE)
 

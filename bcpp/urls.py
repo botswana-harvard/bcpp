@@ -17,19 +17,18 @@ from django.contrib import admin
 
 from edc_appointment.admin_site import edc_appointment_admin
 from edc_base.views import LogoutView, LoginView
+from edc_identifier.admin_site import edc_identifier_admin
 from edc_lab.admin_site import edc_lab_admin
+from edc_map.admin import edc_map_admin
 from edc_metadata.admin_site import edc_metadata_admin
 from edc_registration.admin_site import edc_registration_admin
 from edc_sync.admin import edc_sync_admin
 from edc_sync_files.admin_site import edc_sync_files_admin
-from edc_map.admin import edc_map_admin
-from edc_identifier.admin_site import edc_identifier_admin
-
-from plot.admin_site import plot_admin
-from household.admin_site import household_admin
-from member.admin_site import member_admin
 
 from bcpp_subject.admin_site import bcpp_subject_admin
+from household.admin_site import household_admin
+from member.admin_site import member_admin
+from plot.admin_site import plot_admin
 
 from .views import HomeView, AdministrationView
 

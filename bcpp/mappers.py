@@ -17,6 +17,23 @@ from .landmarks import (TEST_LANDMARKS, METSIMOTLHABE_LANDMARKS,
                         TATI_SIDING_LANDMARKS)
 
 
+class BotswanaPlotMapper(Mapper):
+
+    map_area = 'botswana'
+    map_code = '00'
+    pair = 0
+    regions = []
+    sections = []
+    intervention = False
+    landmarks = []
+    center_lat = -22.543839
+    center_lon = 23.855027
+    radius = 900
+
+
+site_mappers.register(BotswanaPlotMapper)
+
+
 class AnonymousMapper(Mapper):
 
     map_area = 'austin'
@@ -30,6 +47,7 @@ class AnonymousMapper(Mapper):
     regions = None  # SECTIONS
     sections = None  # SUB_SECTIONS
     landmarks = None
+
 
 site_mappers.register(AnonymousMapper)
 
@@ -49,6 +67,7 @@ class TestPlotMapper(Mapper):
 
     intervention = True
 
+
 site_mappers.register(TestPlotMapper)
 
 
@@ -64,6 +83,7 @@ class BokaaPlotMapper(Mapper):
     center_lat = -24.426910
     center_lon = 26.020618
     radius = 5.5
+
 
 site_mappers.register(BokaaPlotMapper)
 
@@ -81,6 +101,7 @@ class DigawanaPlotMapper(Mapper):
     landmarks = DIGAWANA_LANDMARKS
     intervention = True
 
+
 site_mappers.register(DigawanaPlotMapper)
 
 
@@ -96,6 +117,7 @@ class GumarePlotMapper(Mapper):
     center_lat = -19.362483
     center_lon = 22.165860
     radius = 5.5
+
 
 site_mappers.register(GumarePlotMapper)
 
@@ -113,6 +135,7 @@ class GwetaPlotMapper(Mapper):
     center_lon = 25.250788
     radius = 5.5
 
+
 site_mappers.register(GwetaPlotMapper)
 
 
@@ -128,6 +151,7 @@ class LentsweletauPlotMapper(Mapper):
     radius = 5.0
     intervention = True
     landmarks = LENTSWELETAU_LANDMARKS
+
 
 site_mappers.register(LentsweletauPlotMapper)
 
@@ -145,6 +169,7 @@ class LeralaPlotMapper(Mapper):
     center_lon = 27.760241
     radius = 5.5
 
+
 site_mappers.register(LeralaPlotMapper)
 
 
@@ -160,6 +185,7 @@ class LetlhakengPlotMapper(Mapper):
     center_lon = 25.033250
     radius = 5.0
     intervention = False
+
 
 site_mappers.register(LetlhakengPlotMapper)
 
@@ -177,6 +203,7 @@ class MasungaPlotMapper(Mapper):
     center_lon = 27.428340
     radius = 7.5
 
+
 site_mappers.register(MasungaPlotMapper)
 
 
@@ -192,6 +219,7 @@ class MathangwanePlotMapper(Mapper):
     center_lat = -20.993214
     center_lon = 27.333963
     radius = 6.5
+
 
 site_mappers.register(MathangwanePlotMapper)
 
@@ -209,6 +237,7 @@ class MaunatlalaPlotMapper(Mapper):
     center_lon = 27.4198811366
     radius = 5.5
 
+
 site_mappers.register(MaunatlalaPlotMapper)
 
 
@@ -225,6 +254,7 @@ class MetsimotlhabePlotMapper(Mapper):
     center_lon = 25.809554
     radius = 7.5
 
+
 site_mappers.register(MetsimotlhabePlotMapper)
 
 
@@ -239,6 +269,7 @@ class MmadinarePlotMapper(Mapper):
     center_lat = -21.869753
     center_lon = 27.753179
     radius = 7.5
+
 
 site_mappers.register(MmadinarePlotMapper)
 
@@ -256,6 +287,7 @@ class MmandunyanePlotMapper(Mapper):
     center_lon = 27.334564
     radius = 6.5
 
+
 site_mappers.register(MmandunyanePlotMapper)
 
 
@@ -271,6 +303,7 @@ class MmankgodiPlotMapper(Mapper):
     center_lat = -24.729837
     center_lon = 25.646853
     radius = 5.5
+
 
 site_mappers.register(MmankgodiPlotMapper)
 
@@ -288,6 +321,7 @@ class MmathethePlotMapper(Mapper):
     center_lon = 25.269320
     radius = 5.5
 
+
 site_mappers.register(MmathethePlotMapper)
 
 
@@ -303,6 +337,7 @@ class MolapowabojangPlotMapper(Mapper):
     center_lat = -25.204009
     center_lon = 25.562754
     radius = 5.5
+
 
 site_mappers.register(MolapowabojangPlotMapper)
 
@@ -320,6 +355,7 @@ class NataPlotMapper(Mapper):
     center_lon = 26.184711
     radius = 5.5
 
+
 site_mappers.register(NataPlotMapper)
 
 
@@ -335,6 +371,7 @@ class NkangePlotMapper(Mapper):
     center_lat = -20.29269441
     center_lon = 27.13549895
     radius = 6.5
+
 
 site_mappers.register(NkangePlotMapper)
 
@@ -352,6 +389,7 @@ class OodiPlotMapper(Mapper):
     center_lon = 26.021626
     radius = 5.5
 
+
 site_mappers.register(OodiPlotMapper)
 
 
@@ -367,6 +405,7 @@ class OtsePlotMapper(Mapper):
     center_lat = -25.033194
     center_lon = 25.747132
     radius = 5.5
+
 
 site_mappers.register(OtsePlotMapper)
 
@@ -384,6 +423,7 @@ class RakopsPlotMapper(Mapper):
     center_lon = 24.401214
     radius = 5.5
 
+
 site_mappers.register(RakopsPlotMapper)
 
 
@@ -399,6 +439,7 @@ class RamokgonamiPlotMapper(Mapper):
     center_lat = -22.8658437618
     center_lon = 27.4198811366
     radius = 5.5
+
 
 site_mappers.register(RamokgonamiPlotMapper)
 
@@ -416,6 +457,7 @@ class RanakaPlotMapper(Mapper):
     center_lon = 25.463033
     radius = 4
 
+
 site_mappers.register(RanakaPlotMapper)
 
 
@@ -431,6 +473,7 @@ class SebinaPlotMapper(Mapper):
     center_lat = -20.806103
     center_lon = 27.200003
     radius = 6.5
+
 
 site_mappers.register(SebinaPlotMapper)
 
@@ -448,6 +491,7 @@ class SefharePlotMapper(Mapper):
     center_lon = 27.526095
     radius = 5.5
 
+
 site_mappers.register(SefharePlotMapper)
 
 
@@ -463,6 +507,7 @@ class SefophePlotMapper(Mapper):
     center_lat = -22.1918153
     center_lon = 27.9624366
     radius = 5.5
+
 
 site_mappers.register(SefophePlotMapper)
 
@@ -480,6 +525,7 @@ class ShakawePlotMapper(Mapper):
     center_lon = 21.836862
     radius = 11
 
+
 site_mappers.register(ShakawePlotMapper)
 
 
@@ -495,6 +541,7 @@ class ShoshongPlotMapper(Mapper):
     center_lat = -23.032546
     center_lon = 26.516352
     radius = 6.0
+
 
 site_mappers.register(ShoshongPlotMapper)
 
@@ -512,6 +559,7 @@ class TatiSidingPlotMapper(Mapper):
     center_lon = 27.474822
     radius = 6.5
 
+
 site_mappers.register(TatiSidingPlotMapper)
 
 
@@ -527,5 +575,6 @@ class TsetsebjwePlotMapper(Mapper):
     center_lat = -22.41391
     center_lon = 28.39465
     radius = 5.5
+
 
 site_mappers.register(TsetsebjwePlotMapper)
