@@ -14,6 +14,8 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
+from django.conf import settings
+from django.conf.urls.static import static
 
 from edc_appointment.admin_site import edc_appointment_admin
 from edc_base.views import LogoutView, LoginView
@@ -24,6 +26,11 @@ from edc_metadata.admin_site import edc_metadata_admin
 from edc_registration.admin_site import edc_registration_admin
 from edc_sync.admin import edc_sync_admin
 from edc_sync_files.admin_site import edc_sync_files_admin
+
+from edc_map.admin import edc_map_admin
+from edc_identifier.admin_site import edc_identifier_admin
+from bcpp_report.admin_site import bcpp_report_admin
+
 
 from bcpp_subject.admin_site import bcpp_subject_admin
 from household.admin_site import household_admin
@@ -42,6 +49,7 @@ urlpatterns = [
     url(r'^admin/', edc_lab_admin.urls),
     url(r'^admin/', edc_identifier_admin.urls),
     url(r'^admin/', edc_map_admin.urls),
+    url(r'^admin/', bcpp_report_admin.urls),
     url(r'^admin/', edc_metadata_admin.urls),
     url(r'^admin/', edc_registration_admin.urls),
     url(r'^admin/', edc_sync_admin.urls),
@@ -62,6 +70,7 @@ urlpatterns = [
     url(r'^edc_lab/', include('edc_lab.urls')),
     url(r'^edc_label/', include('edc_label.urls')),
     url(r'^edc_map/', include('edc_map.urls')),
+    url(r'^bcpp_report/', include('bcpp_report.urls', namespace='bcpp_report')),
     url(r'^edc_metadata/', include('edc_metadata.urls')),
     url(r'^edc_protocol/', include('edc_protocol.urls')),
     url(r'^edc_registration/',
