@@ -1,17 +1,14 @@
 import os
 
-from fabric.api import abort, env, task
+from fabric.api import abort, env, task, run, cd
 
-from edc_fabric.fabfile.environment import bootstrap_env, update_fabric_env
-from edc_fabric.fabfile.repositories import get_repo_name
 from edc_fabric.fabfile.conf import put_project_conf
+from edc_fabric.fabfile.environment import bootstrap_env, update_fabric_env
+from edc_fabric.fabfile.pip import pip_install_from_cache
+from edc_fabric.fabfile.repositories import get_repo_name
 from edc_fabric.fabfile.utils import launch_webserver
 
 from .utils import update_bcpp_conf
-from edc_fabric.fabfile.pip.tasks import pip_install_requirements_from_cache,\
-    pip_install_from_cache
-from fabric.operations import run
-from fabric.context_managers import cd
 
 
 def update_host(conf_filename=None, bootstrap_path=None, release=None,
