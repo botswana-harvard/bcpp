@@ -127,8 +127,9 @@ def deploy_client(**kwargs):
 
 
 def deploy(conf_filename=None, bootstrap_path=None, release=None, map_area=None, user=None,
-           bootstrap_branch=None, skip_update=None, skip_db=None, skip_repo=None,
-           skip_venv=None, skip_mysql=None, skip_python=None, skip_web=None, work_online=None):
+           bootstrap_branch=None, skip_update_os=None, skip_db=None, skip_repo=None,
+           skip_venv=None, skip_mysql=None, skip_python=None, skip_web=None,
+           skip_collectstatic=None, skip_bash_config=None, work_online=None):
     bootstrap_env(
         path=bootstrap_path,
         filename=conf_filename,
@@ -152,13 +153,14 @@ def deploy(conf_filename=None, bootstrap_path=None, release=None, map_area=None,
 
     update_fabric_env()
 
-    if not skip_update:
+    if not skip_update_os:
         if env.target_os == MACOSX:
             update_brew_cache(no_auto_update=True)
         elif env.target_os == LINUX:
             sudo('apt-get update')
 
-    put_bash_config()
+    if not skip_bash_config:
+        put_bash_config()
 
     if not exists(os.path.join(env.remote_source_root, env.project_repo_name)):
         run('mkdir -p {remote_source_root}'.format(
@@ -240,9 +242,10 @@ def deploy(conf_filename=None, bootstrap_path=None, release=None, map_area=None,
     if not skip_db:
         install_protocol_database()
 
-    with cd(os.path.join(env.remote_source_root, env.project_repo_name)):
-        with prefix(f'source {activate_venv()}'.format(venv_name=env.venv_name)):
-            run('python manage.py collectstatic')
-            run('python manage.py collectstatic_js_reverse')
+    if not skip_collectstatic:
+        with cd(os.path.join(env.remote_source_root, env.project_repo_name)):
+            with prefix(f'source {activate_venv()}'.format(venv_name=env.venv_name)):
+                run('python manage.py collectstatic')
+                run('python manage.py collectstatic_js_reverse')
 
     launch_webserver(work_online=work_online)
