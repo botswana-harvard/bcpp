@@ -42,10 +42,7 @@ class AnonymousMapper(Mapper):
     center_lon = 97.7430600
     radius = 100.5
     location_boundary = ()
-
     intervention = True
-    regions = None  # SECTIONS
-    sections = None  # SUB_SECTIONS
     landmarks = None
 
 
@@ -57,14 +54,11 @@ class TestPlotMapper(Mapper):
     map_area = 'test_community'
     map_code = '01'
     pair = 0
-    regions = None  # SECTIONS
-    sections = None  # SUB_SECTIONS
     landmarks = TEST_LANDMARKS
     center_lat = -24.557709
     center_lon = 25.807963
     radius = 100.5
     location_boundary = ()
-
     intervention = True
 
 
@@ -76,8 +70,6 @@ class BokaaPlotMapper(Mapper):
     map_area = 'bokaa'
     map_code = '17'
     pair = 4
-    regions = []
-    sections = []
     intervention = False
     landmarks = BOKAA_LANDMARKS
     center_lat = -24.426910
@@ -93,8 +85,6 @@ class DigawanaPlotMapper(Mapper):
     map_area = 'digawana'
     map_code = '12'
     pair = 1
-    regions = []
-    sections = []
     center_lat = -25.330451
     center_lon = 25.556502
     radius = 3.5
@@ -110,8 +100,6 @@ class GumarePlotMapper(Mapper):
     map_area = 'gumare'
     map_code = '35'
     pair = 13
-    regions = []
-    sections = []
     intervention = True
     landmarks = GUMARE_LANDMARKS
     center_lat = -19.362483
@@ -127,8 +115,6 @@ class GwetaPlotMapper(Mapper):
     map_area = 'gweta'
     map_code = '34'
     pair = 12
-    regions = []
-    sections = []
     intervention = True
     landmarks = GWETA_LANDMARKS
     center_lat = -20.205298
@@ -144,8 +130,6 @@ class LentsweletauPlotMapper(Mapper):
     map_area = 'lentsweletau'
     map_code = '16'
     pair = 3
-    regions = []
-    sections = []
     center_lat = -24.253009
     center_lon = 25.853233
     radius = 5.0
@@ -161,8 +145,6 @@ class LeralaPlotMapper(Mapper):
     map_area = 'lerala'
     map_code = '21'
     pair = 6
-    regions = []
-    sections = []
     intervention = True
     landmarks = None
     center_lat = -22.781363
@@ -178,8 +160,6 @@ class LetlhakengPlotMapper(Mapper):
     map_area = 'letlhakeng'
     map_code = '15'
     pair = 3
-    regions = []
-    sections = []
     landmarks = LETLHAKENG_LANDMARKS
     center_lat = -24.099945
     center_lon = 25.033250
@@ -195,8 +175,6 @@ class MasungaPlotMapper(Mapper):
     map_area = 'masunga'
     map_code = '37'
     pair = 15
-    regions = []
-    sections = []
     intervention = True
     landmarks = MASUNGA_LANDMARKS
     center_lat = -20.667218
@@ -212,8 +190,6 @@ class MathangwanePlotMapper(Mapper):
     map_area = 'mathangwane'
     map_code = '31'
     pair = 11
-    regions = []
-    sections = []
     intervention = True
     landmarks = MATHANGWANE_LANDMARKS
     center_lat = -20.993214
@@ -229,8 +205,6 @@ class MaunatlalaPlotMapper(Mapper):
     map_area = 'maunatlala'
     map_code = '23'
     pair = 7
-    regions = []
-    sections = []
     intervention = True
     landmarks = MAUNATLALA_LANDMARKS
     center_lat = -22.8658437618
@@ -246,8 +220,6 @@ class MetsimotlhabePlotMapper(Mapper):
     map_area = 'metsimotlhabe'
     map_code = '29'
     pair = 9
-    regions = []
-    sections = []
     intervention = False
     landmarks = METSIMOTLHABE_LANDMARKS
     center_lat = -24.554426
@@ -262,8 +234,6 @@ class MmadinarePlotMapper(Mapper):
 
     map_area = 'mmadinare'
     map_code = '26'
-    regions = []
-    sections = []
     intervention = False
     landmarks = MMADINARE_LANDMARKS
     center_lat = -21.869753
@@ -279,8 +249,6 @@ class MmandunyanePlotMapper(Mapper):
     map_area = 'mmandunyane'
     map_code = '32'
     pair = 11
-    regions = []
-    sections = []
     intervention = False
     landmarks = MMANDUNYANE_LANDMARKS
     center_lat = -20.994015
@@ -296,8 +264,6 @@ class MmankgodiPlotMapper(Mapper):
     map_area = 'mmankgodi'
     map_code = '19'
     pair = 5
-    regions = []
-    sections = []
     intervention = True
     landmarks = MMANKGODI_LANDMARKS
     center_lat = -24.729837
@@ -313,8 +279,6 @@ class MmathethePlotMapper(Mapper):
     map_area = 'mmathethe'
     map_code = '20'
     pair = 5
-    regions = []
-    sections = []
     intervention = False
     landmarks = MMATHETHE_LANDMARKS
     center_lat = -25.318327
@@ -330,8 +294,6 @@ class MolapowabojangPlotMapper(Mapper):
     map_area = 'molapowabojang'
     map_code = '13'
     pair = 2
-    regions = []
-    sections = []
     intervention = False
     landmarks = MOLAPOWABOJANG_LANDMARKS
     center_lat = -25.204009
@@ -347,8 +309,6 @@ class NataPlotMapper(Mapper):
     map_area = 'nata'
     map_code = '38'
     pair = 15
-    regions = []
-    sections = []
     intervention = False
     landmarks = NATA_LANDMARKS
     center_lat = -20.207917
@@ -364,8 +324,6 @@ class NkangePlotMapper(Mapper):
     map_area = 'nkange'
     map_code = '27'
     pair = 10
-    regions = []
-    sections = []
     intervention = True
     landmarks = NKANGE_LANDMARKS
     center_lat = -20.29269441
@@ -381,8 +339,6 @@ class OodiPlotMapper(Mapper):
     map_area = 'oodi'
     map_code = '18'
     pair = 4
-    regions = []
-    sections = []
     intervention = True
     landmarks = OODI_LANDMARKS
     center_lat = -24.425856
@@ -398,8 +354,6 @@ class OtsePlotMapper(Mapper):
     map_area = 'otse'
     map_code = '14'
     pair = 2
-    regions = []
-    sections = []
     intervention = True
     landmarks = OTSE_LANDMARKS
     center_lat = -25.033194
@@ -415,8 +369,6 @@ class RakopsPlotMapper(Mapper):
     map_area = 'rakops'
     map_code = '33'
     pair = 12
-    regions = []
-    sections = []
     intervention = False
     landmarks = RAKOPS_LANDMARKS
     center_lat = -21.034979
@@ -432,8 +384,6 @@ class RamokgonamiPlotMapper(Mapper):
     map_area = 'ramokgonami'
     map_code = '24'
     pair = 7
-    regions = []
-    sections = []
     intervention = False
     landmarks = RAMOKGONAMI_LANDMARKS
     center_lat = -22.8658437618
@@ -449,8 +399,6 @@ class RanakaPlotMapper(Mapper):
     map_area = 'ranaka'
     map_code = '11'
     pair = 1
-    regions = []
-    sections = []
     intervention = False
     landmarks = RANAKA_LANDMARKS
     center_lat = -24.908703
@@ -466,8 +414,6 @@ class SebinaPlotMapper(Mapper):
     map_area = 'sebina'
     map_code = '28'
     pair = 10
-    regions = []
-    sections = []
     intervention = False
     landmarks = SEBINA_LANDMARKS
     center_lat = -20.806103
@@ -483,8 +429,6 @@ class SefharePlotMapper(Mapper):
     map_area = 'sefhare'
     map_code = '39'
     pair = 14
-    regions = []
-    sections = []
     intervention = True
     landmarks = SEFHARE_LANDMARKS
     center_lat = -23.027271
@@ -500,8 +444,6 @@ class SefophePlotMapper(Mapper):
     map_area = 'sefophe'
     map_code = '22'
     pair = 6
-    regions = []
-    sections = []
     intervention = False
     landmarks = SEFOPHE_LANDMARKS
     center_lat = -22.1918153
@@ -517,8 +459,6 @@ class ShakawePlotMapper(Mapper):
     map_area = 'shakawe'
     map_code = '36'
     pair = 13
-    regions = []
-    sections = []
     intervention = False
     landmarks = SHAKAWE_LANDMARKS
     center_lat = -18.360902
@@ -534,8 +474,6 @@ class ShoshongPlotMapper(Mapper):
     map_area = 'shoshong'
     map_code = '25'
     pair = 8
-    regions = []
-    sections = []
     intervention = True
     landmarks = SHOSHONG_LANDMARKS
     center_lat = -23.032546
@@ -551,8 +489,6 @@ class TatiSidingPlotMapper(Mapper):
     map_area = 'tati_siding'
     map_code = '30'
     pair = 9
-    regions = []
-    sections = []
     intervention = True
     landmarks = TATI_SIDING_LANDMARKS
     center_lat = -21.274018
@@ -568,8 +504,6 @@ class TsetsebjwePlotMapper(Mapper):
     map_area = 'tsetsebjwe'
     map_code = '40'
     pair = 14
-    regions = []
-    sections = []
     intervention = False
     landmarks = TSETSEBJWE_LANDMARKS
     center_lat = -22.41391
