@@ -27,11 +27,9 @@ from edc_registration.admin_site import edc_registration_admin
 from edc_sync.admin import edc_sync_admin
 from edc_sync_files.admin_site import edc_sync_files_admin
 
-from edc_map.admin import edc_map_admin
-from edc_identifier.admin_site import edc_identifier_admin
-
 
 from bcpp_subject.admin_site import bcpp_subject_admin
+from bcpp_report.admin_site import bcpp_report_admin
 from household.admin_site import household_admin
 from member.admin_site import member_admin
 from plot.admin_site import plot_admin
@@ -52,6 +50,7 @@ urlpatterns = [
     url(r'^admin/', edc_registration_admin.urls),
     url(r'^admin/', edc_sync_admin.urls),
     url(r'^admin/', edc_sync_files_admin.urls),
+    url(r'^admin/', bcpp_report_admin.urls),
     url(r'^admininistration/', AdministrationView.as_view(),
         name='administration_url'),
     url('plot/', include('plot.urls')),
@@ -62,6 +61,8 @@ urlpatterns = [
     url('follow/', include('bcpp_follow.urls')),
     url(r'^appointment/',
         include('edc_appointment.urls')),
+    url(r'^bcpp_report/',
+        include('bcpp_report.urls', namespace='bcpp_report')),
     url(r'^edc/', include('edc_base.urls')),
     url(r'^edc_consent/', include('edc_consent.urls')),
     url(r'^edc_device/', include('edc_device.urls')),
