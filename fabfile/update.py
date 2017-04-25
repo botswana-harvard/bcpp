@@ -163,14 +163,36 @@ def list_tags_from(pip_file=None):
 
 
 @task
-def checkout_release(pip_file=None, **kwargs):
+def checkout_release(pip_file=None, branch=None, **kwargs):
     prepare_env(**kwargs)
     package_names = get_required_package_names()
-    tags = list_tags_from(pip_file=pip_file)
-    with lcd(f'~/source/{env.project_repo_name}'):
-        local(f'git checkout {env.project_release} # {env.project_repo_name}')
-    for package_name in package_names:
-        tag = tags.get(package_name)
-        if tag:
+    if branch:
+        with lcd(f'~/source/{env.project_repo_name}'):
+            local(f'git checkout {branch} # {env.project_repo_name}')
+        for package_name in package_names:
             with lcd(f'~/source/{package_name}'):
-                local(f'git checkout {tag} # {package_name}')
+                local(f'git checkout {branch} # {package_name}')
+    else:
+        tags = list_tags_from(pip_file=pip_file)
+        with lcd(f'~/source/{env.project_repo_name}'):
+            local(
+                f'git checkout {env.project_release} # {env.project_repo_name}')
+        for package_name in package_names:
+            tag = tags.get(package_name)
+            if tag:
+                with lcd(f'~/source/{package_name}'):
+                    local(f'git checkout {tag} # {package_name}')
+
+
+@task
+def checkout_branch(branch=None, **kwargs):
+    prepare_env(**kwargs)
+    package_names = get_required_package_names()
+    if branch not in ['develop', 'master']:
+        abort('Invalid branch. Got {branch}')
+    else:
+        with lcd(f'~/source/{env.project_repo_name}'):
+            local(f'git checkout {branch} # {env.project_repo_name}')
+        for package_name in package_names:
+            with lcd(f'~/source/{package_name}'):
+                local(f'git checkout {branch} # {package_name}')
