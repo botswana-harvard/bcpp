@@ -1,14 +1,16 @@
 import os
 
-from fabric.api import env, task, run, cd
+from fabric.api import env, task, run, cd, get
 from fabric.colors import red
 from fabric.utils import warn, abort
 
 from edc_fabric.fabfile.conf import put_project_conf
 from edc_fabric.fabfile.environment import bootstrap_env, update_fabric_env
+from edc_fabric.fabfile.mysql import put_mysql_conf, put_my_cnf
 from edc_fabric.fabfile.pip import pip_install_requirements_from_cache
 from edc_fabric.fabfile.repositories import get_repo_name
-from edc_fabric.fabfile.utils import launch_webserver, update_settings
+from edc_fabric.fabfile.utils import launch_webserver, update_settings,\
+    rsync_deployment_root
 from edc_fabric.fabfile.virtualenv import create_venv
 
 from .utils import update_bcpp_conf
@@ -76,16 +78,16 @@ def update_host_task(**kwargs):
 
 
 @task
-def update_task(skip_update_project_repo=None, skip_venv=None, release=None, map_area=None, **kwargs):
+def update_r0131_task(skip_update_project_repo=None, skip_venv=None, map_area=None, **kwargs):
 
-    if not release:
-        abort('Specify the release')
+    release = '0.1.31'
     if not map_area:
         abort('Specify the map_area')
 
-    prepare_env(**kwargs)
+    prepare_env(release=release, **kwargs)
 
-    print(env.venv_dir)
+    rsync_deployment_root()
+
     if not skip_update_project_repo:
         print('rsync -pthrvz --delete {source} {destination}'.format(
             source=os.path.join(env.deployment_root, env.project_appname),
@@ -101,6 +103,8 @@ def update_task(skip_update_project_repo=None, skip_venv=None, release=None, map
         create_venv()
 
     # copy bcpp.conf into etc/{project_app_name}/
+    put_mysql_conf()
+    put_my_cnf()
     put_project_conf()
     update_bcpp_conf()
     update_settings()
@@ -109,3 +113,21 @@ def update_task(skip_update_project_repo=None, skip_venv=None, release=None, map
 #         run('git checkout master')
 #         run('python manage.py makemigrations')
 #         run('python manage.py makemigrations bcpp bcpp_subject members household plot')
+
+
+@task
+def query_consent_task(**kwargs):
+    """Query remote host subject consent table and download the result as a text file.
+    """
+    prepare_env(**kwargs)
+
+    sql = (
+        'SELECT subject_identifier, consent_datetime INTO OUTFILE \'/tmp/subject_consents.txt\' '
+        'CHARACTER SET UTF8 '
+        'FIELDS TERMINATED BY \'|\' ENCLOSED BY \'\' '
+        'LINES TERMINATED BY \'\n\' '
+        'FROM bcpp_subject_subjectconsent;')
+    run(
+        f'mysql -uroot -p edc -Bse \"{sql}\"')
+    get(remote_path='/tmp/subject_consents.txt',
+        local_path=os.path.expanduser('~/fabric/download'))
