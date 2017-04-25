@@ -78,6 +78,7 @@ INSTALLED_APPS = [
     'bcpp.apps.PlotAppConfig',
     'bcpp.apps.EdcSyncAppConfig',
     'bcpp.apps.EdcSyncFilesAppConfig',
+    'bcpp_report.apps.AppConfig',
 ]
 
 if 'test' in sys.argv:
