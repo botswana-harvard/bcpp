@@ -1,64 +1,30 @@
 import os
 
-from datetime import datetime
-
 from fabric.api import execute, task, env, put, sudo, cd, run, warn, prefix, lcd
 from fabric.contrib.files import exists
 from fabric.utils import abort
-from fabric.contrib import django
 
 from edc_device.constants import CENTRAL_SERVER
 
 from edc_fabric.fabfile import (
     update_fabric_env,
     prepare_deployment_host, create_venv,
-    install_mysql, install_protocol_database, prompts)
+    install_mysql, install_protocol_database)
 from edc_fabric.fabfile.brew import update_brew_cache
 from edc_fabric.fabfile.conf import put_project_conf
 from edc_fabric.fabfile.constants import MACOSX, LINUX
-from edc_fabric.fabfile.environment import update_env_secrets
 from edc_fabric.fabfile.files import mount_dmg_locally, dismount_dmg_locally, mount_dmg
 from edc_fabric.fabfile.gunicorn import install_gunicorn
 from edc_fabric.fabfile.nginx import install_nginx
 from edc_fabric.fabfile.python import install_python3
 from edc_fabric.fabfile.repositories import get_repo_name
 from edc_fabric.fabfile.utils import (
-    get_hosts, get_device_ids, update_settings, rsync_deployment_root,
-    bootstrap_env, put_bash_config, ssh_copy_id,
-    test_connection2, move_media_folder, launch_webserver)
+    update_settings, rsync_deployment_root,
+    bootstrap_env, put_bash_config,
+    move_media_folder, launch_webserver)
 from edc_fabric.fabfile.virtualenv import activate_venv
 
-from .patterns import hostname_pattern
-from .roledefs import roledefs
 from .utils import update_bcpp_conf
-
-django.settings_module('bcpp.settings')
-
-CONFIG_FILENAME = 'bcpp.conf'
-DOWNLOADS_DIR = '~/Downloads'
-
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-ETC_CONFIG_PATH = os.path.join(BASE_DIR, 'fabfile', 'etc')
-FABRIC_CONFIG_PATH = os.path.join(BASE_DIR, 'fabfile', 'conf', 'fabric.conf')
-
-timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
-env.log_folder = os.path.expanduser('~/fabric/{}'.format(timestamp))
-os.makedirs(env.log_folder)
-print('log_folder', env.log_folder)
-update_env_secrets(path=ETC_CONFIG_PATH)
-env.roledefs = roledefs
-env.hosts, env.passwords = get_hosts(
-    path=ETC_CONFIG_PATH, gpg_filename='hosts.conf.gpg')
-env.hostname_pattern = hostname_pattern
-env.device_ids = get_device_ids()
-env.prompts = prompts
-
-env.prompts.update({'Enter password: ': env.dbpasswd})
-
-with open(os.path.join(env.log_folder, 'hosts.txt'), 'a') as f:
-    f.write('{}\n'.format(',\n'.join([h for h in env.hosts])))
-
-# env.skip_bad_hosts = True
 
 
 @task

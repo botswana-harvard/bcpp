@@ -6,12 +6,13 @@ from edc_fabric.fabfile.conf import put_project_conf
 from edc_fabric.fabfile.environment import bootstrap_env, update_fabric_env
 from edc_fabric.fabfile.pip import pip_install_from_cache
 from edc_fabric.fabfile.repositories import get_repo_name
-from edc_fabric.fabfile.utils import launch_webserver
+from edc_fabric.fabfile.utils import launch_webserver, update_settings
 
-from .utils import update_bcpp_conf
-from fabric.utils import warn
+from fabric.utils import warn, abort
 from fabric.colors import red
-from edc_fabric.fabfile.pip.tasks import pip_install_requirements_from_cache
+from edc_fabric.fabfile.pip import pip_install_requirements_from_cache
+from edc_fabric.fabfile.virtualenv import create_venv
+from .utils import update_bcpp_conf
 
 
 def prepare_env(conf_filename=None, bootstrap_path=None, release=None,
@@ -33,7 +34,8 @@ def prepare_env(conf_filename=None, bootstrap_path=None, release=None,
     env.fabric_config_root = os.path.join(env.project_repo_root, 'fabfile')
     env.fabric_config_path = os.path.join(
         env.fabric_config_root, 'conf', env.fabric_conf)
-    update_fabric_env()
+    update_fabric_env(use_local_fabric_conf=True)
+    print(env.venv_dir)
 
 
 @task
@@ -76,3 +78,39 @@ def update_host_task(**kwargs):
     pip_install_requirements_from_cache()
 
     launch_webserver()
+
+
+@task
+def update_task(skip_update_project_repo=None, skip_venv=None, release=None, map_area=None, **kwargs):
+
+    if not release:
+        abort('Specify the release')
+    if not map_area:
+        abort('Specify the map_area')
+
+    prepare_env(**kwargs)
+
+    print(env.venv_dir)
+    if not skip_update_project_repo:
+        print('rsync -pthrvz --delete {source} {destination}'.format(
+            source=os.path.join(env.deployment_root, env.project_appname),
+            destination=env.remote_source_root))
+        run('rsync -pthrvz --delete {source} {destination}'.format(
+            source=os.path.join(env.deployment_root, env.project_appname),
+            destination=env.remote_source_root))
+
+    with cd(os.path.join(env.project_repo_root)):
+        run('git checkout master')
+
+    if not skip_venv:
+        create_venv()
+
+    # copy bcpp.conf into etc/{project_app_name}/
+    put_project_conf()
+    update_bcpp_conf()
+    update_settings()
+
+#     with cd(os.path.join(env.project_repo_root)):
+#         run('git checkout master')
+#         run('python manage.py makemigrations')
+#         run('python manage.py makemigrations bcpp bcpp_subject members household plot')
