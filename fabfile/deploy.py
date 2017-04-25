@@ -53,6 +53,8 @@ env.hostname_pattern = hostname_pattern
 env.device_ids = get_device_ids()
 env.prompts = prompts
 
+env.prompts.update({'Enter password: ': env.dbpasswd})
+
 with open(os.path.join(env.log_folder, 'hosts.txt'), 'a') as f:
     f.write('{}\n'.format(',\n'.join([h for h in env.hosts])))
 
