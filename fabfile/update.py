@@ -79,9 +79,9 @@ def update_temp_task(**kwargs):
 
 
 @task
-def update_r0132_task(bootstrap_filename=None, skip_update_project_repo=None, skip_venv=None, map_area=None, **kwargs):
+def update_r0133_task(bootstrap_filename=None, skip_update_project_repo=None, skip_venv=None, map_area=None, **kwargs):
 
-    release = '0.1.32'
+    release = '0.1.33'
     bootstrap_filename = bootstrap_filename or 'bootstrap_client.conf'
     if not map_area:
         abort('Specify the map_area')
