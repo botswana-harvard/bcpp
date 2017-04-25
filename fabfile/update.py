@@ -1,17 +1,16 @@
 import os
 
 from fabric.api import env, task, run, cd
+from fabric.colors import red
+from fabric.utils import warn, abort
 
 from edc_fabric.fabfile.conf import put_project_conf
 from edc_fabric.fabfile.environment import bootstrap_env, update_fabric_env
-from edc_fabric.fabfile.pip import pip_install_from_cache
+from edc_fabric.fabfile.pip import pip_install_requirements_from_cache
 from edc_fabric.fabfile.repositories import get_repo_name
 from edc_fabric.fabfile.utils import launch_webserver, update_settings
-
-from fabric.utils import warn, abort
-from fabric.colors import red
-from edc_fabric.fabfile.pip import pip_install_requirements_from_cache
 from edc_fabric.fabfile.virtualenv import create_venv
+
 from .utils import update_bcpp_conf
 
 
@@ -22,10 +21,6 @@ def prepare_env(conf_filename=None, bootstrap_path=None, release=None,
         path=bootstrap_path,
         filename=conf_filename,
         bootstrap_branch=bootstrap_branch)
-#     if not release:
-#         abort('Specify the release')
-#     if not map_area:
-#         abort('Specify the map_area')
     env.project_release = release
     env.map_area = map_area
     env.project_repo_name = get_repo_name(env.project_repo_url)
