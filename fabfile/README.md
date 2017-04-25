@@ -2,7 +2,7 @@
 
 Using the bootstrap.conf in the bcpp repo:
     
-    fab -H localhost deploy.deployment_host:bootstrap_path=/Users/erikvw/source/bcpp/fabfile/conf/
+    fab -H localhost deploy.deployment_host:bootstrap_path=/Users/erikvw/source/bcpp/fabfile/conf/,release=<your_release>
     
 ### options
 
