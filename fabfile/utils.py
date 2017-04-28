@@ -14,6 +14,7 @@ from edc_fabric.fabfile.environment import (
     bootstrap_env, update_fabric_env)
 from edc_fabric.fabfile.mysql import install_protocol_database
 from fabric.operations import sudo
+from fabric.utils import abort
 
 
 @task
@@ -80,25 +81,27 @@ def restore_media_folder(bootstrap_path=None, bootstrap_branch=None, use_local_f
 
 @task
 def install_protocol_database_task(bootstrap_path=None, bootstrap_branch=None,
-                                   db_archive_name=None, skip_backup=None):
+                                   release=None, map_area=None, skip_backup=None):
     """Overwrites the client DB.
 
     For example:
 
-        fab -P -R lentsweletau deploy.install_protocol_database_task:bootstrap_path=/Users/erikvw/source/bcpp/fabfile/conf/,bootstrap_branch=develo,db_archive_name=edc_deployment_201704092123.sql
+        fab -P -R lentsweletau deploy.install_protocol_database_task:bootstrap_path=/Users/erikvw/source/bcpp/fabfile/conf/,release=,map_area=
 
     """
     bootstrap_env(
         path=bootstrap_path,
         filename='bootstrap_client.conf',
         bootstrap_branch=bootstrap_branch)
-
-    rsync_deployment_root()
+    if not release:
+        abort('release not specified')
+    if not map_area:
+        abort('map_area not specified')
 
     update_fabric_env()
 
-    install_protocol_database(
-        db_archive_name=db_archive_name, skip_backup=skip_backup)
+    install_protocol_database(skip_backup=skip_backup,
+                              release=release, map_area=map_area)
 
 
 def update_bcpp_conf(project_conf=None, map_area=None):

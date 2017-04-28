@@ -216,4 +216,4 @@ def deploy(conf_filename=None, bootstrap_path=None, release=None, map_area=None,
                 run('python manage.py collectstatic')
                 run('python manage.py collectstatic_js_reverse')
 
-    launch_webserver(work_online=work_online)
+    launch_webserver()
