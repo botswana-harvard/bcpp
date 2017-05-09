@@ -205,6 +205,7 @@ class EdcMetadataAppConfig(BaseEdcMetadataAppConfig):
     reason_field = {'bcpp_subject.subjectvisit': 'reason'}
     create_on_reasons = [SCHEDULED, UNSCHEDULED]
     delete_on_reasons = [LOST_VISIT, FAILED_ELIGIBILITY]
+    metadata_rules_enabled = True  # default
 
 
 class EdcAppointmentAppConfig(BaseEdcAppointmentAppConfig):

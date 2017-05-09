@@ -208,7 +208,9 @@ def deploy(conf_filename=None, bootstrap_path=None, release=None, map_area=None,
     update_settings()
 
     if not skip_db:
-        install_protocol_database()
+        run('brew services stop mysql', warn_only=True)
+        run('brew services start mysql')
+        install_protocol_database(skip_backup=True)
 
     if not skip_collectstatic:
         with cd(os.path.join(env.remote_source_root, env.project_repo_name)):

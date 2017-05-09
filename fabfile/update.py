@@ -2,25 +2,24 @@ import os
 
 from fabric.api import env, task, run, cd, get
 from fabric.colors import red
+from fabric.context_managers import lcd
+from fabric.contrib.project import rsync_project
+from fabric.operations import local
 from fabric.utils import warn, abort
 
 from edc_fabric.fabfile.conf import put_project_conf
 from edc_fabric.fabfile.environment import bootstrap_env, update_fabric_env
+from edc_fabric.fabfile.files.dmg import mount_dmg
+from edc_fabric.fabfile.gunicorn.tasks import install_gunicorn
 from edc_fabric.fabfile.mysql import put_mysql_conf, put_my_cnf
+from edc_fabric.fabfile.mysql.tasks import install_protocol_database
 from edc_fabric.fabfile.pip import get_pip_list
+from edc_fabric.fabfile.pip.tasks import get_required_package_names
 from edc_fabric.fabfile.repositories import get_repo_name
-from edc_fabric.fabfile.utils import launch_webserver, update_settings,\
-    rsync_deployment_root
+from edc_fabric.fabfile.utils import launch_webserver, update_settings, rsync_deployment_root
 from edc_fabric.fabfile.virtualenv import create_venv
 
 from .utils import update_bcpp_conf
-from fabric.operations import local, put
-from edc_fabric.fabfile.files.dmg import mount_dmg
-from edc_fabric.fabfile.gunicorn.tasks import install_gunicorn
-from fabric.context_managers import prefix, lcd
-from edc_fabric.fabfile.pip.tasks import get_required_package_names
-from edc_fabric.fabfile.mysql.tasks import install_protocol_database
-from fabric.contrib.project import rsync_project
 
 
 def prepare_env(bootstrap_filename=None, bootstrap_path=None, release=None,
