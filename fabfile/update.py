@@ -13,7 +13,7 @@ from edc_fabric.fabfile.files.dmg import mount_dmg
 from edc_fabric.fabfile.gunicorn.tasks import install_gunicorn
 from edc_fabric.fabfile.mysql import put_mysql_conf, put_my_cnf
 from edc_fabric.fabfile.mysql.tasks import install_protocol_database
-from edc_fabric.fabfile.pip import get_pip_list
+from edc_fabric.fabfile.pip import get_pip_list, pip_install_from_cache, pip_download
 from edc_fabric.fabfile.pip.tasks import get_required_package_names
 from edc_fabric.fabfile.repositories import get_repo_name
 from edc_fabric.fabfile.utils import launch_webserver, update_settings, rsync_deployment_root
@@ -219,3 +219,59 @@ def checkout_branch(branch=None, **kwargs):
         for package_name in package_names:
             with lcd(f'~/source/{package_name}'):
                 local(f'git checkout {branch} # {package_name}')
+
+@task
+def update_r0135_task(**kwargs):
+
+    release = '0.1.34'
+    packages = ['git+https://github.com/botswana-harvard/bcpp-subject.git@master#egg=bcpp_subject',
+                'git+https://github.com/botswana-harvard/plot.git@master#egg=plot']
+
+    bootstrap_filename = 'bootstrap_client.conf'
+
+    prepare_env(bootstrap_filename=bootstrap_filename, **kwargs)
+
+    venv_name = env.venv_name
+
+    rsync_deployment_root()
+
+    venv_name = venv_name or env.venv_name
+    # copy new pip tarballs to deployment root
+    for package in packages:
+        pip_download(package)
+
+    with cd('/Users/django/source/bcpp'):
+        run('git stash')
+        run('git pull')
+        run('git stash pop')
+
+#     for package in packages:
+    uninstall_package = package.split('=')[1]
+    run('workon {venv_name} && pip3 uninstall {package_name}'.format(
+        venv_name=venv_name,
+        package_name=uninstall_package))
+    pip_install_from_cache(package_name=package, venv_name=venv_name)
+
+    mount_dmg(dmg_path=env.etc_dir, dmg_filename=env.dmg_filename,
+              dmg_passphrase=env.crypto_keys_passphrase)
+
+    with cd(os.path.join(env.remote_source_root, env.project_repo_name)):
+        run('git checkout master')
+        result = run(
+            'git diff --name-status master..{release}'.format(release=release))
+        if result:
+            warn('master is not at {release}'.format(release=release))
+
+    update_settings()
+
+    install_protocol_database()
+
+    launch_webserver()
+
+
+@task
+def launch_webserver_bcpp(**kwargs):
+    prepare_env(**kwargs)
+    mount_dmg(dmg_path=env.etc_dir, dmg_filename=env.dmg_filename,
+              dmg_passphrase=env.crypto_keys_passphrase)
+    launch_webserver()
