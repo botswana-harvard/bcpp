@@ -136,3 +136,14 @@ def change_map_area_task(map_area=None, bootstrap_path=None, bootstrap_branch=No
     update_bcpp_conf(map_area=map_area)
 
     launch_webserver()
+
+
+def list_tags_from(pip_file=None):
+    data = {}
+    with open(os.path.expanduser(pip_file), 'r') as f:
+        lines = f.readlines()
+        for line in lines:
+            print(line)
+            package, tag = line.split('==')
+            data.update({package.strip(): tag.strip()})
+    return data
