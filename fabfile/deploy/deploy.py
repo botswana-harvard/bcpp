@@ -19,17 +19,17 @@ from edc_fabric.fabfile.python import install_python3
 from edc_fabric.fabfile.repositories import get_repo_name
 from edc_fabric.fabfile.utils import (
     update_settings, rsync_deployment_root,
-    bootstrap_env, put_bash_config,
-    move_media_folder, launch_webserver)
+    bootstrap_env, put_bash_config, launch_webserver)
 from edc_fabric.fabfile.virtualenv import activate_venv
 
 from ..utils import update_bcpp_conf
 
 
 def deploy(conf_filename=None, bootstrap_path=None, release=None, map_area=None, user=None,
-           bootstrap_branch=None, skip_update_os=None, skip_db=None, skip_repo=None,
+           bootstrap_branch=None, skip_update_os=None, skip_db=None, skip_restore_db=None, skip_repo=None,
            skip_venv=None, skip_mysql=None, skip_python=None, skip_web=None,
-           skip_collectstatic=None, skip_bash_config=None, work_online=None):
+           skip_collectstatic=None, skip_bash_config=None, skip_keys=None, work_online=None):
+
     bootstrap_env(
         path=bootstrap_path,
         filename=conf_filename,
@@ -38,7 +38,7 @@ def deploy(conf_filename=None, bootstrap_path=None, release=None, map_area=None,
         abort('Specify the release')
     if not map_area:
         abort('Specify the map_area')
-    print(env.target_os)
+
     env.project_release = release
     env.map_area = map_area
 
@@ -67,10 +67,6 @@ def deploy(conf_filename=None, bootstrap_path=None, release=None, map_area=None,
             remote_source_root=env.remote_source_root), warn_only=True)
 
     if not skip_repo:
-        # move media folder out of project repo
-        move_media_folder()
-        sudo('rm -rf {remote_source_root}'.format(
-            remote_source_root=env.remote_source_root))
         # copy repo from deployment to source
         destination = env.remote_source_root
         if not exists(destination):
@@ -111,10 +107,11 @@ def deploy(conf_filename=None, bootstrap_path=None, release=None, map_area=None,
         install_nginx(skip_bootstrap=True)
         install_gunicorn(work_online=work_online)
 
-    # crypto_keys DMG into etc/{project_app_name}/
-    put(os.path.expanduser(os.path.join(env.fabric_config_root, 'etc', env.dmg_filename)),
-        env.etc_dir,
-        use_sudo=True)
+    if not skip_keys:
+        # crypto_keys DMG into etc/{project_app_name}/
+        put(os.path.expanduser(os.path.join(env.fabric_config_root, 'etc', env.dmg_filename)),
+            env.etc_dir,
+            use_sudo=True)
 
     # mount dmg
     if env.device_role == CENTRAL_SERVER:
@@ -142,6 +139,7 @@ def deploy(conf_filename=None, bootstrap_path=None, release=None, map_area=None,
     if not skip_db:
         run('brew services stop mysql', warn_only=True)
         run('brew services start mysql')
+    if not skip_restore_db:
         install_protocol_database(skip_backup=True)
 
     if not skip_collectstatic:

@@ -12,7 +12,9 @@ from fabfile.prepare_env import prepare_env
 
 
 @task
-def update_r0135_task(**kwargs):
+def r0135(**kwargs):
+    """Release 0.1.35.
+    """
 
     release = '0.1.34'
     packages = ['git+https://github.com/botswana-harvard/bcpp-subject.git@master#egg=bcpp_subject',

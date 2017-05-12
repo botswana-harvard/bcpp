@@ -17,8 +17,10 @@ from fabfile.utils import update_bcpp_conf
 
 
 @task
-def update_r0134_task(bootstrap_filename=None, skip_update_project_repo=None, skip_venv=None, map_area=None, **kwargs):
-
+def r0134(bootstrap_filename=None, skip_update_project_repo=None,
+          skip_venv=None, map_area=None, **kwargs):
+    """Release 0.1.34.
+    """
     release = '0.1.34'
     bootstrap_filename = bootstrap_filename or 'bootstrap_client.conf'
     if not map_area:
