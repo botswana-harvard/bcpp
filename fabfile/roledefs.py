@@ -1,11 +1,11 @@
-def get_oodi():
+def get_bokaa():
     hosts = ['bcpp0{}'.format(i + 25) for i in range(0, 15)]
     hosts.pop(hosts.index('bcpp026'))
     hosts.pop(hosts.index('bcpp035'))
     return hosts
 
 
-def get_bokaa():
+def get_oodi():
     hosts = ['bcpp0{}'.format(i + 55) for i in range(0, 15)]
     hosts.pop(hosts.index('bcpp057'))
     hosts.pop(hosts.index('bcpp065'))
