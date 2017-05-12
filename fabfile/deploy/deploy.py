@@ -1,14 +1,13 @@
 import os
 
-from fabric.api import execute, task, env, put, sudo, cd, run, warn, prefix, lcd
+from fabric.api import env, put, sudo, cd, run, warn, prefix, lcd
 from fabric.contrib.files import exists
 from fabric.utils import abort
 
 from edc_device.constants import CENTRAL_SERVER
 
 from edc_fabric.fabfile import (
-    update_fabric_env,
-    prepare_deployment_host, create_venv,
+    update_fabric_env, create_venv,
     install_mysql, install_protocol_database)
 from edc_fabric.fabfile.brew import update_brew_cache
 from edc_fabric.fabfile.conf import put_project_conf
@@ -24,74 +23,7 @@ from edc_fabric.fabfile.utils import (
     move_media_folder, launch_webserver)
 from edc_fabric.fabfile.virtualenv import activate_venv
 
-from .utils import update_bcpp_conf
-
-
-@task
-def deployment_host(bootstrap_path=None, release=None, skip_clone=None, skip_pip_download=None,
-                    use_branch=None, bootstrap_branch=None):
-    """
-    Example:
-
-        brew update && fab -H localhost deploy.deployment_host:bootstrap_path=/Users/erikvw/source/bcpp/fabfile/conf/,release=develop,use_branch=True,bootstrap_branch=develop,skip_pip_download=True,skip_clone=True
-
-    """
-    execute(prepare_deployment_host,
-            bootstrap_path=bootstrap_path,
-            release=release,
-            skip_clone=skip_clone,
-            skip_pip_download=skip_pip_download,
-            use_branch=use_branch,
-            bootstrap_branch=bootstrap_branch)
-
-
-@task
-def deploy_centralserver(**kwargs):
-    """
-
-        fab -H bhp066 deploy.deploy_centralserver:bootstrap_path=/Users/erikvw/source/bcpp/fabfile/conf/,release=0.1.26,map_area=botswana --user=django
-
-    """
-
-    conf_filename = 'bootstrap_centralserver.conf'
-    deploy(conf_filename=conf_filename, **kwargs)
-
-
-@task
-def deploy_nodeserver(**kwargs):
-    conf_filename = 'bootstrap_nodeserver.conf'
-    deploy(conf_filename=conf_filename, **kwargs)
-
-
-@task
-def deploy_client(**kwargs):
-    """Deploy clients from the deployment host.
-
-    Assumes you have already prepared the deployment host
-
-    Will use conf files on deployment
-
-    For example:
-
-    Copy ssh keys:
-
-        fab -P -R mmankgodi deploy.ssh_copy_id:bootstrap_path=/Users/erikvw/source/bcpp/fabfile/conf,bootstrap_branch=develop --user=django
-
-    Deploy:
-
-        fab -H bcpp038 deploy.deploy_client:bootstrap_path=/Users/erikvw/source/bcpp/fabfile/conf/,release=0.1.24,map_area=mmankgodi --user=django
-
-    - OR -
-
-        fab -P -R mmankgodi deploy.deploy_client:bootstrap_path=/Users/erikvw/source/bcpp/fabfile/conf/,release=0.1.24,map_area=mmankgodi --user=django
-
-    Once complete:
-
-        fab -P -R mmankgodi deploy.validate:release=0.1.24 --user=django
-
-    """
-    conf_filename = 'bootstrap_client.conf'
-    deploy(conf_filename=conf_filename, **kwargs)
+from ..utils import update_bcpp_conf
 
 
 def deploy(conf_filename=None, bootstrap_path=None, release=None, map_area=None, user=None,

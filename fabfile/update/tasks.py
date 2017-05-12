@@ -1,7 +1,6 @@
 import os
 
 from fabric.api import env, task, run, get
-from fabric.colors import red
 from fabric.context_managers import lcd
 from fabric.contrib.project import rsync_project
 from fabric.operations import local
@@ -14,32 +13,7 @@ from edc_fabric.fabfile.pip.tasks import get_required_package_names
 from edc_fabric.fabfile.utils import launch_webserver
 
 from ..prepare_env import prepare_env
-from fabfile.utils import list_tags_from
-
-
-@task
-def query_tx_task(**kwargs):
-    """Check for any host with pending transactions.
-
-    fab -P -R mmankgodi update.query_tx_task:bootstrap_path=/Users/erikvw/source/bcpp/fabfile/conf/  --user=django
-
-    """
-    prepare_env(**kwargs)
-
-    # run('brew services restart mysql', quiet=True)
-    run('mysql -uroot -p edc -Bse \'select  count(*) '
-        'from edc_sync_outgoingtransaction where is_consumed_server=0;\' > /tmp/stats1.txt')
-    result = run('cat /tmp/stats1.txt')
-    if result != '0':
-        warn(red(f'{env.host}: pending {result}'))
-
-    run(
-        'mysql -uroot -p edc -Bse \'select count(*) '
-        'from edc_sync_files_history '
-        'where sent=0;\' > /tmp/stats2.txt')
-    result = run('cat /tmp/stats2.txt')
-    if result != '0':
-        warn(red(f'{env.host}: unsent {result}'))
+from ..utils import list_tags_from
 
 
 @task
