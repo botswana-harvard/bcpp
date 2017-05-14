@@ -1,14 +1,13 @@
 import os
 
-from fabric.api import execute, task, env, put, sudo, cd, run, warn, prefix, lcd
+from fabric.api import env, put, sudo, cd, run, warn, prefix, lcd
 from fabric.contrib.files import exists
 from fabric.utils import abort
 
 from edc_device.constants import CENTRAL_SERVER
 
 from edc_fabric.fabfile import (
-    update_fabric_env,
-    prepare_deployment_host, create_venv,
+    update_fabric_env, create_venv,
     install_mysql, install_protocol_database)
 from edc_fabric.fabfile.brew import update_brew_cache
 from edc_fabric.fabfile.conf import put_project_conf
@@ -20,84 +19,17 @@ from edc_fabric.fabfile.python import install_python3
 from edc_fabric.fabfile.repositories import get_repo_name
 from edc_fabric.fabfile.utils import (
     update_settings, rsync_deployment_root,
-    bootstrap_env, put_bash_config,
-    move_media_folder, launch_webserver)
+    bootstrap_env, put_bash_config, launch_webserver)
 from edc_fabric.fabfile.virtualenv import activate_venv
 
-from .utils import update_bcpp_conf
-
-
-@task
-def deployment_host(bootstrap_path=None, release=None, skip_clone=None, skip_pip_download=None,
-                    use_branch=None, bootstrap_branch=None):
-    """
-    Example:
-
-        brew update && fab -H localhost deploy.deployment_host:bootstrap_path=/Users/erikvw/source/bcpp/fabfile/conf/,release=develop,use_branch=True,bootstrap_branch=develop,skip_pip_download=True,skip_clone=True
-
-    """
-    execute(prepare_deployment_host,
-            bootstrap_path=bootstrap_path,
-            release=release,
-            skip_clone=skip_clone,
-            skip_pip_download=skip_pip_download,
-            use_branch=use_branch,
-            bootstrap_branch=bootstrap_branch)
-
-
-@task
-def deploy_centralserver(**kwargs):
-    """
-
-        fab -H bhp066 deploy.deploy_centralserver:bootstrap_path=/Users/erikvw/source/bcpp/fabfile/conf/,release=0.1.26,map_area=botswana --user=django
-
-    """
-
-    conf_filename = 'bootstrap_centralserver.conf'
-    deploy(conf_filename=conf_filename, **kwargs)
-
-
-@task
-def deploy_nodeserver(**kwargs):
-    conf_filename = 'bootstrap_nodeserver.conf'
-    deploy(conf_filename=conf_filename, **kwargs)
-
-
-@task
-def deploy_client(**kwargs):
-    """Deploy clients from the deployment host.
-
-    Assumes you have already prepared the deployment host
-
-    Will use conf files on deployment
-
-    For example:
-
-    Copy ssh keys:
-
-        fab -P -R mmankgodi deploy.ssh_copy_id:bootstrap_path=/Users/erikvw/source/bcpp/fabfile/conf,bootstrap_branch=develop --user=django
-
-    Deploy:
-
-        fab -H bcpp038 deploy.deploy_client:bootstrap_path=/Users/erikvw/source/bcpp/fabfile/conf/,release=0.1.24,map_area=mmankgodi --user=django
-
-    - OR -
-
-        fab -P -R mmankgodi deploy.deploy_client:bootstrap_path=/Users/erikvw/source/bcpp/fabfile/conf/,release=0.1.24,map_area=mmankgodi --user=django
-
-    Once complete:
-
-        fab -P -R mmankgodi deploy.validate:release=0.1.24 --user=django
-
-    """
-    conf_filename = 'bootstrap_client.conf'
-    deploy(conf_filename=conf_filename, **kwargs)
+from ..utils import update_bcpp_conf
 
 
 def deploy(conf_filename=None, bootstrap_path=None, release=None, map_area=None, user=None,
-           bootstrap_branch=None, skip_update_os=None, skip_db=None, skip_repo=None,
+           bootstrap_branch=None, skip_update_os=None, skip_db=None, skip_restore_db=None, skip_repo=None,
            skip_venv=None, skip_mysql=None, skip_python=None, skip_web=None,
-           skip_collectstatic=None, skip_bash_config=None, work_online=None):
+           skip_collectstatic=None, skip_bash_config=None, skip_keys=None, work_online=None):
+
     bootstrap_env(
         path=bootstrap_path,
         filename=conf_filename,
@@ -106,7 +38,7 @@ def deploy(conf_filename=None, bootstrap_path=None, release=None, map_area=None,
         abort('Specify the release')
     if not map_area:
         abort('Specify the map_area')
-    print(env.target_os)
+
     env.project_release = release
     env.map_area = map_area
 
@@ -135,10 +67,6 @@ def deploy(conf_filename=None, bootstrap_path=None, release=None, map_area=None,
             remote_source_root=env.remote_source_root), warn_only=True)
 
     if not skip_repo:
-        # move media folder out of project repo
-        move_media_folder()
-        sudo('rm -rf {remote_source_root}'.format(
-            remote_source_root=env.remote_source_root))
         # copy repo from deployment to source
         destination = env.remote_source_root
         if not exists(destination):
@@ -179,10 +107,11 @@ def deploy(conf_filename=None, bootstrap_path=None, release=None, map_area=None,
         install_nginx(skip_bootstrap=True)
         install_gunicorn(work_online=work_online)
 
-    # crypto_keys DMG into etc/{project_app_name}/
-    put(os.path.expanduser(os.path.join(env.fabric_config_root, 'etc', env.dmg_filename)),
-        env.etc_dir,
-        use_sudo=True)
+    if not skip_keys:
+        # crypto_keys DMG into etc/{project_app_name}/
+        put(os.path.expanduser(os.path.join(env.fabric_config_root, 'etc', env.dmg_filename)),
+            env.etc_dir,
+            use_sudo=True)
 
     # mount dmg
     if env.device_role == CENTRAL_SERVER:
@@ -208,7 +137,10 @@ def deploy(conf_filename=None, bootstrap_path=None, release=None, map_area=None,
     update_settings()
 
     if not skip_db:
-        install_protocol_database()
+        run('brew services stop mysql', warn_only=True)
+        run('brew services start mysql')
+    if not skip_restore_db:
+        install_protocol_database(skip_backup=True)
 
     if not skip_collectstatic:
         with cd(os.path.join(env.remote_source_root, env.project_repo_name)):

@@ -1,20 +1,17 @@
 import os
 
-from fabric.api import task, run
-
-from fabric.api import warn, cd, env
-from fabric.colors import yellow, blue
+from fabric.api import task, run, warn, cd, env
+from fabric.colors import yellow, blue, red
 from fabric.contrib.files import exists, sed
 from fabric.contrib.project import rsync_project
-
-from edc_fabric.fabfile.utils import (
-    rsync_deployment_root, ssh_copy_id, test_connection2,
-    launch_webserver_task, launch_webserver)
-from edc_fabric.fabfile.environment import (
-    bootstrap_env, update_fabric_env)
-from edc_fabric.fabfile.mysql import install_protocol_database
 from fabric.operations import sudo
 from fabric.utils import abort
+
+from edc_fabric.fabfile.utils import launch_webserver
+from edc_fabric.fabfile.environment import bootstrap_env, update_fabric_env
+from edc_fabric.fabfile.mysql import install_protocol_database
+
+from .prepare_env import prepare_env
 
 
 @task
@@ -136,3 +133,39 @@ def change_map_area_task(map_area=None, bootstrap_path=None, bootstrap_branch=No
     update_bcpp_conf(map_area=map_area)
 
     launch_webserver()
+
+
+def list_tags_from(pip_file=None):
+    data = {}
+    with open(os.path.expanduser(pip_file), 'r') as f:
+        lines = f.readlines()
+        for line in lines:
+            print(line)
+            package, tag = line.split('==')
+            data.update({package.strip(): tag.strip()})
+    return data
+
+
+@task
+def query_tx_task(**kwargs):
+    """Check for any host with pending transactions.
+
+    fab -P -R mmankgodi update.query_tx_task:bootstrap_path=/Users/erikvw/source/bcpp/fabfile/conf/  --user=django
+
+    """
+    prepare_env(**kwargs)
+
+    # run('brew services restart mysql', quiet=True)
+    run('mysql -uroot -p edc -Bse \'select  count(*) '
+        'from edc_sync_outgoingtransaction where is_consumed_server=0;\' > /tmp/stats1.txt')
+    result = run('cat /tmp/stats1.txt')
+    if result != '0':
+        warn(red(f'{env.host}: pending {result}'))
+
+    run(
+        'mysql -uroot -p edc -Bse \'select count(*) '
+        'from edc_sync_files_history '
+        'where sent=0;\' > /tmp/stats2.txt')
+    result = run('cat /tmp/stats2.txt')
+    if result != '0':
+        warn(red(f'{env.host}: unsent {result}'))
