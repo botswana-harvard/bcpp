@@ -12,6 +12,7 @@ import sys
 
 from django.core.management.color import color_style
 from pathlib import PurePath
+
 style = color_style()
 
 APP_NAME = 'bcpp'
@@ -21,8 +22,7 @@ DEBUG = True
 
 CONFIG_FILE = '{}.conf'.format(APP_NAME)
 if DEBUG:
-     ETC_DIR = '/etc'
-#    ETC_DIR = str(PurePath(BASE_DIR).joinpath('etc'))
+    ETC_DIR = str(PurePath(BASE_DIR).joinpath('etc'))
 else:
     ETC_DIR = '/etc'
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
@@ -217,4 +217,4 @@ LABEL_PRINTER = config['edc_label'].get('label_printer', 'label_printer')
 SURVEY_GROUP_NAME = config['survey'].get('group_name')
 SURVEY_SCHEDULE_NAME = config['survey'].get('schedule_name')
 ANONYMOUS_ENABLED = config['bcpp'].get('anonymous_enabled')
-DEVICE_IDS = config['edc_map'].get('device_ids').split(',')
+DEVICE_IDS = config['edc_map'].get('device_ids', '').split(',')
