@@ -21,8 +21,7 @@ DEBUG = True
 
 CONFIG_FILE = '{}.conf'.format(APP_NAME)
 if DEBUG:
-     ETC_DIR = '/etc'
-#    ETC_DIR = str(PurePath(BASE_DIR).joinpath('etc'))
+    ETC_DIR = str(PurePath(BASE_DIR).joinpath('etc'))
 else:
     ETC_DIR = '/etc'
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
