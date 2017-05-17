@@ -101,10 +101,6 @@ def deploy(requirements_list=None, conf_filename=None, bootstrap_path=None, rele
         if not skip_venv:
             create_venv(work_online=work_online)
 
-        # copy bcpp.conf into etc/{project_app_name}/
-        put_project_conf()
-        update_bcpp_conf()
-
         if not skip_web:
             if env.log_root and exists(env.log_root):
                 sudo('rm -rf {log_root}'.format(log_root=env.log_root),
@@ -118,6 +114,10 @@ def deploy(requirements_list=None, conf_filename=None, bootstrap_path=None, rele
             put(os.path.expanduser(os.path.join(env.fabric_config_root, 'etc', env.dmg_filename)),
                 env.etc_dir,
                 use_sudo=True)
+
+    # copy bcpp.conf into etc/{project_app_name}/
+    put_project_conf()
+    update_bcpp_conf()
 
     with cd(os.path.join(env.project_repo_root)):
         run('git checkout master')

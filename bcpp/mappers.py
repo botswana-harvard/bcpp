@@ -341,8 +341,8 @@ class OodiPlotMapper(Mapper):
     pair = 4
     intervention = True
     landmarks = OODI_LANDMARKS
-    center_lat = -24.425856
-    center_lon = 26.021626
+    center_lat = -24.566840
+    center_lon = 26.039595
     radius = 5.5
 
 
