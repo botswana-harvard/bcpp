@@ -3,6 +3,6 @@ from .deploy import deploy
 
 
 @task
-def deploy_nodeserver(**kwargs):
+def deploy_nodeserver(*requirements_list, **kwargs):
     conf_filename = 'bootstrap_nodeserver.conf'
-    deploy(conf_filename=conf_filename, **kwargs)
+    deploy(requirements_list=requirements_list, conf_filename=conf_filename, **kwargs)
