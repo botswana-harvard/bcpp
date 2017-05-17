@@ -3,7 +3,7 @@ from .deploy import deploy
 
 
 @task
-def deploy_client(**kwargs):
+def deploy_client(requirements_list=None, **kwargs):
     """Deploy clients from the deployment host.
 
     Assumes you have already prepared the deployment host
@@ -30,4 +30,4 @@ def deploy_client(**kwargs):
 
     """
     conf_filename = 'bootstrap_client.conf'
-    deploy(conf_filename=conf_filename, **kwargs)
+    deploy(requirements_list=requirements_list, conf_filename=conf_filename, **kwargs)
