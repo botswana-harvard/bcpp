@@ -9,6 +9,9 @@ def get_oodi():
     hosts = ['bcpp0{}'.format(i + 55) for i in range(0, 15)]
     hosts.pop(hosts.index('bcpp057'))
     hosts.pop(hosts.index('bcpp065'))
+    hosts.pop(hosts.index('bcpp066'))
+    hosts.pop(hosts.index('bcpp067'))
+    hosts.append('bcpp070')
     return hosts
 
 
