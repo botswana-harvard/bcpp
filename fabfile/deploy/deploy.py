@@ -58,7 +58,7 @@ def deploy(requirements_list=None, conf_filename=None, bootstrap_path=None, rele
         update_fabric_env()
 
         for package in requirements_list:
-            run('workon {venv_name} && pip3 uninstall {package_name}'.format(
+            run('workon {venv_name} && apip3 uninstall {package_name}'.format(
                 venv_name=env.venv_name,
                 package_name=package), warn_only=True)
             pip_install_from_cache(package_name=package, venv_name=env.venv_name)
