@@ -244,12 +244,6 @@ class EdcSyncFilesAppConfig(BaseEdcSyncFilesAppConfig):
     remote_host = config['edc_sync_files'].get('remote_host')
     user = config['edc_sync_files'].get('sync_user')
     usb_volume = config['edc_sync_files'].get('usb_volume')
-    source_folder = os.path.join(
-        settings.MEDIA_ROOT, 'transactions', 'outgoing')
-    destination_folder = os.path.join(
-        settings.MEDIA_ROOT, 'transactions', 'incoming')
-    archive_folder = os.path.join(
-        settings.MEDIA_ROOT, 'transactions', 'archive')
 
 
 class EdcLabelAppConfig(BaseEdcLabelAppConfig):

@@ -13,10 +13,16 @@ import sys
 from django.core.management.color import color_style
 from pathlib import PurePath
 
+from .logging import LOGGING
+
 style = color_style()
 
 APP_NAME = 'bcpp'
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+LOGGING = LOGGING
+sys.stdout.write(style.SUCCESS('Logging to {}\n'.format(
+    LOGGING.get('handlers').get('file').get('filename'))))
 
 DEBUG = True
 
@@ -206,10 +212,10 @@ MEDIA_ROOT = config['django'].get(
 MEDIA_URL = '/media/'
 
 # etc ini file attributes
-# if DEBUG:
-#     KEY_PATH = os.path.join(BASE_DIR, 'crypto_fields')
-# else:
-KEY_PATH = config['django_crypto_fields'].get('key_path')
+if DEBUG:
+    KEY_PATH = os.path.join(BASE_DIR, 'crypto_fields')
+else:
+    KEY_PATH = config['django_crypto_fields'].get('key_path')
 CURRENT_MAP_AREA = config['edc_map'].get('map_area', 'test_community')
 DEVICE_ID = config['edc_device'].get('device_id', '99')
 DEVICE_ROLE = config['edc_device'].get('role')
