@@ -224,4 +224,4 @@ SURVEY_GROUP_NAME = config['survey'].get('group_name')
 SURVEY_SCHEDULE_NAME = config['survey'].get('schedule_name')
 ANONYMOUS_ENABLED = config['bcpp'].get('anonymous_enabled')
 DEVICE_IDS = [d.strip()
-              for d in config['edc_map'].get('device_ids').split(',')]
+              for d in config['edc_map'].get('device_ids', '').split(',')]
