@@ -223,5 +223,4 @@ LABEL_PRINTER = config['edc_label'].get('label_printer', 'label_printer')
 SURVEY_GROUP_NAME = config['survey'].get('group_name')
 SURVEY_SCHEDULE_NAME = config['survey'].get('schedule_name')
 ANONYMOUS_ENABLED = config['bcpp'].get('anonymous_enabled')
-DEVICE_IDS = [d.strip()
-              for d in config['edc_map'].get('device_ids', '').split(',')]
+EDC_MAP_DEVICE_IDS = config['edc_map'].get('device_ids')
