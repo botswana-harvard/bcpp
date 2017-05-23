@@ -4,8 +4,9 @@ from edc_fabric.fabfile import prepare_deployment_host
 
 
 @task
-def deployment_host(bootstrap_path=None, release=None, skip_clone=None, skip_pip_download=None,
-                    use_branch=None, bootstrap_branch=None):
+def deployment_host(bootstrap_path=None, release=None,
+                    skip_clone=None, skip_pip_download=None,
+                    use_branch=None, bootstrap_branch=None,):
     """
     Example:
 
