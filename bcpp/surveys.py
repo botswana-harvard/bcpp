@@ -5,11 +5,11 @@ from datetime import datetime
 from dateutil.tz import gettz
 
 from django.conf import settings
+from django.core.exceptions import ImproperlyConfigured
 
 from survey import site_surveys, Survey, SurveySchedule
 
 from .communities import communities
-from django.core.exceptions import ImproperlyConfigured
 
 if settings.CURRENT_MAP_AREA not in communities:
     raise ImproperlyConfigured(

@@ -10,7 +10,9 @@ Community = namedtuple('Community', 'code name pair intervention')
 
 if 'test' in sys.argv:
     communities = {'test_community': Community(
-        '01', 'test_community', 1, True)}
+        '01', 'test_community', 1, True),
+        'botswana': Community('00', 'botswana', 0, False),
+    }
 else:
     communities = {
         'test_community': Community('99', 'test_community', 99, True),

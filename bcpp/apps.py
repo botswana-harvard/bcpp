@@ -166,19 +166,18 @@ class EdcDeviceAppConfig(BaseEdcDeviceAppConfig):
 
 
 class SurveyAppConfig(BaseSurveyAppConfig):
-    if 'test' in sys.argv:
-        current_surveys = [
-            S('bcpp-survey.bcpp-year-1.bhs.test_community'),
-            S('bcpp-survey.bcpp-year-2.ahs.test_community'),
-            S('bcpp-survey.bcpp-year-3.ahs.test_community'),
-            S('bcpp-survey.bcpp-year-3.ess.test_community')]
-    else:
-        map_area = settings.CURRENT_MAP_AREA
-        current_surveys = [
-            S(f'bcpp-survey.bcpp-year-1.bhs.{map_area}'),
-            S(f'bcpp-survey.bcpp-year-2.ahs.{map_area}'),
-            S(f'bcpp-survey.bcpp-year-3.ahs.{map_area}'),
-            S(f'bcpp-survey.bcpp-year-3.ess.{map_area}')]
+    #     if 'test' in sys.argv:
+    #         current_surveys = [
+    #             S('bcpp-survey.bcpp-year-1.bhs.test_community'),
+    #             S('bcpp-survey.bcpp-year-2.ahs.test_community'),
+    #             S('bcpp-survey.bcpp-year-3.ahs.test_community'),
+    #             S('bcpp-survey.bcpp-year-3.ess.test_community')]
+    map_area = settings.CURRENT_MAP_AREA
+    current_surveys = [
+        S(f'bcpp-survey.bcpp-year-1.bhs.{map_area}'),
+        S(f'bcpp-survey.bcpp-year-2.ahs.{map_area}'),
+        S(f'bcpp-survey.bcpp-year-3.ahs.{map_area}'),
+        S(f'bcpp-survey.bcpp-year-3.ess.{map_area}')]
 
 
 class EdcMapAppConfig(BaseEdcMapAppConfig):
