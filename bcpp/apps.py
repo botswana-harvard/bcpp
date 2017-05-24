@@ -19,7 +19,7 @@ from edc_base_test.apps import AppConfig as BaseEdcBaseTestAppConfig
 from edc_consent.apps import AppConfig as BaseEdcConsentAppConfig
 from edc_constants.constants import FAILED_ELIGIBILITY
 from edc_device.apps import AppConfig as BaseEdcDeviceAppConfig, DevicePermission
-from edc_device.constants import SERVER, CENTRAL_SERVER, CLIENT
+from edc_device.constants import SERVER, CENTRAL_SERVER, CLIENT, NODE_SERVER
 from edc_identifier.apps import AppConfig as BaseEdcIdentifierAppConfig
 from edc_lab.apps import AppConfig as BaseEdcLabAppConfig
 from edc_label.apps import AppConfig as BaseEdcLabelAppConfig
@@ -161,7 +161,7 @@ class EdcDeviceAppConfig(BaseEdcDeviceAppConfig):
         'plot.plot': DevicePermission(
             model='plot.plot',
             create_roles=[CENTRAL_SERVER, CLIENT],
-            change_roles=[SERVER, CENTRAL_SERVER, CLIENT])
+            change_roles=[NODE_SERVER, CENTRAL_SERVER, CLIENT])
     }
 
 
