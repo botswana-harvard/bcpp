@@ -93,4 +93,16 @@ anonymous_v1 = Consent(
     age_max=64,
     gender=[MALE, FEMALE])
 
-site_consents.register(v1, v2, v3, v4, v5, anonymous_v1)
+clinic_v1 = Consent(
+    'bcpp_clinic.clinicconsent',
+    group='clinic',
+    start=arrow.get(
+        datetime(2013, 10, 18, 0, 0, 0), tzinfo=tzinfo).to('UTC').datetime,
+    end=arrow.get(
+        datetime(2018, 4, 30, 23, 59, 59), tzinfo=tzinfo).to('UTC').datetime,
+    age_min=16,
+    age_is_adult=18,
+    age_max=64,
+    gender=[MALE, FEMALE])
+
+site_consents.register(v1, v2, v3, v4, v5, anonymous_v1, clinic_v1)
