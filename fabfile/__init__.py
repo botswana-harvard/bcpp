@@ -1,6 +1,6 @@
 import sys
 
-if 'fab' in sys.argv:
+if 'fab' in sys.argv[0]:
     from edc_fabric import fabfile as common
 
     from .deploy import deploy_centralserver, deploy_client, deploy_nodeserver, deployment_host
