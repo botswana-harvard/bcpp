@@ -175,32 +175,49 @@ def query_tx_task(**kwargs):
 
 @task
 def generate_anonymous_transactions(**kwargs):
+    """Generate anonymous transactions.
 
+    fab -P -R mmathethe utils.generate_anonymous_transactions:bootstrap_path=/Users/imosweu/source/bcpp/fabfile/conf/  --user=django
+
+    """
     prepare_env(**kwargs)
 
     transactions_path = os.path.join(env.media_root, 'transactions/tmp/')
 
+    enrollment_checklist_file = (
+        f'{transactions_path}{env.host}_member_enrollmentchecklistanonymous.txt')
+    historical_enrollment_file = (
+        f'{transactions_path}{env.host}_member_historicalenrollmentchecklistanonymous.txt')
+
+    if exists(f'{enrollment_checklist_file}'):
+        run(f'rm {enrollment_checklist_file}')
+
     run("mysql -uroot -p edc -Bse \"SELECT * INTO OUTFILE "
-        f"'{transactions_path}{env.host}_member_enrollmentchecklistanonymous.txt' "
+        f"'{enrollment_checklist_file}' "
         "CHARACTER SET UTF8 "
         "FIELDS TERMINATED BY '|' ENCLOSED BY '' "
         "LINES TERMINATED BY '\\n' "
         "FROM member_enrollmentchecklistanonymous;\" ")
 
     enrollment_result = run(
-        f'cat {transactions_path}{env.host}_member_enrollmentchecklistanonymous.txt')
+        f'cat {enrollment_checklist_file}')
     if not enrollment_result:
         warn(red(f'{env.host}: transactions not generated'))
 
+    if exists(
+            f'{historical_enrollment_file}'):
+        run(
+            f'rm {historical_enrollment_file}')
+
     run("mysql -uroot -p edc -Bse \"SELECT * INTO OUTFILE "
-        f"'{transactions_path}{env.host}_member_historicalenrollmentchecklistanonymous.txt' "
+        f"'{historical_enrollment_file}' "
         "CHARACTER SET UTF8 "
         "FIELDS TERMINATED BY '|' ENCLOSED BY '' "
         "LINES TERMINATED BY '\\n' "
         "FROM member_historicalenrollmentchecklistanonymous; \"")
 
     historical_result = run(
-        f'cat {transactions_path}{env.host}_member_historicalenrollmentchecklistanonymous.txt')
+        f'cat {historical_enrollment_file}')
     if not historical_result:
         warn(red(f'{env.host}: transactions not generated'))
 
