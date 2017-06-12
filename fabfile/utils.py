@@ -1,6 +1,8 @@
 import os
 
-from fabric.api import task, run, warn, cd, env
+from pathlib import PurePath
+
+from fabric.api import task, run, warn, cd, env, local
 from fabric.colors import yellow, blue, red
 from fabric.contrib.files import exists, sed
 from fabric.contrib.project import rsync_project
@@ -169,3 +171,51 @@ def query_tx_task(**kwargs):
     result = run('cat /tmp/stats2.txt')
     if result != '0':
         warn(red(f'{env.host}: unsent {result}'))
+
+
+@task
+def generate_anonymous_transactions(**kwargs):
+
+    prepare_env(**kwargs)
+
+    transactions_path = os.path.join(env.media_root, 'transactions/tmp/')
+
+    run("mysql -uroot -p edc -Bse \"SELECT * INTO OUTFILE "
+        f"'{transactions_path}{env.host}_member_enrollmentchecklistanonymous.txt' "
+        "CHARACTER SET UTF8 "
+        "FIELDS TERMINATED BY '|' ENCLOSED BY '' "
+        "LINES TERMINATED BY '\\n' "
+        "FROM member_enrollmentchecklistanonymous;\" ")
+
+    enrollment_result = run(
+        f'cat {transactions_path}{env.host}_member_enrollmentchecklistanonymous.txt')
+    if not enrollment_result:
+        warn(red(f'{env.host}: transactions not generated'))
+
+    run("mysql -uroot -p edc -Bse \"SELECT * INTO OUTFILE "
+        f"'{transactions_path}{env.host}_member_historicalenrollmentchecklistanonymous.txt' "
+        "CHARACTER SET UTF8 "
+        "FIELDS TERMINATED BY '|' ENCLOSED BY '' "
+        "LINES TERMINATED BY '\\n' "
+        "FROM member_historicalenrollmentchecklistanonymous; \"")
+
+    historical_result = run(
+        f'cat {transactions_path}{env.host}_member_historicalenrollmentchecklistanonymous.txt')
+    if not historical_result:
+        warn(red(f'{env.host}: transactions not generated'))
+
+    local_transaction_path = os.path.join(
+        env.media_root, 'transactions/pending/')
+    local(f'scp django@{env.host}:{transactions_path}*.txt  {local_transaction_path}')
+
+
+@task
+def check_repo_status(expected_tag=None, **kwargs):
+
+    prepare_env(**kwargs)
+
+    with cd(os.path.join(env.remote_source_root, env.project_repo_name)):
+        run('git checkout master')
+        result = run('git describe --tags')
+        if result != expected_tag:
+            warn(red(f'master is not at {expected_tag}'))

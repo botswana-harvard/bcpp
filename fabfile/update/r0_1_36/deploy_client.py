@@ -19,5 +19,6 @@ def r0136(*requirements_list, **kwargs):
 
         fab -P -R mmankgodi bcpp-subject,bootstrap_path=/Users/imosweu/source/bcpp/fabfile/conf/,
         release=0.1.40,map_area=oodi,skip_db=True,skip_restore_db=True,skip_web=True,skip_repo=True
+        --user=django
     """
     _deploy_client(requirements_list=requirements_list, **kwargs)
