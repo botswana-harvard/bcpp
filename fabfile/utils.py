@@ -228,37 +228,38 @@ def generate_anonymous_transactions(**kwargs):
 
 @task
 def import_anonymous_transactions(**kwargs):
-    """Generate anonymous transactions.
+    """Import anonymous transactions.
 
-    fab -P -R mmathethe utils.import_anonymous_transactions:bootstrap_path=/Users/imosweu/source/bcpp/fabfile/conf/  --user=django
+    fab -P -R mmathethe utils.import_anonymous_transactions:bootstrap_path=/Users/tsetsiba/source/bcpp/fabfile/conf/  --user=django
 
     """
     prepare_env(**kwargs)
 
     transactions_path = os.path.join(env.media_root, 'transactions/pending/')
     for filename in os.listdir(transactions_path):
+            transactions_path = os.path.join(transactions_path, filename)
             if filename.endswith('_member_enrollmentchecklistanonymous.txt'):
                 result = run(
                     "mysql -uroot -p edc -Bse \"LOAD DATA LOCAL INFILE "
-                    f"'{filename}' "
+                    f"'{transactions_path}' "
                     f"INTO TABLE member_enrollmentchecklistanonymous "
                     "CHARACTER SET UTF8 "
                     "FIELDS TERMINATED BY '|' ENCLOSED BY '' "
                     "LINES TERMINATED BY '\\n' "
                 )
                 if not result:
-                    warn(red(f'{filename} not imported'))
+                    warn(red(f'{transactions_path} not imported'))
             else:
                 result = run(
                     "mysql -uroot -p edc -Bse \"LOAD DATA LOCAL INFILE "
-                    f"'{filename}' "
+                    f"'{transactions_path}' "
                     f"INTO TABLE member_historicalenrollmentchecklistanonymous "
                     "CHARACTER SET UTF8 "
                     "FIELDS TERMINATED BY '|' ENCLOSED BY '' "
                     "LINES TERMINATED BY '\\n' "
                 )
                 if not result:
-                    warn(red(f'{filename} not imported'))
+                    warn(red(f'{transactions_paths} not imported'))
 
 
 @task
