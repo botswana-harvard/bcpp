@@ -207,9 +207,9 @@ class MaunatlalaPlotMapper(Mapper):
     pair = 7
     intervention = True
     landmarks = MAUNATLALA_LANDMARKS
-    center_lat = -22.8658437618
-    center_lon = 27.4198811366
-    radius = 5.5
+    center_lat = -22.595561
+    center_lon = 27.636537
+    radius = 7.5
 
 
 site_mappers.register(MaunatlalaPlotMapper)
