@@ -2,16 +2,20 @@ import os
 
 from pathlib import PurePath
 
-from fabric.api import task, run, warn, cd, env, local
+from fabric.api import task, run, warn, cd, env, local, lcd, put
 from fabric.colors import yellow, blue, red
 from fabric.contrib.files import exists, sed
 from fabric.contrib.project import rsync_project
 from fabric.operations import sudo
 from fabric.utils import abort
 
-from edc_fabric.fabfile.utils import launch_webserver
+from edc_device.constants import CENTRAL_SERVER
+
 from edc_fabric.fabfile.environment import bootstrap_env, update_fabric_env
+from edc_fabric.fabfile.files import mount_dmg_locally, dismount_dmg_locally, mount_dmg
 from edc_fabric.fabfile.mysql import install_protocol_database
+from edc_fabric.fabfile.repositories import get_repo_name
+from edc_fabric.fabfile.utils import launch_webserver
 
 from .prepare_env import prepare_env
 
@@ -226,6 +230,21 @@ def generate_anonymous_transactions(**kwargs):
     local(f'scp django@{env.host}:{transactions_path}*.txt  {local_transaction_path}')
 
 
+def get_pip_freeze_list_from_requirements(requirements_file=None):
+    package_names = []
+    with cd(env.project_repo_root):
+        data = run('cat {requirements}'.format(
+            requirements=requirements_file))
+        data = data.split('\n')
+        for line in data:
+            if 'botswana-harvard' in line or 'erikvw' in line:
+                repo_url = line.split('@')[0].replace('git+', '')
+                tag = line.split('@')[1].split('#')[0]
+                package = get_repo_name(repo_url) + '==' + tag
+                package_names.append(package)
+    return package_names
+
+
 @task
 def import_anonymous_transactions(**kwargs):
     """Import anonymous transactions.
@@ -264,11 +283,50 @@ def import_anonymous_transactions(**kwargs):
 
 @task
 def check_repo_status(expected_tag=None, **kwargs):
+    """Check repo tag.
+
+    fab -P -R mmathethe utils.check_repo_status:bootstrap_path=/Users/imosweu/source/bcpp/fabfile/conf/,expected_tag=0.1.47  --user=django
+
+    """
 
     prepare_env(**kwargs)
 
     with cd(os.path.join(env.remote_source_root, env.project_repo_name)):
+        if exists('env_dependencies.txt'):
+            run('rm env_dependencies.txt')
         run('git checkout master')
+        run('source ~/.venvs/bcpp/bin/activate && pip freeze > env_dependencies.txt')
         result = run('git describe --tags')
         if result != expected_tag:
             warn(red(f'master is not at {expected_tag}'))
+        data = run('cat env_dependencies.txt')
+        data = [d[:-1] for d in data.split('\n')]
+        requirements_list = get_pip_freeze_list_from_requirements(
+            requirements_file=env.requirements_file)
+        for requirement in requirements_list:
+            if requirement not in data:
+                warn(red(f'{requirement} is not in {env.host}'))
+
+
+@task
+def load_keys_bcpp(device_role=None, **kwargs):
+    """Check repo tag.
+
+    fab -H bcpp010 utils.load_keys_bcpp:bootstrap_path=/Users/imosweu/source/bcpp/fabfile/conf/,device_role=Client  --user=django
+
+    """
+
+    prepare_env(**kwargs)
+    # mount dmg
+    if device_role == CENTRAL_SERVER:
+        mount_dmg_locally(dmg_path=env.etc_dir, dmg_filename=env.dmg_filename,
+                          dmg_passphrase=env.crypto_keys_passphrase)
+        if not exists(env.key_path):
+            sudo(f'mkdir -p {env.key_path}')
+        with lcd(env.key_volume):
+            put(local_path='user*',
+                remote_path=f'{env.key_path}/', use_sudo=True)
+        dismount_dmg_locally(volume_name=env.key_volume)
+    else:
+        mount_dmg(dmg_path=env.etc_dir, dmg_filename=env.dmg_filename,
+                  dmg_passphrase=env.crypto_keys_passphrase)
