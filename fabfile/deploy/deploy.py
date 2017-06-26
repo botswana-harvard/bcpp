@@ -1,6 +1,6 @@
 import os
 
-from fabric.api import env, put, sudo, cd, run, warn, prefix, lcd
+from fabric.api import env, put, sudo, cd, run, warn, prefix, lcd, task
 from fabric.contrib.files import exists
 from fabric.utils import abort
 
@@ -28,7 +28,7 @@ from ..utils import update_bcpp_conf
 
 def deploy(requirements_list=None, conf_filename=None, bootstrap_path=None, release=None, map_area=None, user=None,
            bootstrap_branch=None, skip_update_os=None, skip_db=None, skip_restore_db=None, skip_repo=None,
-           skip_venv=None, skip_mysql=None, skip_python=None, skip_web=None, update=None,
+           skip_venv=None, skip_mysql=None, skip_python=None, skip_web=None, update=None, current_tag=None,
            skip_collectstatic=None, skip_bash_config=None, skip_keys=None, work_online=None):
 
     bootstrap_env(
@@ -61,7 +61,8 @@ def deploy(requirements_list=None, conf_filename=None, bootstrap_path=None, rele
             run('workon {venv_name} && pip3 uninstall {package_name}'.format(
                 venv_name=env.venv_name,
                 package_name=package), warn_only=True)
-            pip_install_from_cache(package_name=package, venv_name=env.venv_name)
+            pip_install_from_cache(
+                package_name=package, venv_name=env.venv_name)
 
         if not skip_repo:
             put_bcpp_repo()
