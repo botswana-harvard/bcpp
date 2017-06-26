@@ -114,7 +114,6 @@ if 'test' in sys.argv:
         'contenttypes': None,
         'sessions': None,
     }
-if 'test' in sys.argv:
     PASSWORD_HASHERS = ('django_plainpasswordhasher.PlainPasswordHasher', )
     DEFAULT_FILE_STORAGE = 'inmemorystorage.InMemoryStorage'
 
@@ -227,3 +226,4 @@ SURVEY_GROUP_NAME = config['survey'].get('group_name')
 SURVEY_SCHEDULE_NAME = config['survey'].get('schedule_name')
 ANONYMOUS_ENABLED = config['bcpp'].get('anonymous_enabled')
 EDC_MAP_DEVICE_IDS = config['edc_map'].get('device_ids')
+EDC_LAB_REQUISITION_MODEL = 'bcpp_subject.SubjectRequisition'

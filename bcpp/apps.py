@@ -113,7 +113,7 @@ class BcppFollowAppConfig(BaseBcppFollowAppConfig):
 
 class EdcLabAppConfig(BaseEdcLabAppConfig):
     base_template_name = 'bcpp/base.html'
-    requisition_model = 'bcpp_subject.subjectrequisition'
+    requisition_model = settings.EDC_LAB_REQUISITION_MODEL
     result_model = 'edc_lab.result'
 
     @property

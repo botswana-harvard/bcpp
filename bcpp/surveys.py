@@ -120,3 +120,12 @@ bcpp_year_three.add_survey(
 site_surveys.register(bcpp_year_one)
 site_surveys.register(bcpp_year_two)
 site_surveys.register(bcpp_year_three)
+site_surveys.constants = dict(
+    ANONYMOUS_SURVEY=ANONYMOUS_SURVEY,
+    ESS_SURVEY=ESS_SURVEY,
+    AHS_SURVEY=AHS_SURVEY,
+    BHS_SURVEY=BHS_SURVEY,
+    BCPP_YEAR_1=BCPP_YEAR_1,
+    BCPP_YEAR_2=BCPP_YEAR_2,
+    BCPP_YEAR_3=BCPP_YEAR_3,
+)
