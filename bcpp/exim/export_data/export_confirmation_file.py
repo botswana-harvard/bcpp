@@ -2,6 +2,7 @@ import os
 import json
 
 from django.apps import apps as django_apps
+from django.db.models import Q
 from datetime import datetime
 
 from bcpp_subject.models import SubjectVisit, SubjectConsent
@@ -40,23 +41,27 @@ class ExportConfirmationFile:
     file_writer = ConfirmationFile
 
     def __init__(self, survey=None,
-                 subject_identifiers=None, community=None, verbose=None):
+                 subject_identifiers=None, community=None, verbose=None,
+                 start_date=None, end_date=None):
         self.survey = survey
         self.subject_identifiers = subject_identifiers
         self.community = community
+        self.edc_sync_file_app = django_apps.get_app_configs('edc_sync_files')
         self.verbose = verbose
+        self.start_date = start_date
+        self.end_date = end_date
 
     def subject_visits(self):
         subject_visits = SubjectVisit.objects.filter(
-            survey=self.survey,
-            subject_identifier__in=self.subject_identifiers)
+            Q(created__range=(self.start_date, self.end_date))
+            | Q(subject_identifier__in=self.subject_identifiers))
         return subject_visits
 
     def create_subject_consents_file(self):
-        app = django_apps.get_app_configs('edc_sync_files')
         filename = '{}_consents_data-{}.json'.format(
             self.community, datetime.today().strftime("%Y%m%d%H%m"))
-        filename = os.path.join(app.outgoing, filename)
+        filename = os.path.join(
+            self.edc_sync_file_app.outgoing_folder, filename)
         data = []
         for subject_visit in self.subject_visits():
             subject_consent = SubjectConsent.objects.get(
@@ -70,11 +75,11 @@ class ExportConfirmationFile:
                 subject_consent.household_member.household_structure.household.plot.plot_identifier)
             data.append(
                 {str(SubjectConsent._meta.label_lower): consent_filter})
-        self.file_write(filename=self.filename).write(data=data)
+        self.file_write(filename=filename).write(data=data)
         if self.verbose:
             print("Created {} with {}".format(filename, len(data)))
 
-    def create_subjectvisits_file(self, ess_community=None):
+    def create_subjectvisits_file(self):
         data = []
         for visit in self.subject_visits():
             data.append(
@@ -99,7 +104,7 @@ class ExportConfirmationFile:
         model_label_lowers = [
             label for label in sync_models if not self.is_ignored(label)]
         for subject_identifier in self.subject_identifiers:
-            visit = SubjectVisit.objects.filter(
+            visit = SubjectVisit.objects.get(
                 survey=self.survey,
                 subject_identifier=subject_identifier)
             temp_data = []
@@ -122,8 +127,7 @@ class ExportConfirmationFile:
             data.append(temp_data)
         filename = '{}_consents_data-{}.json'.format(
             self.community, datetime.today().strftime("%Y%m%d%H%m"))
-        app = django_apps.get_app_configs('edc_sync_reports')
-        filename = os.path.join(app.reports, filename)
+        filename = os.path.join(self.edc_sync_file_app.outgoing_folder, filename)
         self.file_write(filename=filename).write(data=data)
         if self.verbose:
             print("Created {} with {}".format(filename, len(data)))

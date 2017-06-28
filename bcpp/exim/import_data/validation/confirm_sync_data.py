@@ -1,6 +1,8 @@
 from django.apps import apps as django_apps
-from ...export_data.export_confirmation_file import ConfirmationFile
+
 from bcpp_subject.models import SubjectVisit, SubjectConsent
+
+from ...export_data.export_confirmation_file import ConfirmationFile
 
 
 class ConfirmSyncData:
