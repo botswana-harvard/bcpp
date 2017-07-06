@@ -2,14 +2,11 @@ import arrow
 
 from dateutil.tz import gettz
 from datetime import datetime
-
 from django.apps import apps as django_apps
-
+from django.conf import settings
 from edc_consent.consent import Consent
 from edc_consent.site_consents import site_consents
 from edc_constants.constants import MALE, FEMALE
-
-from .apps import ANONYMOUS_CONSENT_GROUP
 
 app_config = django_apps.get_app_config('edc_protocol')
 
@@ -82,7 +79,7 @@ v5 = Consent(
 anonymous_v1 = Consent(
     'bcpp_subject.anonymousconsent',
     version='1',
-    group=ANONYMOUS_CONSENT_GROUP,
+    group=settings.ANONYMOUS_CONSENT_GROUP,
     # updates_versions=['4'],
     start=arrow.get(
         datetime(2016, 5, 23, 0, 0, 0), tzinfo=tzinfo).to('UTC').datetime,

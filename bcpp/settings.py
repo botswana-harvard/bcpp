@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     'edc_dashboard.apps.AppConfig',
     'edc_registration.apps.AppConfig',
     'edc_visit_schedule.apps.AppConfig',
+    'bcpp_community.apps.AppConfig',
     'bcpp.apps.AppConfig',
     'bcpp.apps.EdcBaseAppConfig',
     'bcpp.apps.EdcLabAppConfig',

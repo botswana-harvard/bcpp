@@ -15,7 +15,8 @@ from edc_base.address import Address
 from edc_base.apps import AppConfig as BaseEdcBaseAppConfig
 from edc_base.utils import get_utcnow
 from edc_constants.constants import FAILED_ELIGIBILITY
-from edc_device.apps import AppConfig as BaseEdcDeviceAppConfig, DevicePermission
+from edc_device import DevicePermissions, DeviceAddPermission, DeviceChangePermission
+from edc_device.apps import AppConfig as BaseEdcDeviceAppConfig
 from edc_device.constants import CENTRAL_SERVER, CLIENT, NODE_SERVER
 from edc_identifier.apps import AppConfig as BaseEdcIdentifierAppConfig
 from edc_lab.apps import AppConfig as BaseEdcLabAppConfig
@@ -145,12 +146,13 @@ class EdcDeviceAppConfig(BaseEdcDeviceAppConfig):
     use_settings = True
     device_id = settings.DEVICE_ID
     device_role = settings.DEVICE_ROLE
-    device_permissions = {
-        'plot.plot': DevicePermission(
+    device_permissions = DevicePermissions(
+        DeviceAddPermission(
             model='plot.plot',
-            create_roles=[CENTRAL_SERVER, CLIENT],
-            change_roles=[NODE_SERVER, CENTRAL_SERVER, CLIENT])
-    }
+            device_roles=[CENTRAL_SERVER, CLIENT]),
+        DeviceChangePermission(
+            model='plot.plot',
+            device_roles=[NODE_SERVER, CENTRAL_SERVER, CLIENT]))
 
 
 class SurveyAppConfig(BaseSurveyAppConfig):
