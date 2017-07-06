@@ -17,7 +17,7 @@ if settings.CURRENT_MAP_AREA not in communities:
 
 tzinfo = gettz(settings.TIME_ZONE)
 
-ANONYMOUS_SURVEY = 'ano'
+ANONYMOUS_SURVEY = settings.ANONYMOUS_SURVEY
 ESS_SURVEY = 'ess'
 AHS_SURVEY = 'ahs'
 BHS_SURVEY = 'bhs'

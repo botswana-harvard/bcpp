@@ -1,6 +1,5 @@
 import configparser
 import os
-import sys
 
 from datetime import datetime
 from dateutil.relativedelta import MO, TU, WE, TH, FR, SA, SU
@@ -15,11 +14,9 @@ from edc_appointment.facility import Facility
 from edc_base.address import Address
 from edc_base.apps import AppConfig as BaseEdcBaseAppConfig
 from edc_base.utils import get_utcnow
-from edc_base_test.apps import AppConfig as BaseEdcBaseTestAppConfig
-from edc_consent.apps import AppConfig as BaseEdcConsentAppConfig
 from edc_constants.constants import FAILED_ELIGIBILITY
 from edc_device.apps import AppConfig as BaseEdcDeviceAppConfig, DevicePermission
-from edc_device.constants import SERVER, CENTRAL_SERVER, CLIENT, NODE_SERVER
+from edc_device.constants import CENTRAL_SERVER, CLIENT, NODE_SERVER
 from edc_identifier.apps import AppConfig as BaseEdcIdentifierAppConfig
 from edc_lab.apps import AppConfig as BaseEdcLabAppConfig
 from edc_label.apps import AppConfig as BaseEdcLabelAppConfig
@@ -45,7 +42,7 @@ from survey.apps import AppConfig as BaseSurveyAppConfig
 from .navbars import navbars
 
 style = color_style()
-ANONYMOUS_CONSENT_GROUP = 'anonymous'
+
 config = configparser.RawConfigParser()
 config.read(os.path.join(settings.ETC_DIR,
                          settings.APP_NAME,
@@ -144,15 +141,6 @@ class EdcBaseAppConfig(BaseEdcBaseAppConfig):
         return navbars
 
 
-class EdcBaseTestAppConfig(BaseEdcBaseTestAppConfig):
-    consent_model = 'bcpp_subject.subjectconsent'
-    survey_group_name = 'bcpp-survey'
-
-
-class EdcConsentAppConfig(BaseEdcConsentAppConfig):
-    anonymous_consent_group = ANONYMOUS_CONSENT_GROUP
-
-
 class EdcDeviceAppConfig(BaseEdcDeviceAppConfig):
     use_settings = True
     device_id = settings.DEVICE_ID
@@ -248,3 +236,10 @@ class EdcSyncFilesAppConfig(BaseEdcSyncFilesAppConfig):
 class EdcLabelAppConfig(BaseEdcLabelAppConfig):
     template_folder = os.path.join(
         settings.STATIC_ROOT, 'bcpp', 'label_templates')
+
+
+# from edc_base_test.apps import AppConfig as BaseEdcBaseTestAppConfig
+#
+# class EdcBaseTestAppConfig(BaseEdcBaseTestAppConfig):
+#     consent_model = 'bcpp_subject.subjectconsent'
+#     survey_group_name = 'bcpp-survey'

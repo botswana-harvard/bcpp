@@ -73,7 +73,7 @@ INSTALLED_APPS = [
     'bcpp.apps.EdcMapAppConfig',
     'bcpp.apps.EdcConsentAppConfig',
     'bcpp.apps.EdcDeviceAppConfig',
-    'bcpp.apps.EdcBaseTestAppConfig',
+    # 'bcpp.apps.EdcBaseTestAppConfig',
     'bcpp.apps.EdcTimepointAppConfig',
     'bcpp.apps.EdcAppointmentAppConfig',
     'bcpp.apps.EdcVisitTrackingAppConfig',
@@ -224,6 +224,8 @@ DEVICE_ROLE = config['edc_device'].get('role')
 LABEL_PRINTER = config['edc_label'].get('label_printer', 'label_printer')
 SURVEY_GROUP_NAME = config['survey'].get('group_name')
 SURVEY_SCHEDULE_NAME = config['survey'].get('schedule_name')
+ANONYMOUS_SURVEY = 'ano'
+ANONYMOUS_CONSENT_GROUP = 'anonymous'
 ANONYMOUS_ENABLED = config['bcpp'].get('anonymous_enabled')
 EDC_MAP_DEVICE_IDS = config['edc_map'].get('device_ids')
 EDC_LAB_REQUISITION_MODEL = 'bcpp_subject.SubjectRequisition'
