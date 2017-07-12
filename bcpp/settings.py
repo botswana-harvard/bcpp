@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     'edc_dashboard.apps.AppConfig',
     'edc_registration.apps.AppConfig',
     'edc_visit_schedule.apps.AppConfig',
+    'bcpp_visit_schedule.apps.AppConfig',
     'bcpp_community.apps.AppConfig',
     'bcpp.apps.AppConfig',
     'bcpp.apps.EdcBaseAppConfig',
@@ -89,34 +90,6 @@ INSTALLED_APPS = [
     'bcpp_report.apps.AppConfig',
 ]
 
-if 'test' in sys.argv:
-    MIGRATION_MODULES = {
-        "django_crypto_fields": None,
-        "edc_call_manager": None,
-        "edc_appointment": None,
-        "edc_call_manager": None,
-        "edc_consent": None,
-        "edc_death_report": None,
-        "edc_export": None,
-        "edc_identifier": None,
-        "edc_metadata": None,
-        "edc_registration": None,
-        "edc_sync": None,
-        'edc_map': None,
-        "bcpp": None,
-        "bcpp_subject": None,
-        "plot": None,
-        "household": None,
-        "member": None,
-        "survey": None,
-        'admin': None,
-        "auth": None,
-        'bcpp_map': None,
-        'contenttypes': None,
-        'sessions': None,
-    }
-    PASSWORD_HASHERS = ('django_plainpasswordhasher.PlainPasswordHasher', )
-    DEFAULT_FILE_STORAGE = 'inmemorystorage.InMemoryStorage'
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -230,3 +203,17 @@ ANONYMOUS_CONSENT_GROUP = 'anonymous'
 ANONYMOUS_ENABLED = config['bcpp'].get('anonymous_enabled')
 EDC_MAP_DEVICE_IDS = config['edc_map'].get('device_ids')
 EDC_LAB_REQUISITION_MODEL = 'bcpp_subject.SubjectRequisition'
+VISIT_SCHEDULE_APP_LABEL = 'bcpp_subject'
+
+if 'test' in sys.argv:
+
+    class DisableMigrations:
+        def __contains__(self, item):
+            return True
+
+        def __getitem__(self, item):
+            return None
+
+    MIGRATION_MODULES = DisableMigrations()
+    PASSWORD_HASHERS = ('django.contrib.auth.hashers.MD5PasswordHasher', )
+    DEFAULT_FILE_STORAGE = 'inmemorystorage.InMemoryStorage'
