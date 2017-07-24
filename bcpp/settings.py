@@ -29,12 +29,14 @@ DEBUG = True
 CONFIG_FILE = '{}.conf'.format(APP_NAME)
 if DEBUG:
     ETC_DIR = str(PurePath(BASE_DIR).joinpath('etc'))
+    ETC_DIR = '/etc'
 else:
     ETC_DIR = '/etc'
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 CONFIG_PATH = os.path.join(ETC_DIR, APP_NAME, CONFIG_FILE)
 sys.stdout.write(style.SUCCESS('Reading config from {}\n'.format(CONFIG_PATH)))
+print(CONFIG_PATH, "CONFIG_PATH CONFIG_PATH CONFIG_PATH")
 
 config = configparser.RawConfigParser()
 config.read(os.path.join(CONFIG_PATH))
@@ -63,6 +65,7 @@ INSTALLED_APPS = [
     'edc_dashboard.apps.AppConfig',
     'edc_registration.apps.AppConfig',
     'edc_visit_schedule.apps.AppConfig',
+    'member_dashboard.apps.AppConfig',
     'bcpp_visit_schedule.apps.AppConfig',
     'bcpp_community.apps.AppConfig',
     'bcpp_consent.apps.AppConfig',
@@ -190,7 +193,7 @@ MEDIA_URL = '/media/'
 
 # etc ini file attributes
 if DEBUG:
-    KEY_PATH = os.path.join(BASE_DIR, 'crypto_fields')
+    KEY_PATH = config['django_crypto_fields'].get('key_path')
 else:
     KEY_PATH = config['django_crypto_fields'].get('key_path')
 CURRENT_MAP_AREA = config['edc_map'].get('map_area', 'test_community')
@@ -199,6 +202,7 @@ DEVICE_ROLE = config['edc_device'].get('role')
 LABEL_PRINTER = config['edc_label'].get('label_printer', 'label_printer')
 SURVEY_GROUP_NAME = config['survey'].get('group_name')
 SURVEY_SCHEDULE_NAME = config['survey'].get('schedule_name')
+DEVICE_IDS = config['edc_map'].get('device_ids')
 ANONYMOUS_SURVEY = 'ano'
 ANONYMOUS_CONSENT_GROUP = 'anonymous'
 ANONYMOUS_ENABLED = config['bcpp'].get('anonymous_enabled')
@@ -216,5 +220,5 @@ if 'test' in sys.argv:
             return None
 
     MIGRATION_MODULES = DisableMigrations()
-    PASSWORD_HASHERS = ('django.contrib.auth.hashers.MD5PasswordHasher', )
+    PASSWORD_HASHERS = ('django.contrib.auth.hashers.MD5PasswordHasher',)
     DEFAULT_FILE_STORAGE = 'inmemorystorage.InMemoryStorage'
