@@ -4,6 +4,7 @@ git+https://github.com/botswana-harvard/bcpp-subject.git@develop#egg=bcpp_subjec
 git+https://github.com/botswana-harvard/bcpp-metadata-rules@develop#egg=bcpp-metadata-rules
 git+https://github.com/botswana-harvard/bcpp-referral@develop#egg=bcpp-referral
 git+https://github.com/botswana-harvard/bcpp-community@develop#egg=bcpp-community
+git+https://github.com/botswana-harvard/bcpp-consent.git@develop#egg=bcpp_consent
 
 git+https://github.com/botswana-harvard/edc-appointment.git@develop#egg=edc_appointment
 git+https://github.com/botswana-harvard/edc-base.git@develop#egg=edc_base
