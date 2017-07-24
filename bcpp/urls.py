@@ -55,7 +55,7 @@ urlpatterns = [
     url('household/', include('household.urls')),
     url('member/', include('member.urls')),
     url('enumeration/', include('enumeration.urls')),
-    url('subject/', include('bcpp_subject.urls')),
+    url('subject/', include('bcpp_subject_dashboard.urls')),
     url('follow/', include('bcpp_follow.urls')),
     url(r'^appointment/',
         include('edc_appointment.urls')),
