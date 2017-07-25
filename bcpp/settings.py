@@ -46,6 +46,13 @@ SECRET_KEY = config['django'].get('secret_key', 'blah$blah$blah')
 # SECRET_KEY = '9-%tjc_ov-=t6-fefrys4n@izkj4y8oewah6uf2p9q%*!ub%)^'
 
 # Application definition
+DASHBOARD_APPS = [
+    'edc_dashboard.apps.AppConfig',
+    'member_dashboard.apps.AppConfig',
+    'plot_dashboard.apps.AppConfig',
+    'household_dashboard.apps.AppConfig',
+]
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -62,10 +69,8 @@ INSTALLED_APPS = [
     'django_crypto_fields.apps.AppConfig',
     'django_revision.apps.AppConfig',
     'edc_consent.apps.AppConfig',
-    'edc_dashboard.apps.AppConfig',
     'edc_registration.apps.AppConfig',
     'edc_visit_schedule.apps.AppConfig',
-    'member_dashboard.apps.AppConfig',
     'bcpp_visit_schedule.apps.AppConfig',
     'bcpp_community.apps.AppConfig',
     'bcpp_consent.apps.AppConfig',
@@ -92,7 +97,7 @@ INSTALLED_APPS = [
     'bcpp.apps.EdcSyncAppConfig',
     'bcpp.apps.EdcSyncFilesAppConfig',
     'bcpp_report.apps.AppConfig',
-]
+] + DASHBOARD_APPS
 
 
 MIDDLEWARE = [
