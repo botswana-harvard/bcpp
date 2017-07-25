@@ -29,6 +29,7 @@ DEBUG = True
 CONFIG_FILE = '{}.conf'.format(APP_NAME)
 if DEBUG:
     ETC_DIR = str(PurePath(BASE_DIR).joinpath('etc'))
+    ETC_DIR = '/etc'
 else:
     ETC_DIR = '/etc'
 
@@ -50,6 +51,7 @@ DASHBOARD_APPS = [
     'member_dashboard.apps.AppConfig',
     'plot_dashboard.apps.AppConfig',
     'household_dashboard.apps.AppConfig',
+    'bcpp_subject_dashboard.apps.AppConfig',
 ]
 
 INSTALLED_APPS = [
