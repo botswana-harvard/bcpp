@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     'django_revision.apps.AppConfig',
     'edc_consent.apps.AppConfig',
     'edc_dashboard.apps.AppConfig',
+    'edc_lab_dashboard.apps.AppConfig',
     'edc_registration.apps.AppConfig',
     'edc_reference.apps.AppConfig',
     'edc_visit_schedule.apps.AppConfig',
