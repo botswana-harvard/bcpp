@@ -7,7 +7,7 @@ config = [
     ('plot', 'plots', 'fa-building', 'listboard_url_name'),
     ('household', 'households', 'fa-home', 'listboard_url_name'),
     ('enumeration', 'enumeration', 'fa-sitemap', 'listboard_url_name'),
-    ('member', 'members', 'fa-users', 'listboard_url_name'),
+    ('member_dashboard', 'members', 'fa-users', 'listboard_url_name'),
     ('bcpp_subject_dashboard', 'subjects',
      'fa-user-circle-o', 'listboard_url_name'),
     ('bcpp_follow', 'follow', 'fa-comments-o', 'listboard_url_name'),
