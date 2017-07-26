@@ -52,6 +52,7 @@ DASHBOARD_APPS = [
     'plot_dashboard.apps.AppConfig',
     'household_dashboard.apps.AppConfig',
     'bcpp_subject_dashboard.apps.AppConfig',
+    'edc_lab_dashboard.apps.AppConfig',
 ]
 
 INSTALLED_APPS = [
