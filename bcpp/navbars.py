@@ -5,7 +5,7 @@ navbars = {}
 navbar_items = []
 config = [
     ('plot_dashboard', 'plots', 'fa-building', 'listboard_url_name'),
-    ('household_dashbaord', 'households', 'fa-home', 'listboard_url_name'),
+    ('household_dashboard', 'households', 'fa-home', 'listboard_url_name'),
     ('enumeration', 'enumeration', 'fa-sitemap', 'listboard_url_name'),
     ('member_dashboard', 'members', 'fa-users', 'listboard_url_name'),
     ('bcpp_subject_dashboard', 'subjects',
