@@ -11,7 +11,7 @@ config = [
     ('bcpp_subject_dashboard', 'subjects',
      'fa-user-circle-o', 'listboard_url_name'),
     ('bcpp_follow', 'follow', 'fa-comments-o', 'listboard_url_name'),
-    ('edc_lab', None, 'fa-flask', 'home_url_name')
+    ('edc_lab_dashboard', None, 'fa-flask', 'home_url_name')
 ]
 for app_config_name, label, fa_icon, app_config_attr in config:
     navbar_item = NavbarItem(
