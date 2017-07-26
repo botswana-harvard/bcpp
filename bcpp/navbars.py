@@ -8,7 +8,8 @@ config = [
     ('household', 'households', 'fa-home', 'listboard_url_name'),
     ('enumeration', 'enumeration', 'fa-sitemap', 'listboard_url_name'),
     ('member', 'members', 'fa-users', 'listboard_url_name'),
-    ('bcpp_subject', 'subjects', 'fa-user-circle-o', 'listboard_url_name'),
+    ('bcpp_subject_dashboard', 'subjects',
+     'fa-user-circle-o', 'listboard_url_name'),
     ('bcpp_follow', 'follow', 'fa-comments-o', 'listboard_url_name'),
     ('edc_lab', None, 'fa-flask', 'home_url_name')
 ]
@@ -23,7 +24,7 @@ navbars.update(default=navbar_items)
 
 navbar_items = []
 config = [
-    ('bcpp_subject', 'Anonymous Subjects', 'fa-user-secret'),
+    ('bcpp_subject_dashboard', 'Anonymous Subjects', 'fa-user-secret'),
 ]
 for app_config_name, label, fa_icon in config:
     navbar_item = NavbarItem(
