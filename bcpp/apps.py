@@ -20,6 +20,7 @@ from edc_device.apps import AppConfig as BaseEdcDeviceAppConfig
 from edc_device.constants import CENTRAL_SERVER, CLIENT, NODE_SERVER
 from edc_identifier.apps import AppConfig as BaseEdcIdentifierAppConfig
 from edc_lab.apps import AppConfig as BaseEdcLabAppConfig
+from edc_lab_dashboard.apps import AppConfig as BaseEdcLabDashboardAppConfig
 from edc_label.apps import AppConfig as BaseEdcLabelAppConfig
 from edc_map.apps import AppConfig as BaseEdcMapAppConfig
 from edc_metadata.apps import AppConfig as BaseEdcMetadataAppConfig
@@ -33,10 +34,14 @@ from edc_visit_tracking.constants import SCHEDULED, UNSCHEDULED, LOST_VISIT
 
 from bcpp_follow.apps import AppConfig as BaseBcppFollowAppConfig
 from bcpp_subject.apps import AppConfig as BaseBcppSubjectAppConfig
+from bcpp_subject_dashboard.apps import AppConfig as BaseBcppSubjectDashboardAppConfig
 from enumeration.apps import AppConfig as BaseEnumerationAppConfig
 from household.apps import AppConfig as BaseHouseholdAppConfig
+from household_dashboard.apps import AppConfig as BaseHouseholdDashboardAppConfig
 from member.apps import AppConfig as BaseMemberAppConfig
+from member_dashboard.apps import AppConfig as BaseMemberDashboardAppConfig
 from plot.apps import AppConfig as BasePlotAppConfig
+from plot_dashboard.apps import AppConfig as BasePlotDashboardAppConfig
 from survey import S
 from survey.apps import AppConfig as BaseSurveyAppConfig
 
@@ -53,6 +58,8 @@ config.read(os.path.join(settings.ETC_DIR,
 class AppConfig(DjangoAppConfig):
     name = 'bcpp'
     base_template_name = 'bcpp/base.html'
+    dashboard_url_name = 'home_url'
+    listboard_url_name = 'home_url'
 
 
 class EdcProtocolAppConfig(BaseEdcProtocolAppConfig):
@@ -78,8 +85,11 @@ class EdcProtocolAppConfig(BaseEdcProtocolAppConfig):
         return site_mappers.current_map_code
 
 
-class PlotAppConfig(BasePlotAppConfig):
+class PlotDashboardAppConfig(BasePlotDashboardAppConfig):
     base_template_name = 'bcpp/base.html'
+
+
+class PlotAppConfig(BasePlotAppConfig):
 
     @property
     def add_plot_map_areas(self):
@@ -88,11 +98,18 @@ class PlotAppConfig(BasePlotAppConfig):
 
 
 class HouseholdAppConfig(BaseHouseholdAppConfig):
-    base_template_name = 'bcpp/base.html'
     max_failed_enumeration_attempts = 10
 
 
+class HouseholdDashboardAppConfig(BaseHouseholdDashboardAppConfig):
+    base_template_name = 'bcpp/base.html'
+
+
 class MemberAppConfig(BaseMemberAppConfig):
+    pass
+
+
+class MemberDashboardAppConfig(BaseMemberDashboardAppConfig):
     base_template_name = 'bcpp/base.html'
 
 
@@ -102,6 +119,10 @@ class EnumerationAppConfig(BaseEnumerationAppConfig):
 
 
 class BcppSubjectAppConfig(BaseBcppSubjectAppConfig):
+    pass
+
+
+class BcppSubjectDashboardAppConfig(BaseBcppSubjectDashboardAppConfig):
     base_template_name = 'bcpp/base.html'
 
 
@@ -109,8 +130,11 @@ class BcppFollowAppConfig(BaseBcppFollowAppConfig):
     base_template_name = 'bcpp/base.html'
 
 
-class EdcLabAppConfig(BaseEdcLabAppConfig):
+class EdcLabDashboardAppConfig(BaseEdcLabDashboardAppConfig):
     base_template_name = 'bcpp/base.html'
+
+
+class EdcLabAppConfig(BaseEdcLabAppConfig):
     requisition_model = settings.EDC_LAB_REQUISITION_MODEL
     result_model = 'edc_lab.result'
 
