@@ -96,6 +96,7 @@ INSTALLED_APPS = [
     'bcpp.apps.EdcSyncAppConfig',
     'bcpp.apps.EdcSyncFilesAppConfig',
     'bcpp_report.apps.AppConfig',
+    'bcpp_reference.apps.AppConfig',
 ]
 
 
