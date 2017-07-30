@@ -69,13 +69,18 @@ def get_maunatlala():
 def get_lerala():
     hosts = ['bcpp0{}'.format(i + 10) for i in range(0, 15)]
     hosts.append('bcpp057')
+    hosts.pop(hosts.index('bcpp016'))
+    hosts.pop(hosts.index('bcpp017'))
+    hosts.pop(hosts.index('bcpp019'))
     return hosts
 
 
 def get_sefophe():
     hosts = ['bcpp0{}'.format(i + 40) for i in range(0, 15)]
     hosts.append('bcpp026')
-    hosts.append('bcpp035')
+    hosts.pop(hosts.index('bcpp042'))
+    hosts.pop(hosts.index('bcpp050'))
+    hosts.pop(hosts.index('bcpp052'))
     return hosts
 
 
