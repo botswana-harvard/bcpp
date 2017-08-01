@@ -49,4 +49,4 @@ git+https://github.com/botswana-harvard/member-form-validators.git@develop#egg=m
 git+https://github.com/botswana-harvard/bcpp-status.git@develop#egg=bcpp_status
 git+https://github.com/botswana-harvard/plot-form-validators.git@develop#egg=plot_form_validators
 git+https://github.com/botswana-harvard/bcpp-reference.git@develop#egg=bcpp_reference
-git+https://github.com/botswana-harvard/bcpp-subject-form_validators.git@develop#egg=bcpp_subject_form_validators
+git+https://github.com/botswana-harvard/bcpp-subject-form-validators.git@develop#egg=bcpp_subject_form_validators
