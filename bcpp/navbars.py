@@ -1,16 +1,18 @@
 from edc_base.navbar_item import NavbarItem
-from edc_lab.navbars import navbar_items as edc_lab_navbar_items
+from edc_lab_dashboard.navbars import navbar_items as edc_lab_navbar_items
+from pprint import pprint
 
 navbars = {}
 navbar_items = []
 config = [
-    ('plot', 'plots', 'fa-building', 'listboard_url_name'),
-    ('household', 'households', 'fa-home', 'listboard_url_name'),
+    ('plot_dashboard', 'plots', 'fa-building', 'listboard_url_name'),
+    ('household_dashboard', 'households', 'fa-home', 'listboard_url_name'),
     ('enumeration', 'enumeration', 'fa-sitemap', 'listboard_url_name'),
-    ('member', 'members', 'fa-users', 'listboard_url_name'),
-    ('bcpp_subject', 'subjects', 'fa-user-circle-o', 'listboard_url_name'),
+    ('member_dashboard', 'members', 'fa-users', 'listboard_url_name'),
+    ('bcpp_subject_dashboard', 'subjects',
+     'fa-user-circle-o', 'listboard_url_name'),
     ('bcpp_follow', 'follow', 'fa-comments-o', 'listboard_url_name'),
-    ('edc_lab', None, 'fa-flask', 'home_url_name')
+    ('edc_lab_dashboard', None, 'fa-flask', 'home_url_name')
 ]
 for app_config_name, label, fa_icon, app_config_attr in config:
     navbar_item = NavbarItem(
@@ -23,7 +25,7 @@ navbars.update(default=navbar_items)
 
 navbar_items = []
 config = [
-    ('bcpp_subject', 'Anonymous Subjects', 'fa-user-secret'),
+    ('bcpp_subject_dashboard', 'Anonymous Subjects', 'fa-user-secret'),
 ]
 for app_config_name, label, fa_icon in config:
     navbar_item = NavbarItem(

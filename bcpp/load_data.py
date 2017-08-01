@@ -1,8 +1,5 @@
 from edc_base.preload_data import PreloadData
-
-from edc_constants.constants import (
-    NOT_APPLICABLE, OTHER, DWTA, NONE, NOT_SURE)
-
+from edc_constants.constants import NOT_APPLICABLE, OTHER, DWTA, NONE, NOT_SURE
 from bcpp_subject.constants import HEART_DISEASE, CANCER, TUBERCULOSIS, STI, ALONE
 
 
