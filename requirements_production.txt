@@ -24,6 +24,7 @@ git+https://github.com/botswana-harvard/edc-label.git@0.1.2#egg=edc_label
 git+https://github.com/botswana-harvard/edc-locator.git@0.2.1#egg=edc_locator
 git+https://github.com/botswana-harvard/edc-map.git@0.3.8#egg=edc_map
 git+https://github.com/botswana-harvard/edc-metadata.git@0.2.3#egg=edc_metadata
+git+https://github.com/botswana-harvard/edc-model-wrapper.git@0.1.1#egg=edc_model_wrapper
 git+https://github.com/botswana-harvard/edc-offstudy.git@0.2.1#egg=edc_offstudy
 git+https://github.com/botswana-harvard/edc-protocol.git@0.1.4#egg=edc_protocol
 git+https://github.com/botswana-harvard/edc-reference.git@0.1.1#egg=edc_reference
