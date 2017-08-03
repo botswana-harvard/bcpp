@@ -16,6 +16,7 @@ from edc_fabric.fabfile.files import mount_dmg_locally, dismount_dmg_locally, mo
 from edc_fabric.fabfile.mysql import install_protocol_database
 from edc_fabric.fabfile.repositories import get_repo_name
 from edc_fabric.fabfile.utils import launch_webserver
+from edc_fabric.fabfile.virtualenv.tasks import activate_venv
 
 from .prepare_env import prepare_env
 
@@ -256,29 +257,29 @@ def import_anonymous_transactions(**kwargs):
 
     transactions_path = os.path.join(env.media_root, 'transactions/pending/')
     for filename in os.listdir(transactions_path):
-            transactions_path = os.path.join(transactions_path, filename)
-            if filename.endswith('_member_enrollmentchecklistanonymous.txt'):
-                result = run(
-                    "mysql -uroot -p edc -Bse \"LOAD DATA LOCAL INFILE "
-                    f"'{transactions_path}' "
-                    f"INTO TABLE member_enrollmentchecklistanonymous "
-                    "CHARACTER SET UTF8 "
-                    "FIELDS TERMINATED BY '|' ENCLOSED BY '' "
-                    "LINES TERMINATED BY '\\n' "
-                )
-                if not result:
-                    warn(red(f'{transactions_path} not imported'))
-            else:
-                result = run(
-                    "mysql -uroot -p edc -Bse \"LOAD DATA LOCAL INFILE "
-                    f"'{transactions_path}' "
-                    f"INTO TABLE member_historicalenrollmentchecklistanonymous "
-                    "CHARACTER SET UTF8 "
-                    "FIELDS TERMINATED BY '|' ENCLOSED BY '' "
-                    "LINES TERMINATED BY '\\n' "
-                )
-                if not result:
-                    warn(red(f'{transactions_paths} not imported'))
+        transactions_path = os.path.join(transactions_path, filename)
+        if filename.endswith('_member_enrollmentchecklistanonymous.txt'):
+            result = run(
+                "mysql -uroot -p edc -Bse \"LOAD DATA LOCAL INFILE "
+                f"'{transactions_path}' "
+                f"INTO TABLE member_enrollmentchecklistanonymous "
+                "CHARACTER SET UTF8 "
+                "FIELDS TERMINATED BY '|' ENCLOSED BY '' "
+                "LINES TERMINATED BY '\\n' "
+            )
+            if not result:
+                warn(red(f'{transactions_path} not imported'))
+        else:
+            result = run(
+                "mysql -uroot -p edc -Bse \"LOAD DATA LOCAL INFILE "
+                f"'{transactions_path}' "
+                f"INTO TABLE member_historicalenrollmentchecklistanonymous "
+                "CHARACTER SET UTF8 "
+                "FIELDS TERMINATED BY '|' ENCLOSED BY '' "
+                "LINES TERMINATED BY '\\n' "
+            )
+            if not result:
+                warn(red(f'{transactions_paths} not imported'))
 
 
 @task
@@ -330,3 +331,23 @@ def load_keys_bcpp(device_role=None, **kwargs):
     else:
         mount_dmg(dmg_path=env.etc_dir, dmg_filename=env.dmg_filename,
                   dmg_passphrase=env.crypto_keys_passphrase)
+
+
+@task
+def install_dependency_specific_tag(dependency=None, tag=None, account=None, **kwargs):
+    if not account:
+        account = 'botswana-harvard'
+    egg = '_'.join(dependency.split('-'))
+    prepare_env(**kwargs)
+    with cd(env.project_repo_root):
+        run(f'source {activate_venv()} && pip uninstall {dependency}', warn_only=True)
+        run(f'pip install git+https://github.com/{account}/'
+            f'{dependency}.git@{tag}#egg=={egg}')
+
+
+@task
+def install_dependency_not_in_requirements(dependency=None, tag=None, **kwargs):
+    prepare_env(**kwargs)
+    with cd(env.project_repo_root):
+        run(f'source {activate_venv()} && pip uninstall {dependency}', warn_only=True)
+        run(f'source {activate_venv()} && pip install {dependency}=={tag}')
