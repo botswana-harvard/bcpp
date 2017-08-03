@@ -100,8 +100,9 @@ def deploy(requirements_list=None, conf_filename=None, bootstrap_path=None, rele
             install_python3()
 
         if not skip_venv:
-            if specific_tag:
-                run(f'git checkout {release}')
+            with cd(os.path.join(env.project_repo_root)):
+                if specific_tag:
+                    run(f'git checkout {release}')
             create_venv(work_online=work_online)
 
         if not skip_web:
