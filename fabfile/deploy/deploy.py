@@ -29,7 +29,7 @@ from ..utils import update_bcpp_conf
 def deploy(requirements_list=None, conf_filename=None, bootstrap_path=None, release=None, map_area=None, user=None,
            bootstrap_branch=None, skip_update_os=None, skip_db=None, skip_restore_db=None, skip_repo=None,
            skip_venv=None, skip_mysql=None, skip_python=None, skip_web=None, update=None, current_tag=None,
-           skip_collectstatic=None, skip_bash_config=None, skip_keys=None, work_online=None):
+           skip_collectstatic=None, skip_bash_config=None, skip_keys=None, work_online=None, specific_tag=None):
 
     bootstrap_env(
         path=bootstrap_path,
@@ -121,7 +121,10 @@ def deploy(requirements_list=None, conf_filename=None, bootstrap_path=None, rele
     update_bcpp_conf()
 
     with cd(os.path.join(env.project_repo_root)):
-        run('git checkout master')
+        if specific_tag:
+            run(f'git checkout {release}')
+        else:
+            run('git checkout master')
 
     # mount dmg
     if env.device_role == CENTRAL_SERVER:
@@ -138,11 +141,14 @@ def deploy(requirements_list=None, conf_filename=None, bootstrap_path=None, rele
                   dmg_passphrase=env.crypto_keys_passphrase)
 
     with cd(os.path.join(env.remote_source_root, env.project_repo_name)):
-        run('git checkout master')
-        result = run(
-            'git diff --name-status master..{release}'.format(release=release))
-        if result:
-            warn('master is not at {release}'.format(release=release))
+        if specific_tag:
+            run(f'git checkout {release}')
+        else:
+            run('git checkout master')
+            result = run(
+                'git diff --name-status master..{release}'.format(release=release))
+            if result:
+                warn('master is not at {release}'.format(release=release))
 
     update_settings()
 
