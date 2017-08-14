@@ -1,14 +1,15 @@
 import configparser
+from datetime import datetime
 import os
 
-from datetime import datetime
+from bcpp_follow.apps import AppConfig as BaseBcppFollowAppConfig
+from bcpp_subject.apps import AppConfig as BaseBcppSubjectAppConfig
+from bcpp_subject_dashboard.apps import AppConfig as BaseBcppSubjectDashboardAppConfig
 from dateutil.relativedelta import MO, TU, WE, TH, FR, SA, SU
 from dateutil.tz import gettz
-
 from django.apps import AppConfig as DjangoAppConfig
 from django.conf import settings
 from django.core.management.color import color_style
-
 from edc_appointment.apps import AppConfig as BaseEdcAppointmentAppConfig
 from edc_appointment.facility import Facility
 from edc_base.address import Address
@@ -31,10 +32,6 @@ from edc_timepoint.apps import AppConfig as BaseEdcTimepointAppConfig
 from edc_timepoint.timepoint import Timepoint
 from edc_visit_tracking.apps import AppConfig as BaseEdcVisitTrackingAppConfig
 from edc_visit_tracking.constants import SCHEDULED, UNSCHEDULED, LOST_VISIT
-
-from bcpp_follow.apps import AppConfig as BaseBcppFollowAppConfig
-from bcpp_subject.apps import AppConfig as BaseBcppSubjectAppConfig
-from bcpp_subject_dashboard.apps import AppConfig as BaseBcppSubjectDashboardAppConfig
 from enumeration.apps import AppConfig as BaseEnumerationAppConfig
 from household.apps import AppConfig as BaseHouseholdAppConfig
 from household_dashboard.apps import AppConfig as BaseHouseholdDashboardAppConfig
@@ -46,6 +43,7 @@ from survey import S
 from survey.apps import AppConfig as BaseSurveyAppConfig
 
 from .navbars import navbars
+
 
 style = color_style()
 
@@ -164,8 +162,7 @@ class EdcBaseAppConfig(BaseEdcBaseAppConfig):
         city='Bontleng',
         country='Botswana')
 
-    def get_navbars(self):
-        return navbars
+    navbars = navbars
 
 
 class EdcDeviceAppConfig(BaseEdcDeviceAppConfig):
