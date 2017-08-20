@@ -1,6 +1,8 @@
-from edc_base.navbar_item import NavbarItem
-from edc_lab_dashboard.navbars import navbar_items as edc_lab_navbar_items
 from pprint import pprint
+
+from edc_base.navbar import NavbarItem
+from edc_lab_dashboard.navbars import navbar_items as edc_lab_navbar_items
+
 
 navbars = {}
 navbar_items = []
