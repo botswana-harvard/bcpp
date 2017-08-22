@@ -36,6 +36,7 @@ from .views import HomeView, AdministrationView
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/edc_appointment/', edc_appointment_admin.urls),
     url(r'^admin/household/', household_admin.urls),
     url(r'^admin/plot/', plot_admin.urls),
