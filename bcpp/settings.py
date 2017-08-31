@@ -14,6 +14,7 @@ from django.core.management.color import color_style
 from pathlib import PurePath
 
 from .logging import LOGGING
+from edc_device.constants import CENTRAL_SERVER
 
 style = color_style()
 
@@ -47,6 +48,7 @@ SECRET_KEY = config['django'].get('secret_key', 'blah$blah$blah')
 
 INSTALLED_APPS = [
     'django.contrib.admin',
+    'django.contrib.admindocs',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -65,15 +67,18 @@ INSTALLED_APPS = [
     'edc_lab_dashboard.apps.AppConfig',
     'edc_registration.apps.AppConfig',
     'edc_reference.apps.AppConfig',
+    'edc_metadata_rules.apps.AppConfig',
     'edc_visit_schedule.apps.AppConfig',
     'member_dashboard.apps.AppConfig',
     'household_dashboard.apps.AppConfig',
     'plot_dashboard.apps.AppConfig',
-    'bcpp_visit_schedule.apps.AppConfig',
     'bcpp_community.apps.AppConfig',
     'bcpp_consent.apps.AppConfig',
+    'bcpp_reference.apps.AppConfig',
+    'bcpp_report.apps.AppConfig',
+    'bcpp_visit_schedule.apps.AppConfig',
     'bcpp_subject_dashboard.apps.AppConfig',
-    'bcpp.apps.AppConfig',
+    'bcpp_subject_form_validators.apps.AppConfig',
     'bcpp.apps.EdcBaseAppConfig',
     'bcpp.apps.EdcLabAppConfig',
     'bcpp.apps.EdcLabelAppConfig',
@@ -83,7 +88,6 @@ INSTALLED_APPS = [
     'bcpp.apps.EdcMapAppConfig',
     'bcpp.apps.EdcDeviceAppConfig',
     'bcpp.apps.EdcProtocolAppConfig',
-    # 'bcpp.apps.EdcBaseTestAppConfig',
     'bcpp.apps.EdcTimepointAppConfig',
     'bcpp.apps.EdcAppointmentAppConfig',
     'bcpp.apps.EdcVisitTrackingAppConfig',
@@ -95,8 +99,7 @@ INSTALLED_APPS = [
     'bcpp.apps.PlotAppConfig',
     'bcpp.apps.EdcSyncAppConfig',
     'bcpp.apps.EdcSyncFilesAppConfig',
-    'bcpp_report.apps.AppConfig',
-    'bcpp_reference.apps.AppConfig',
+    'bcpp.apps.AppConfig',
 ]
 
 
@@ -109,6 +112,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.contrib.admindocs.middleware.XViewMiddleware',
 ]
 
 ROOT_URLCONF = '{}.urls'.format(APP_NAME)
@@ -203,8 +207,8 @@ else:
     KEY_PATH = config['django_crypto_fields'].get('key_path')
 GIT_DIR = BASE_DIR
 CURRENT_MAP_AREA = config['edc_map'].get('map_area', 'test_community')
-DEVICE_ID = config['edc_device'].get('device_id', '99')
-DEVICE_ROLE = config['edc_device'].get('role')
+DEVICE_ID = '99'  # config['edc_device'].get('device_id', '99')
+DEVICE_ROLE = CENTRAL_SERVER  # config['edc_device'].get('role')
 LABEL_PRINTER = config['edc_label'].get('label_printer', 'label_printer')
 SURVEY_GROUP_NAME = config['survey'].get('group_name')
 SURVEY_SCHEDULE_NAME = config['survey'].get('schedule_name')
