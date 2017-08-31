@@ -97,6 +97,8 @@ INSTALLED_APPS = [
     'bcpp.apps.EdcSyncFilesAppConfig',
     'bcpp_report.apps.AppConfig',
     'bcpp_reference.apps.AppConfig',
+    'edc_metadata_rules.apps.AppConfig',
+    'bcpp_metadata_rules.apps.AppConfig',
 ]
 
 
@@ -203,6 +205,7 @@ else:
     KEY_PATH = config['django_crypto_fields'].get('key_path')
 GIT_DIR = BASE_DIR
 CURRENT_MAP_AREA = config['edc_map'].get('map_area', 'test_community')
+
 DEVICE_ID = config['edc_device'].get('device_id', '99')
 DEVICE_ROLE = config['edc_device'].get('role')
 LABEL_PRINTER = config['edc_label'].get('label_printer', 'label_printer')
