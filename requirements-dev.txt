@@ -23,6 +23,7 @@
 -e /Users/erikvw/source/edc-locator
 -e /Users/erikvw/source/edc-map
 -e /Users/erikvw/source/edc-metadata
+-e /Users/erikvw/source/edc-metadata-rules
 -e /Users/erikvw/source/edc-model-wrapper
 -e /Users/erikvw/source/edc-offstudy
 -e /Users/erikvw/source/edc-protocol
