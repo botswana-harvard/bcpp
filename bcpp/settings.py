@@ -14,20 +14,19 @@ from django.core.management.color import color_style
 from pathlib import PurePath
 
 from .logging import LOGGING
-from edc_device.constants import CENTRAL_SERVER
 
 style = color_style()
 
-APP_NAME = 'bcpp'
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+APP_NAME = 'bcpp'
 
-LOGGING = LOGGING
-sys.stdout.write(style.SUCCESS('Logging to {}\n'.format(
-    LOGGING.get('handlers').get('file').get('filename'))))
+logging_handler = LOGGING.get('handlers').get('file').get('filename')
+sys.stdout.write(style.SUCCESS(f'Logging to {logging_handler}\n'))
 
 DEBUG = True
 
-CONFIG_FILE = '{}.conf'.format(APP_NAME)
+CONFIG_FILE = f'{APP_NAME}.conf'
+MYSQL_CONF = 'mysql.conf'
 if DEBUG:
     ETC_DIR = str(PurePath(BASE_DIR).joinpath('etc'))
     ETC_DIR = '/etc'
@@ -37,7 +36,9 @@ else:
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 CONFIG_PATH = os.path.join(ETC_DIR, APP_NAME, CONFIG_FILE)
-sys.stdout.write(style.SUCCESS('Reading config from {}\n'.format(CONFIG_PATH)))
+sys.stdout.write(style.SUCCESS(f'Config folder {ETC_DIR}\n'))
+sys.stdout.write(style.SUCCESS(f'  * Reading config from {CONFIG_FILE}\n'))
+sys.stdout.write(style.SUCCESS(f'  * Reading mysql from {MYSQL_CONF}\n'))
 
 config = configparser.RawConfigParser()
 config.read(os.path.join(CONFIG_PATH))
@@ -67,6 +68,7 @@ INSTALLED_APPS = [
     'edc_lab_dashboard.apps.AppConfig',
     'edc_registration.apps.AppConfig',
     'edc_reference.apps.AppConfig',
+    'edc_metadata_rules.apps.AppConfig',
     'edc_visit_schedule.apps.AppConfig',
     'member_dashboard.apps.AppConfig',
     'household_dashboard.apps.AppConfig',
@@ -74,8 +76,11 @@ INSTALLED_APPS = [
     'bcpp_community.apps.AppConfig',
     'bcpp_consent.apps.AppConfig',
     'bcpp_visit_schedule.apps.AppConfig',
+    'bcpp_reference.apps.AppConfig',
+    'bcpp_metadata_rules.apps.AppConfig',
     'bcpp_subject_dashboard.apps.AppConfig',
     'bcpp_subject_form_validators.apps.AppConfig',
+    'bcpp_report.apps.AppConfig',
     'bcpp.apps.EdcBaseAppConfig',
     'bcpp.apps.EdcLabAppConfig',
     'bcpp.apps.EdcLabelAppConfig',
@@ -96,10 +101,6 @@ INSTALLED_APPS = [
     'bcpp.apps.PlotAppConfig',
     'bcpp.apps.EdcSyncAppConfig',
     'bcpp.apps.EdcSyncFilesAppConfig',
-    'bcpp_report.apps.AppConfig',
-    'bcpp_reference.apps.AppConfig',
-    'edc_metadata_rules.apps.AppConfig',
-    'bcpp_metadata_rules.apps.AppConfig',
     'bcpp.apps.AppConfig'
 ]
 
@@ -116,7 +117,7 @@ MIDDLEWARE = [
     'django.contrib.admindocs.middleware.XViewMiddleware',
 ]
 
-ROOT_URLCONF = '{}.urls'.format(APP_NAME)
+ROOT_URLCONF = f'{APP_NAME}.urls'
 
 TEMPLATES = [
     {
@@ -135,13 +136,13 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = '{}.wsgi.application'.format(APP_NAME)
+WSGI_APPLICATION = f'{APP_NAME}.wsgi.application'
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'OPTIONS': {
-            'read_default_file': os.path.join(ETC_DIR, APP_NAME, 'mysql.conf'),
+            'read_default_file': os.path.join(ETC_DIR, APP_NAME, MYSQL_CONF),
         },
     },
 }
