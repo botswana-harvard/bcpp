@@ -15,7 +15,7 @@ def get_oodi():
     return hosts
 
 
-def get_lenstweletau():
+def get_lentsweletau():
     hosts = ['bcpp0{}'.format(i + 25) for i in range(0, 15)]
     hosts.pop(hosts.index('bcpp026'))
     hosts.pop(hosts.index('bcpp035'))
@@ -84,10 +84,28 @@ def get_sefophe():
     return hosts
 
 
+def get_mmadinare():
+    hosts = ['bcpp0{}'.format(i + 10) for i in range(0, 15)]
+    hosts.append('bcpp057')
+    hosts.pop(hosts.index('bcpp016'))
+    hosts.pop(hosts.index('bcpp017'))
+    hosts.pop(hosts.index('bcpp019'))
+    return hosts
+
+
+def get_shoshong():
+    hosts = ['bcpp0{}'.format(i + 40) for i in range(0, 15)]
+    hosts.append('bcpp026')
+    hosts.pop(hosts.index('bcpp042'))
+    hosts.pop(hosts.index('bcpp050'))
+    hosts.pop(hosts.index('bcpp052'))
+    return hosts
+
+
 roledefs = {
     'deployment_hosts': ['localhost'],
     'mmankgodi': get_mmankgodi(),
-    'lentsweletau': get_lenstweletau(),
+    'lentsweletau': get_lentsweletau(),
     'mmathethe': get_mmathethe(),
     'letlhakeng': get_letlhakeng(),
     'oodi': get_oodi(),
@@ -96,5 +114,7 @@ roledefs = {
     'ramokgonami': get_ramokgonami(),
     'lerala': get_lerala(),
     'sefophe': get_sefophe(),
+    'shoshong': get_shoshong(),
+    'mmadinare': get_mmadinare(),
     'testhosts': ['bcpp075', 'bcpp076', 'bcpp077', 'bcpp078', 'bcpp080', 'bcpp081'],
 }
