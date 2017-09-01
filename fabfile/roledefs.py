@@ -84,7 +84,7 @@ def get_sefophe():
     return hosts
 
 
-def get_mmadinare():
+def get_shoshong():
     hosts = ['bcpp0{}'.format(i + 10) for i in range(0, 15)]
     hosts.append('bcpp057')
     hosts.pop(hosts.index('bcpp016'))
@@ -93,7 +93,7 @@ def get_mmadinare():
     return hosts
 
 
-def get_shoshong():
+def get_mmadinare():
     hosts = ['bcpp0{}'.format(i + 40) for i in range(0, 15)]
     hosts.append('bcpp026')
     hosts.pop(hosts.index('bcpp042'))
