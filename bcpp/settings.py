@@ -23,7 +23,7 @@ APP_NAME = 'bcpp'
 logging_handler = LOGGING.get('handlers').get('file').get('filename')
 sys.stdout.write(style.SUCCESS(f'Logging to {logging_handler}\n'))
 
-DEBUG = False
+DEBUG = True
 
 CONFIG_FILE = f'{APP_NAME}.conf'
 MYSQL_CONF = 'mysql.conf'
@@ -102,7 +102,13 @@ INSTALLED_APPS = [
     'bcpp.apps.PlotAppConfig',
     'bcpp.apps.EdcSyncAppConfig',
     'bcpp.apps.EdcSyncFilesAppConfig',
-    'bcpp.apps.AppConfig'
+    'bcpp_report.apps.AppConfig',
+    'bcpp_reference.apps.AppConfig',
+    'edc_metadata_rules.apps.AppConfig',
+    'bcpp_metadata_rules.apps.AppConfig',
+    'bcpp_status.apps.AppConfig',
+    'bcpp_referral.apps.AppConfig',
+    'bcpp.apps.AppConfig',
 ]
 
 if DEBUG:
