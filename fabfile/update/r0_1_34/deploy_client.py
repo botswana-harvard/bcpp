@@ -2,10 +2,10 @@ import os
 
 from fabric.api import cd, run, env, task, abort
 
-from edc_fabric.fabfile.utils import launch_webserver, update_settings,\
+from edc_fabric.fabfile.utils import launch_webserver, update_settings, \
     rsync_deployment_root
 from edc_fabric.fabfile.pip.tasks import get_pip_list
-from edc_fabric.fabfile.mysql.tasks import install_protocol_database,\
+from edc_fabric.fabfile.mysql.tasks import install_protocol_database, \
     put_my_cnf, put_mysql_conf
 from edc_fabric.fabfile.conf import put_project_conf
 from edc_fabric.fabfile.files.dmg import mount_dmg

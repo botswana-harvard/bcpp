@@ -14,20 +14,19 @@ from django.core.management.color import color_style
 from pathlib import PurePath
 
 from .logging import LOGGING
-from edc_device.constants import CENTRAL_SERVER
 
 style = color_style()
 
-APP_NAME = 'bcpp'
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+APP_NAME = 'bcpp'
 
-LOGGING = LOGGING
-sys.stdout.write(style.SUCCESS('Logging to {}\n'.format(
-    LOGGING.get('handlers').get('file').get('filename'))))
+logging_handler = LOGGING.get('handlers').get('file').get('filename')
+sys.stdout.write(style.SUCCESS(f'Logging to {logging_handler}\n'))
 
 DEBUG = True
 
-CONFIG_FILE = '{}.conf'.format(APP_NAME)
+CONFIG_FILE = f'{APP_NAME}.conf'
+MYSQL_CONF = 'mysql.conf'
 if DEBUG:
     ETC_DIR = str(PurePath(BASE_DIR).joinpath('etc'))
     ETC_DIR = '/etc'
@@ -35,9 +34,12 @@ else:
     ETC_DIR = '/etc'
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+INTERNAL_IPS = ['127.0.0.1']
 
 CONFIG_PATH = os.path.join(ETC_DIR, APP_NAME, CONFIG_FILE)
-sys.stdout.write(style.SUCCESS('Reading config from {}\n'.format(CONFIG_PATH)))
+sys.stdout.write(style.SUCCESS(f'Config folder {ETC_DIR}\n'))
+sys.stdout.write(style.SUCCESS(f'  * Reading config from {CONFIG_FILE}\n'))
+sys.stdout.write(style.SUCCESS(f'  * Reading mysql from {MYSQL_CONF}\n'))
 
 config = configparser.RawConfigParser()
 config.read(os.path.join(CONFIG_PATH))
@@ -74,37 +76,51 @@ INSTALLED_APPS = [
     'plot_dashboard.apps.AppConfig',
     'bcpp_community.apps.AppConfig',
     'bcpp_consent.apps.AppConfig',
+    'bcpp_metadata_rules.apps.AppConfig',
     'bcpp_reference.apps.AppConfig',
+    'bcpp_referral.apps.AppConfig',
     'bcpp_report.apps.AppConfig',
-    'bcpp_visit_schedule.apps.AppConfig',
+    'bcpp_status.apps.AppConfig',
     'bcpp_subject_dashboard.apps.AppConfig',
     'bcpp_subject_form_validators.apps.AppConfig',
+    'bcpp_visit_schedule.apps.AppConfig',
+    'bcpp.apps.BcppFollowAppConfig',
+    'bcpp.apps.BcppSubjectAppConfig',
+    'bcpp.apps.EdcAppointmentAppConfig',
     'bcpp.apps.EdcBaseAppConfig',
+    'bcpp.apps.EdcDeviceAppConfig',
+    'bcpp.apps.EdcIdentifierAppConfig',
     'bcpp.apps.EdcLabAppConfig',
     'bcpp.apps.EdcLabelAppConfig',
-    'bcpp.apps.EdcMetadataAppConfig',
-    'bcpp.apps.EdcIdentifierAppConfig',
-    'bcpp.apps.SurveyAppConfig',
     'bcpp.apps.EdcMapAppConfig',
-    'bcpp.apps.EdcDeviceAppConfig',
+    'bcpp.apps.EdcMetadataAppConfig',
     'bcpp.apps.EdcProtocolAppConfig',
-    'bcpp.apps.EdcTimepointAppConfig',
-    'bcpp.apps.EdcAppointmentAppConfig',
-    'bcpp.apps.EdcVisitTrackingAppConfig',
-    'bcpp.apps.HouseholdAppConfig',
-    'bcpp.apps.MemberAppConfig',
-    'bcpp.apps.EnumerationAppConfig',
-    'bcpp.apps.BcppSubjectAppConfig',
-    'bcpp.apps.BcppFollowAppConfig',
-    'bcpp.apps.PlotAppConfig',
     'bcpp.apps.EdcSyncAppConfig',
     'bcpp.apps.EdcSyncFilesAppConfig',
+    'bcpp.apps.EdcTimepointAppConfig',
+    'bcpp.apps.EdcVisitTrackingAppConfig',
+    'bcpp.apps.EnumerationAppConfig',
+    'bcpp.apps.HouseholdAppConfig',
+    'bcpp.apps.MemberAppConfig',
+    'bcpp.apps.PlotAppConfig',
+    'bcpp.apps.SurveyAppConfig',
     'bcpp.apps.AppConfig',
 ]
 
+if DEBUG:
+    INSTALLED_APPS = INSTALLED_APPS + ['debug_toolbar']
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.cache.UpdateCacheMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.cache.FetchFromCacheMiddleware',
+    'corsheaders.middleware.CorsMiddleware']
+
+if DEBUG:
+    MIDDLEWARE = MIDDLEWARE + [
+        'debug_toolbar.middleware.DebugToolbarMiddleware']
+
+MIDDLEWARE = MIDDLEWARE + [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -115,7 +131,8 @@ MIDDLEWARE = [
     'django.contrib.admindocs.middleware.XViewMiddleware',
 ]
 
-ROOT_URLCONF = '{}.urls'.format(APP_NAME)
+
+ROOT_URLCONF = f'{APP_NAME}.urls'
 
 TEMPLATES = [
     {
@@ -134,15 +151,22 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = '{}.wsgi.application'.format(APP_NAME)
+WSGI_APPLICATION = f'{APP_NAME}.wsgi.application'
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'OPTIONS': {
-            'read_default_file': os.path.join(ETC_DIR, APP_NAME, 'mysql.conf'),
+            'read_default_file': os.path.join(ETC_DIR, APP_NAME, MYSQL_CONF),
         },
     },
+}
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': '127.0.0.1:11211',
+    }
 }
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -207,8 +231,10 @@ else:
     KEY_PATH = config['django_crypto_fields'].get('key_path')
 GIT_DIR = BASE_DIR
 CURRENT_MAP_AREA = config['edc_map'].get('map_area', 'test_community')
-DEVICE_ID = '99'  # config['edc_device'].get('device_id', '99')
-DEVICE_ROLE = CENTRAL_SERVER  # config['edc_device'].get('role')
+
+DEVICE_ID = config['edc_device'].get('device_id', '99')
+DEVICE_ROLE = config['edc_device'].get('role')
+
 LABEL_PRINTER = config['edc_label'].get('label_printer', 'label_printer')
 SURVEY_GROUP_NAME = config['survey'].get('group_name')
 SURVEY_SCHEDULE_NAME = config['survey'].get('schedule_name')
