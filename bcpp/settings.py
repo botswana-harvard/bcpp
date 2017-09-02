@@ -23,7 +23,7 @@ APP_NAME = 'bcpp'
 logging_handler = LOGGING.get('handlers').get('file').get('filename')
 sys.stdout.write(style.SUCCESS(f'Logging to {logging_handler}\n'))
 
-DEBUG = True
+DEBUG = False
 
 CONFIG_FILE = f'{APP_NAME}.conf'
 MYSQL_CONF = 'mysql.conf'
@@ -34,6 +34,7 @@ else:
     ETC_DIR = '/etc'
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+INTERNAL_IPS = ['127.0.0.1']
 
 CONFIG_PATH = os.path.join(ETC_DIR, APP_NAME, CONFIG_FILE)
 sys.stdout.write(style.SUCCESS(f'Config folder {ETC_DIR}\n'))
@@ -104,9 +105,20 @@ INSTALLED_APPS = [
     'bcpp.apps.AppConfig'
 ]
 
+if DEBUG:
+    INSTALLED_APPS = INSTALLED_APPS + ['debug_toolbar']
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.cache.UpdateCacheMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.cache.FetchFromCacheMiddleware',
+    'corsheaders.middleware.CorsMiddleware']
+
+if DEBUG:
+    MIDDLEWARE = MIDDLEWARE + [
+        'debug_toolbar.middleware.DebugToolbarMiddleware']
+
+MIDDLEWARE = MIDDLEWARE + [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -116,6 +128,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.contrib.admindocs.middleware.XViewMiddleware',
 ]
+
 
 ROOT_URLCONF = f'{APP_NAME}.urls'
 
@@ -145,6 +158,13 @@ DATABASES = {
             'read_default_file': os.path.join(ETC_DIR, APP_NAME, MYSQL_CONF),
         },
     },
+}
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': '127.0.0.1:11211',
+    }
 }
 
 AUTH_PASSWORD_VALIDATORS = [
