@@ -259,8 +259,8 @@ class EdcSyncFilesAppConfig(BaseEdcSyncFilesAppConfig):
 
 
 class EdcLabelAppConfig(BaseEdcLabelAppConfig):
-    template_folder = '/Users/tsetsiba/source/bcpp/label_templates'
-
+    template_folder = os.path.join(
+        settings.STATIC_ROOT, 'bcpp', 'label_templates')
 
 # from edc_base_test.apps import AppConfig as BaseEdcBaseTestAppConfig
 #
