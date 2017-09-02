@@ -101,7 +101,13 @@ INSTALLED_APPS = [
     'bcpp.apps.PlotAppConfig',
     'bcpp.apps.EdcSyncAppConfig',
     'bcpp.apps.EdcSyncFilesAppConfig',
-    'bcpp.apps.AppConfig'
+    'bcpp_report.apps.AppConfig',
+    'bcpp_reference.apps.AppConfig',
+    'edc_metadata_rules.apps.AppConfig',
+    'bcpp_metadata_rules.apps.AppConfig',
+    'bcpp_status.apps.AppConfig',
+    'bcpp_referral.apps.AppConfig',
+    'bcpp.apps.AppConfig',
 ]
 
 
