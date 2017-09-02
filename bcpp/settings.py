@@ -34,6 +34,7 @@ else:
     ETC_DIR = '/etc'
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+INTERNAL_IPS = ['127.0.0.1']
 
 CONFIG_PATH = os.path.join(ETC_DIR, APP_NAME, CONFIG_FILE)
 sys.stdout.write(style.SUCCESS(f'Config folder {ETC_DIR}\n'))
@@ -75,40 +76,51 @@ INSTALLED_APPS = [
     'plot_dashboard.apps.AppConfig',
     'bcpp_community.apps.AppConfig',
     'bcpp_consent.apps.AppConfig',
-    'bcpp_visit_schedule.apps.AppConfig',
-    'bcpp_reference.apps.AppConfig',
     'bcpp_metadata_rules.apps.AppConfig',
+    'bcpp_reference.apps.AppConfig',
+    'bcpp_referral.apps.AppConfig',
+    'bcpp_report.apps.AppConfig',
+    'bcpp_status.apps.AppConfig',
     'bcpp_subject_dashboard.apps.AppConfig',
     'bcpp_subject_form_validators.apps.AppConfig',
-    'bcpp_report.apps.AppConfig',
+    'bcpp_visit_schedule.apps.AppConfig',
+    'bcpp.apps.BcppFollowAppConfig',
+    'bcpp.apps.BcppSubjectAppConfig',
+    'bcpp.apps.EdcAppointmentAppConfig',
     'bcpp.apps.EdcBaseAppConfig',
+    'bcpp.apps.EdcDeviceAppConfig',
+    'bcpp.apps.EdcIdentifierAppConfig',
     'bcpp.apps.EdcLabAppConfig',
     'bcpp.apps.EdcLabelAppConfig',
-    'bcpp.apps.EdcMetadataAppConfig',
-    'bcpp.apps.EdcIdentifierAppConfig',
-    'bcpp.apps.SurveyAppConfig',
     'bcpp.apps.EdcMapAppConfig',
-    'bcpp.apps.EdcDeviceAppConfig',
+    'bcpp.apps.EdcMetadataAppConfig',
     'bcpp.apps.EdcProtocolAppConfig',
     'bcpp.apps.EdcTimepointAppConfig',
-    'bcpp.apps.EdcAppointmentAppConfig',
     'bcpp.apps.EdcVisitTrackingAppConfig',
+    'bcpp.apps.EnumerationAppConfig',
     'bcpp.apps.HouseholdAppConfig',
     'bcpp.apps.MemberAppConfig',
-    'bcpp.apps.EnumerationAppConfig',
-    'bcpp.apps.BcppSubjectAppConfig',
-    'bcpp.apps.BcppFollowAppConfig',
     'bcpp.apps.PlotAppConfig',
     'bcpp.apps.EdcSyncAppConfig',
     'bcpp.apps.EdcSyncFilesAppConfig',
-    'bcpp_status.apps.AppConfig',
-    'bcpp_referral.apps.AppConfig',
+    'bcpp.apps.SurveyAppConfig',
     'bcpp.apps.AppConfig',
 ]
 
+if DEBUG:
+    INSTALLED_APPS = INSTALLED_APPS + ['debug_toolbar']
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.cache.UpdateCacheMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.cache.FetchFromCacheMiddleware',
+    'corsheaders.middleware.CorsMiddleware']
+
+if DEBUG:
+    MIDDLEWARE = MIDDLEWARE + [
+        'debug_toolbar.middleware.DebugToolbarMiddleware']
+
+MIDDLEWARE = MIDDLEWARE + [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -118,6 +130,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.contrib.admindocs.middleware.XViewMiddleware',
 ]
+
 
 ROOT_URLCONF = f'{APP_NAME}.urls'
 
@@ -147,6 +160,13 @@ DATABASES = {
             'read_default_file': os.path.join(ETC_DIR, APP_NAME, MYSQL_CONF),
         },
     },
+}
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': '127.0.0.1:11211',
+    }
 }
 
 AUTH_PASSWORD_VALIDATORS = [

@@ -33,6 +33,7 @@ from member.admin_site import member_admin
 from plot.admin_site import plot_admin
 
 from .views import HomeView, AdministrationView
+from django.conf import settings
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -82,3 +83,9 @@ urlpatterns = [
         pattern_name='login_url'), name='logout_url'),
     url(r'', HomeView.as_view(), name='home_url'),
 ]
+
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns = [
+        url(r'^__debug__/', include(debug_toolbar.urls)),
+    ] + urlpatterns
