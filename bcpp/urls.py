@@ -12,9 +12,10 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
+from bcpp_report.admin_site import bcpp_report_admin
+from bcpp_subject.admin_site import bcpp_subject_admin
 from django.conf.urls import url, include
 from django.contrib import admin
-
 from edc_appointment.admin_site import edc_appointment_admin
 from edc_base.views import LogoutView, LoginView
 from edc_identifier.admin_site import edc_identifier_admin
@@ -24,16 +25,11 @@ from edc_metadata.admin_site import edc_metadata_admin
 from edc_registration.admin_site import edc_registration_admin
 from edc_sync.admin_site import edc_sync_admin
 from edc_sync_files.admin_site import edc_sync_files_admin
-
-
-from bcpp_subject.admin_site import bcpp_subject_admin
-from bcpp_report.admin_site import bcpp_report_admin
 from household.admin_site import household_admin
 from member.admin_site import member_admin
 from plot.admin_site import plot_admin
 
 from .views import HomeView, AdministrationView
-from django.conf import settings
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -84,8 +80,6 @@ urlpatterns = [
     url(r'', HomeView.as_view(), name='home_url'),
 ]
 
-if settings.DEBUG:
-    import debug_toolbar
-    urlpatterns = [
-        url(r'^__debug__/', include(debug_toolbar.urls)),
-    ] + urlpatterns
+# if settings.DEBUG:
+#     import debug_toolbar
+#     urlpatterns += [url(r'^__debug__/', include(debug_toolbar.urls))]

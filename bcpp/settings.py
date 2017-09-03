@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'rest_framework.authtoken',
+    # 'debug_toolbar',
     'django_js_reverse',
     'django_crypto_fields.apps.AppConfig',
     'django_revision.apps.AppConfig',
@@ -107,24 +108,16 @@ INSTALLED_APPS = [
     'bcpp.apps.AppConfig',
 ]
 
-if DEBUG:
-    INSTALLED_APPS = INSTALLED_APPS + ['debug_toolbar']
-
 MIDDLEWARE = [
     'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.cache.FetchFromCacheMiddleware',
-    'corsheaders.middleware.CorsMiddleware']
-
-if DEBUG:
-    MIDDLEWARE = MIDDLEWARE + [
-        'debug_toolbar.middleware.DebugToolbarMiddleware']
-
-MIDDLEWARE = MIDDLEWARE + [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
