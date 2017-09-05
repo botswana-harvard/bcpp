@@ -231,6 +231,19 @@ def generate_anonymous_transactions(**kwargs):
     local(f'scp django@{env.host}:{transactions_path}*.txt  {local_transaction_path}')
 
 
+@task
+def verify_deployment_db(**kwargs):
+    """Generate anonymous transactions.
+
+    fab -P -R mmathethe utils.verify_deployment_db:bootstrap_path=/Users/imosweu/source/bcpp/fabfile/conf/  --user=django
+
+    """
+    prepare_env(**kwargs)
+
+    run("mysql -uroot -p edc -Bse \"SELECT COUNT(*) from information_schema.tables "
+        "where TABLE_SCHEMA='edc';\"")
+
+
 def get_pip_freeze_list_from_requirements(requirements_file=None):
     package_names = []
     with cd(env.project_repo_root):
