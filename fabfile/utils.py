@@ -157,7 +157,7 @@ def list_tags_from(pip_file=None):
 def query_tx_task(**kwargs):
     """Check for any host with pending transactions.
 
-    fab -P -R mmankgodi update.query_tx_task:bootstrap_path=/Users/erikvw/source/bcpp/fabfile/conf/  --user=django
+    fab -P -R mmankgodi utils.query_tx_task:bootstrap_path=/Users/erikvw/source/bcpp/fabfile/conf/  --user=django
 
     """
     prepare_env(**kwargs)
@@ -324,7 +324,7 @@ def check_repo_status(expected_tag=None, **kwargs):
 
 @task
 def load_keys_bcpp(device_role=None, **kwargs):
-    """Check repo tag.
+    """Load keys for project.
 
     fab -H bcpp010 utils.load_keys_bcpp:bootstrap_path=/Users/imosweu/source/bcpp/fabfile/conf/,device_role=Client  --user=django
 
@@ -348,6 +348,11 @@ def load_keys_bcpp(device_role=None, **kwargs):
 
 @task
 def install_dependency_specific_tag(dependency=None, tag=None, account=None, **kwargs):
+    """Install a dependency with a specific tag.
+
+    fab -H bcpp010 utils.install_dependency_specific_tag:bootstrap_path=/Users/imosweu/source/bcpp/fabfile/conf/,dependency=bcpp-subject,tag=0.1.22  --user=django
+
+    """
     if not account:
         account = 'botswana-harvard'
     egg = '_'.join(dependency.split('-'))
@@ -360,7 +365,62 @@ def install_dependency_specific_tag(dependency=None, tag=None, account=None, **k
 
 @task
 def install_dependency_not_in_requirements(dependency=None, tag=None, **kwargs):
+    """Install a dependency with a specific tag.
+
+    fab -H bcpp010 utils.install_dependency_not_in_requirements:bootstrap_path=/Users/imosweu/source/bcpp/fabfile/conf/,dependency=bcpp-subject,tag=0.1.22  --user=django
+
+    """
     prepare_env(**kwargs)
     with cd(env.project_repo_root):
         run(f'source {activate_venv()} && pip uninstall {dependency}', warn_only=True)
         run(f'source {activate_venv()} && pip install {dependency}=={tag}')
+
+
+@task
+def remove_old_sync_files(verify=None, **kwargs):
+    """Install a dependency with a specific tag.
+
+    fab -H bcpp010 utils.remove_old_sync_files:bootstrap_path=/Users/imosweu/source/bcpp/fabfile/conf/  --user=django
+
+    """
+    prepare_env(**kwargs)
+
+    with cd('~/static/'):
+        if not verify:
+            if exists('edc_sync'):
+                run('rm -rf edc_sync')
+            if exists('edc_sync_files'):
+                run('rm -rf edc_sync_files')
+        else:
+            if not exists('edc_sync') or not exists('edc_sync_files'):
+                print(
+                    blue('Missing Edc Sync and Edc Sync Files,'
+                         ' folders do not exist.'))
+
+
+@task
+def load_containers_task(bootstrap_path=None, bootstrap_branch=None,
+                         map_area=None, file_path=None):
+    """Loads containers into the database.
+
+    For example:
+
+        fab -P -R lentsweletau utils.load_containers_task:bootstrap_path=/Users/imosweu/source/bcpp/fabfile/conf/,file_path=,map_area=
+
+    """
+
+    bootstrap_env(
+        path=bootstrap_path,
+        filename='bootstrap_client.conf',
+        bootstrap_branch=bootstrap_branch)
+    if not map_area:
+        abort('map_area not specified')
+
+    update_fabric_env()
+
+    with cd(env.project_repo_root):
+        run(f'source {activate_venv()} &&  python manage.py'
+            f' load_containers {file_path}{map_area}container.json edc_map.container')
+        run(f'source {activate_venv()} &&  python manage.py'
+            f' load_containers {file_path}{map_area}inner_container.json'
+            ' edc_map.innercontainer')
