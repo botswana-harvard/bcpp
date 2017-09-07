@@ -77,6 +77,7 @@ INSTALLED_APPS = [
     'plot_dashboard.apps.AppConfig',
     'bcpp_community.apps.AppConfig',
     'bcpp_consent.apps.AppConfig',
+    'bcpp_labs.apps.AppConfig',
     'bcpp_metadata_rules.apps.AppConfig',
     'bcpp_reference.apps.AppConfig',
     'bcpp_referral.apps.AppConfig',
