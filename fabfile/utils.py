@@ -436,4 +436,4 @@ def add_missing_db_column(**kwargs):
     prepare_env(**kwargs)
 
     run("mysql -uroot -p edc -Bse \"alter table bcpp_subject_subjectrequisition"
-        "add column slug varchar(250) NULL;\"")
+        " add column slug varchar(250) NULL;\"")
