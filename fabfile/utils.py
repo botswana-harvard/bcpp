@@ -437,3 +437,14 @@ def add_missing_db_column(**kwargs):
 
     run("mysql -uroot -p edc -Bse \"alter table bcpp_subject_subjectrequisition"
         " add column slug varchar(250) NULL;\"")
+
+
+@task
+def launch_webserver_bcpp_task(**kwargs):
+    """Add missing DB column.
+
+    fab -P -R mmathethe utils.launch_webserver_bcpp_task:target_os=Darwin --user=django
+
+    """
+    prepare_env(**kwargs)
+    launch_webserver()
