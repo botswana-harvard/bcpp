@@ -205,6 +205,7 @@ class EdcMapAppConfig(BaseEdcMapAppConfig):
 
 
 class EdcVisitTrackingAppConfig(BaseEdcVisitTrackingAppConfig):
+    report_datetime_allowance = -1  # disabled
     visit_models = {
         'bcpp_subject': ('subject_visit', 'bcpp_subject.subjectvisit')}
 
