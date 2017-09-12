@@ -465,3 +465,19 @@ def launch_webserver_bcpp_task(**kwargs):
     """
     prepare_env(**kwargs)
     launch_webserver()
+
+
+@task
+def run_management_commands(map_area=None, **kwargs):
+    """Run management commands
+
+    fab -P -R mmathethe utils.run_management_commands:bootstrap_path=/Users/imosweu/source/bcpp/fabfile/conf/,map_area=mmathethe --user=django
+
+    """
+    prepare_env(**kwargs)
+
+    with cd(os.path.join(env.project_repo_root)):
+        run(f'source {activate_venv()} && python manage.py delete_wrong_members'
+            f' {map_area} bcpp-survey.bcpp-year-3.{map_area} 5', warn_only=True)
+        run(f'source {activate_venv()} && python manage.py re_save_reference_data')
+        run(f'source {activate_venv()} && python manage.py re_save_status_history')

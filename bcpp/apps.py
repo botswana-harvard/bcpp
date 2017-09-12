@@ -4,6 +4,7 @@ import os
 
 from bcpp_follow.apps import AppConfig as BaseBcppFollowAppConfig
 from bcpp_subject.apps import AppConfig as BaseBcppSubjectAppConfig
+from bcpp_subject.parsers import schedule_appt_date_parser
 from bcpp_subject_dashboard.apps import AppConfig as BaseBcppSubjectDashboardAppConfig
 from dateutil.relativedelta import MO, TU, WE, TH, FR, SA, SU
 from dateutil.tz import gettz
@@ -250,6 +251,7 @@ class EdcSyncAppConfig(BaseEdcSyncAppConfig):
     edc_sync_files_using = True
     server_ip = config['edc_sync'].get('server_ip')
     base_template_name = 'bcpp/base.html'
+    custom_json_parsers = [schedule_appt_date_parser]
 
 
 class EdcSyncFilesAppConfig(BaseEdcSyncFilesAppConfig):
@@ -257,8 +259,6 @@ class EdcSyncFilesAppConfig(BaseEdcSyncFilesAppConfig):
     remote_host = config['edc_sync_files'].get('remote_host')
     user = config['edc_sync_files'].get('sync_user')
     usb_volume = config['edc_sync_files'].get('usb_volume')
-    override_sync_data_values = [
-        {'bcpp_subject.subjectreferral': ['scheduled_appt_date']}]
 
 
 class EdcLabelAppConfig(BaseEdcLabelAppConfig):
