@@ -1,22 +1,19 @@
 import os
-
 from pathlib import PurePath
 
-from fabric.api import task, run, warn, cd, env, local, lcd, put
-from fabric.colors import yellow, blue, red
-from fabric.contrib.files import exists, sed
-from fabric.contrib.project import rsync_project
-from fabric.operations import sudo
-from fabric.utils import abort
-
 from edc_device.constants import CENTRAL_SERVER
-
 from edc_fabric.fabfile.environment import bootstrap_env, update_fabric_env
 from edc_fabric.fabfile.files import mount_dmg_locally, dismount_dmg_locally, mount_dmg
 from edc_fabric.fabfile.mysql import install_protocol_database
 from edc_fabric.fabfile.repositories import get_repo_name
 from edc_fabric.fabfile.utils import launch_webserver
 from edc_fabric.fabfile.virtualenv.tasks import activate_venv
+from fabric.api import task, run, warn, cd, env, local, lcd, put
+from fabric.colors import yellow, blue, red
+from fabric.contrib.files import exists, sed
+from fabric.contrib.project import rsync_project
+from fabric.operations import sudo
+from fabric.utils import abort
 
 from .prepare_env import prepare_env
 
@@ -437,6 +434,26 @@ def add_missing_db_column(**kwargs):
 
     run("mysql -uroot -p edc -Bse \"alter table bcpp_subject_subjectrequisition"
         " add column slug varchar(250) NULL;\"")
+
+
+@task
+def ssh_copy_id(bootstrap_path=None, use_local_fabric_conf=None, bootstrap_branch=None):
+    """
+    Example:
+        fab -R testhosts -P deploy.ssh_copy_id:config_path=/Users/erikvw/source/bcpp/fabfile/,bootstrap_branch=develop,local_fabric_conf=True --user=django
+    """
+
+    bootstrap_env(
+        path=os.path.expanduser(bootstrap_path),
+        bootstrap_branch=bootstrap_branch)
+    update_fabric_env(use_local_fabric_conf=use_local_fabric_conf)
+    pub_key = local('cat ~/.ssh/id_rsa.pub', capture=True)
+    with cd('~/.ssh'):
+        run('touch authorized_keys')
+        result = run('cat authorized_keys', quiet=True)
+        if pub_key not in result:
+            run('cp authorized_keys authorized_keys.bak')
+            run(f'echo {pub_key} >> authorized_keys')
 
 
 @task
