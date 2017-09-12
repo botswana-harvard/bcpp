@@ -459,7 +459,8 @@ def run_management_commands(**kwargs):
     """
     prepare_env(**kwargs)
 
-    run(f'source {activate_venv()} && python manage.py delete_wrong_members'
-        ' maunatlala bcpp-survey.bcpp-year-3.maunatlala 5')
-    run(f'source {activate_venv()} && python manage.py re_save_reference_data')
-    run(f'source {activate_venv()} && python manage.py re_save_status_history')
+    with cd(os.path.join(env.project_repo_root)):
+        run(f'source {activate_venv()} && python manage.py delete_wrong_members'
+            ' maunatlala bcpp-survey.bcpp-year-3.maunatlala 5')
+        run(f'source {activate_venv()} && python manage.py re_save_reference_data')
+        run(f'source {activate_venv()} && python manage.py re_save_status_history')
