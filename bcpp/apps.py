@@ -251,7 +251,7 @@ class EdcSyncAppConfig(BaseEdcSyncAppConfig):
     edc_sync_files_using = True
     server_ip = config['edc_sync'].get('server_ip')
     base_template_name = 'bcpp/base.html'
-    custom_json_parser = [schedule_appt_date_parser]
+    custom_json_parsers = [schedule_appt_date_parser]
 
 
 class EdcSyncFilesAppConfig(BaseEdcSyncFilesAppConfig):
@@ -259,8 +259,6 @@ class EdcSyncFilesAppConfig(BaseEdcSyncFilesAppConfig):
     remote_host = config['edc_sync_files'].get('remote_host')
     user = config['edc_sync_files'].get('sync_user')
     usb_volume = config['edc_sync_files'].get('usb_volume')
-    override_sync_data_values = [
-        {'bcpp_subject.subjectreferral': ['scheduled_appt_date']}]
 
 
 class EdcLabelAppConfig(BaseEdcLabelAppConfig):
