@@ -424,3 +424,27 @@ def load_containers_task(bootstrap_path=None, bootstrap_branch=None,
         run(f'source {activate_venv()} &&  python manage.py'
             f' load_containers {file_path}{map_area}inner_container.json'
             ' edc_map.innercontainer')
+
+
+@task
+def add_missing_db_column(**kwargs):
+    """Add missing DB column.
+
+    fab -P -R mmathethe utils.add_missing_db_column:bootstrap_path=/Users/imosweu/source/bcpp/fabfile/conf/  --user=django
+
+    """
+    prepare_env(**kwargs)
+
+    run("mysql -uroot -p edc -Bse \"alter table bcpp_subject_subjectrequisition"
+        " add column slug varchar(250) NULL;\"")
+
+
+@task
+def launch_webserver_bcpp_task(**kwargs):
+    """Add missing DB column.
+
+    fab -P -R mmathethe utils.launch_webserver_bcpp_task:target_os=Darwin --user=django
+
+    """
+    prepare_env(**kwargs)
+    launch_webserver()
