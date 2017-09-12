@@ -461,6 +461,6 @@ def run_management_commands(map_area=None, **kwargs):
 
     with cd(os.path.join(env.project_repo_root)):
         run(f'source {activate_venv()} && python manage.py delete_wrong_members'
-            f' {map_area} bcpp-survey.bcpp-year-3.{map_area} 5')
+            f' {map_area} bcpp-survey.bcpp-year-3.{map_area} 5', warn_only=True)
         run(f'source {activate_venv()} && python manage.py re_save_reference_data')
         run(f'source {activate_venv()} && python manage.py re_save_status_history')
