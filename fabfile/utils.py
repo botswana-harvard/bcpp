@@ -448,3 +448,18 @@ def launch_webserver_bcpp_task(**kwargs):
     """
     prepare_env(**kwargs)
     launch_webserver()
+
+
+@task
+def run_management_commands(**kwargs):
+    """Run management commands
+
+    fab -P -R mmathethe utils.run_management_commands:bootstrap_path=/Users/imosweu/source/bcpp/fabfile/conf/ --user=django
+
+    """
+    prepare_env(**kwargs)
+
+    run(f'source {activate_venv()} && python manage.py delete_wrong_members'
+        ' maunatlala bcpp-survey.bcpp-year-3.maunatlala 5')
+    run(f'source {activate_venv()} && python manage.py re_save_reference_data')
+    run(f'source {activate_venv()} && python manage.py re_save_status_history')
