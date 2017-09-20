@@ -1,22 +1,19 @@
 import os
-
 from pathlib import PurePath
 
-from fabric.api import task, run, warn, cd, env, local, lcd, put
-from fabric.colors import yellow, blue, red
-from fabric.contrib.files import exists, sed
-from fabric.contrib.project import rsync_project
-from fabric.operations import sudo
-from fabric.utils import abort
-
 from edc_device.constants import CENTRAL_SERVER
-
 from edc_fabric.fabfile.environment import bootstrap_env, update_fabric_env
 from edc_fabric.fabfile.files import mount_dmg_locally, dismount_dmg_locally, mount_dmg
 from edc_fabric.fabfile.mysql import install_protocol_database
 from edc_fabric.fabfile.repositories import get_repo_name
 from edc_fabric.fabfile.utils import launch_webserver
 from edc_fabric.fabfile.virtualenv.tasks import activate_venv
+from fabric.api import task, run, warn, cd, env, local, lcd, put
+from fabric.colors import yellow, blue, red
+from fabric.contrib.files import exists, sed
+from fabric.contrib.project import rsync_project
+from fabric.operations import sudo
+from fabric.utils import abort
 
 from .prepare_env import prepare_env
 
@@ -440,6 +437,26 @@ def add_missing_db_column(**kwargs):
 
 
 @task
+def ssh_copy_id(bootstrap_path=None, use_local_fabric_conf=None, bootstrap_branch=None):
+    """
+    Example:
+        fab -R testhosts -P deploy.ssh_copy_id:config_path=/Users/erikvw/source/bcpp/fabfile/,bootstrap_branch=develop,local_fabric_conf=True --user=django
+    """
+
+    bootstrap_env(
+        path=os.path.expanduser(bootstrap_path),
+        bootstrap_branch=bootstrap_branch)
+    update_fabric_env(use_local_fabric_conf=use_local_fabric_conf)
+    pub_key = local('cat ~/.ssh/id_rsa.pub', capture=True)
+    with cd('~/.ssh'):
+        run('touch authorized_keys')
+        result = run('cat authorized_keys', quiet=True)
+        if pub_key not in result:
+            run('cp authorized_keys authorized_keys.bak')
+            run(f'echo {pub_key} >> authorized_keys')
+
+
+@task
 def launch_webserver_bcpp_task(**kwargs):
     """Add missing DB column.
 
@@ -451,10 +468,10 @@ def launch_webserver_bcpp_task(**kwargs):
 
 
 @task
-def run_management_commands(map_area=None, **kwargs):
+def member_data_edit_mgt_command(map_area=None, **kwargs):
     """Run management commands
 
-    fab -P -R mmathethe utils.run_management_commands:bootstrap_path=/Users/imosweu/source/bcpp/fabfile/conf/,map_area=mmathethe --user=django
+    fab -P -R mmathethe utils.member_data_edit_mgt_command:bootstrap_path=/Users/imosweu/source/bcpp/fabfile/conf/,map_area=mmathethe --user=django
 
     """
     prepare_env(**kwargs)
@@ -464,3 +481,17 @@ def run_management_commands(map_area=None, **kwargs):
             f' {map_area} bcpp-survey.bcpp-year-3.{map_area} 5', warn_only=True)
         run(f'source {activate_venv()} && python manage.py re_save_reference_data')
         run(f'source {activate_venv()} && python manage.py re_save_status_history')
+
+
+@task
+def update_registration_identifier_mgt_command(map_area=None, **kwargs):
+    """Run management commands
+
+    fab -P -R mmathethe utils.update_registration_identifier:bootstrap_path=/Users/magodign/source/bcpp/fabfile/conf/,map_area=mmathethe --user=django
+
+    """
+    prepare_env(**kwargs)
+
+    with cd(os.path.join(env.project_repo_root)):
+        run(f'source {activate_venv()} && python manage.py update_registration_identifier {map_area}')
+
