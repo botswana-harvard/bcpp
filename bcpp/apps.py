@@ -251,7 +251,7 @@ class EdcSyncAppConfig(BaseEdcSyncAppConfig):
     edc_sync_files_using = True
     server_ip = config['edc_sync'].get('server_ip')
     base_template_name = 'bcpp/base.html'
-    custom_json_parsers = [schedule_appt_date_parser]
+    # custom_json_parsers = [schedule_appt_date_parser]
 
 
 class EdcSyncFilesAppConfig(BaseEdcSyncFilesAppConfig):
