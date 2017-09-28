@@ -432,8 +432,11 @@ def add_missing_db_column(**kwargs):
     """
     prepare_env(**kwargs)
 
-    run("mysql -uroot -p edc -Bse \"alter table bcpp_subject_subjectrequisition"
-        " add column slug varchar(250) NULL;\"")
+    run("mysql -uroot -p edc -Bse \"alter table edc_lab_result"
+        " add column device_created varchar(10) NULL;\"")
+
+    run("mysql -uroot -p edc -Bse \"alter table edc_lab_result"
+        " add column device_modified varchar(10) NULL;\"")
 
 
 @task
@@ -468,10 +471,10 @@ def launch_webserver_bcpp_task(**kwargs):
 
 
 @task
-def run_management_commands(map_area=None, **kwargs):
+def member_data_edit_mgt_command(map_area=None, **kwargs):
     """Run management commands
 
-    fab -P -R mmathethe utils.run_management_commands:bootstrap_path=/Users/imosweu/source/bcpp/fabfile/conf/,map_area=mmathethe --user=django
+    fab -P -R mmathethe utils.member_data_edit_mgt_command:bootstrap_path=/Users/imosweu/source/bcpp/fabfile/conf/,map_area=mmathethe --user=django
 
     """
     prepare_env(**kwargs)
@@ -481,3 +484,17 @@ def run_management_commands(map_area=None, **kwargs):
             f' {map_area} bcpp-survey.bcpp-year-3.{map_area} 5', warn_only=True)
         run(f'source {activate_venv()} && python manage.py re_save_reference_data')
         run(f'source {activate_venv()} && python manage.py re_save_status_history')
+
+
+@task
+def update_registration_identifier_mgt_command(map_area=None, **kwargs):
+    """Run management commands
+
+    fab -P -R mmathethe utils.update_registration_identifier:bootstrap_path=/Users/django/source/bcpp/fabfile/conf/,map_area=mmathethe --user=django
+
+    """
+    prepare_env(**kwargs)
+
+    with cd(os.path.join(env.project_repo_root)):
+        run(f'source {activate_venv()} && python manage.py update_registration_identifier {map_area}')
+
