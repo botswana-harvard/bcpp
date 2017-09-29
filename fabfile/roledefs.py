@@ -102,6 +102,29 @@ def get_mmadinare():
     return hosts
 
 
+def get_metsimotlhabe():
+    hosts = ['bcpp0{}'.format(i + 55) for i in range(0, 16)]
+    hosts.pop(hosts.index('bcpp057'))
+    hosts.pop(hosts.index('bcpp065'))
+    hosts.pop(hosts.index('bcpp066'))
+    hosts.pop(hosts.index('bcpp067'))
+    hosts.append('bcpp035')
+    hosts.append('bcpp052')
+    hosts.append('bcpp042')
+    hosts.append('bcpp050')
+    return hosts
+
+
+def get_tati_siding():
+    hosts = ['bcpp0{}'.format(i + 25) for i in range(0, 15)]
+    hosts.pop(hosts.index('bcpp026'))
+    hosts.pop(hosts.index('bcpp035'))
+    hosts.append('bcpp016')
+    hosts.append('bcpp017')
+    hosts.append('bcpp019')
+    return hosts
+
+
 roledefs = {
     'deployment_hosts': ['localhost'],
     'mmankgodi': get_mmankgodi(),
@@ -116,5 +139,7 @@ roledefs = {
     'sefophe': get_sefophe(),
     'shoshong': get_shoshong(),
     'mmadinare': get_mmadinare(),
+    'metsimotlhabe': get_metsimotlhabe(),
+    'tati_siding': get_tati_siding(),
     'testhosts': ['bcpp075', 'bcpp076', 'bcpp077', 'bcpp078', 'bcpp080', 'bcpp081'],
 }
