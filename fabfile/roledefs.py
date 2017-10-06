@@ -125,6 +125,24 @@ def get_tati_siding():
     return hosts
 
 
+def get_nkange():
+    hosts = ['bcpp0{}'.format(i + 10) for i in range(0, 15)]
+    hosts.append('bcpp057')
+    hosts.pop(hosts.index('bcpp016'))
+    hosts.pop(hosts.index('bcpp017'))
+    hosts.pop(hosts.index('bcpp019'))
+    return hosts
+
+
+def get_sebina():
+    hosts = ['bcpp0{}'.format(i + 40) for i in range(0, 15)]
+    hosts.append('bcpp026')
+    hosts.pop(hosts.index('bcpp042'))
+    hosts.pop(hosts.index('bcpp050'))
+    hosts.pop(hosts.index('bcpp052'))
+    return hosts
+
+
 roledefs = {
     'deployment_hosts': ['localhost'],
     'mmankgodi': get_mmankgodi(),
