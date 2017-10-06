@@ -159,5 +159,7 @@ roledefs = {
     'mmadinare': get_mmadinare(),
     'metsimotlhabe': get_metsimotlhabe(),
     'tati_siding': get_tati_siding(),
+    'sebina': get_sebina(),
+    'nkange': get_nkange(),
     'testhosts': ['bcpp075', 'bcpp076', 'bcpp077', 'bcpp078', 'bcpp080', 'bcpp081'],
 }
