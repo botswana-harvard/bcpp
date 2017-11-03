@@ -12,6 +12,7 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
+from bcpp_follow.admin_site import bcpp_follow_admin
 from bcpp_report.admin_site import bcpp_report_admin
 from bcpp_subject.admin_site import bcpp_subject_admin
 from django.conf.urls import url, include
@@ -37,10 +38,7 @@ urlpatterns = [
     url(r'^admin/edc_appointment/', edc_appointment_admin.urls),
     url(r'^admin/household/', household_admin.urls),
     url(r'^admin/plot/', plot_admin.urls),
-<<<<<<< Updated upstream
-=======
     url(r'^admin/bcpp_follow/', bcpp_follow_admin.urls),
->>>>>>> Stashed changes
     url(r'^admin/member/', member_admin.urls),
     url(r'^admin/bcpp_subject/', bcpp_subject_admin.urls),
     url(r'^admin/edc_lab/', edc_lab_admin.urls),
