@@ -143,6 +143,28 @@ def get_sebina():
     return hosts
 
 
+def get_gumare():
+    hosts = ['bcpp0{}'.format(i + 10) for i in range(0, 30)]
+    hosts.pop(hosts.index('bcpp026'))
+    hosts.pop(hosts.index('bcpp035'))
+    hosts.pop(hosts.index('bcpp038'))
+    hosts.pop(hosts.index('bcpp032'))
+    hosts.pop(hosts.index('bcpp034'))
+    hosts.append('bcpp057')
+    return hosts
+
+
+def get_shakawe():
+    hosts = ['bcpp0{}'.format(i + 40) for i in range(0, 31)]
+    hosts.pop(hosts.index('bcpp057'))
+    hosts.pop(hosts.index('bcpp065'))
+    hosts.pop(hosts.index('bcpp066'))
+    hosts.pop(hosts.index('bcpp067'))
+    hosts.append('bcpp035')
+    hosts.append('bcpp026')
+    return hosts
+
+
 roledefs = {
     'deployment_hosts': ['localhost'],
     'mmankgodi': get_mmankgodi(),
@@ -161,5 +183,7 @@ roledefs = {
     'tati_siding': get_tati_siding(),
     'sebina': get_sebina(),
     'nkange': get_nkange(),
+    'gumare': get_gumare(),
+    'shakawe': get_shakawe(),
     'testhosts': ['bcpp075', 'bcpp076', 'bcpp077', 'bcpp078', 'bcpp080', 'bcpp081'],
 }
