@@ -37,6 +37,10 @@ urlpatterns = [
     url(r'^admin/edc_appointment/', edc_appointment_admin.urls),
     url(r'^admin/household/', household_admin.urls),
     url(r'^admin/plot/', plot_admin.urls),
+<<<<<<< Updated upstream
+=======
+    url(r'^admin/bcpp_follow/', bcpp_follow_admin.urls),
+>>>>>>> Stashed changes
     url(r'^admin/member/', member_admin.urls),
     url(r'^admin/bcpp_subject/', bcpp_subject_admin.urls),
     url(r'^admin/edc_lab/', edc_lab_admin.urls),
