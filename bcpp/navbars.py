@@ -1,41 +1,65 @@
-from pprint import pprint
-
-from edc_base.navbar import NavbarItem
-from edc_lab_dashboard.navbars import navbar_items as edc_lab_navbar_items
+from edc_navbar import NavbarItem, site_navbars, Navbar
 
 
-navbars = {}
-navbar_items = []
-config = [
-    ('plot_dashboard', 'plots', 'fa-building', 'listboard_url_name'),
-    ('household_dashboard', 'households', 'fa-home', 'listboard_url_name'),
-    ('enumeration', 'enumeration', 'fa-sitemap', 'listboard_url_name'),
-    ('member_dashboard', 'members', 'fa-users', 'listboard_url_name'),
-    ('bcpp_subject_dashboard', 'subjects',
-     'fa-user-circle-o', 'listboard_url_name'),
-    ('bcpp_follow', 'follow', 'fa-comments-o', 'listboard_url_name'),
-    ('edc_lab_dashboard', None, 'fa-flask', 'home_url_name')
-]
-for app_config_name, label, fa_icon, app_config_attr in config:
-    navbar_item = NavbarItem(
-        app_config_name=app_config_name,
-        label=label,
-        fa_icon=fa_icon,
-        app_config_attr=app_config_attr)
-    navbar_items.append(navbar_item)
-navbars.update(default=navbar_items)
+bcpp = Navbar(name='bcpp')
 
-navbar_items = []
-config = [
-    ('bcpp_subject_dashboard', 'Anonymous Subjects', 'fa-user-secret'),
-]
-for app_config_name, label, fa_icon in config:
-    navbar_item = NavbarItem(
-        app_config_name=app_config_name,
-        label=label,
-        fa_icon=fa_icon,
-        app_config_attr='anonymous_listboard_url_name')
-    navbar_items.append(navbar_item)
+bcpp.append_item(
+    NavbarItem(name='plots',
+               title='Plots',
+               label='plots',
+               fa_icon='fa-building',
+               url_name=f'plot_dashboard:listboard_url'))
 
-navbars.update(anonymous=navbar_items)
-navbars.update(specimens=edc_lab_navbar_items)
+bcpp.append_item(
+    NavbarItem(name='households',
+               title='Households',
+               label='households',
+               fa_icon='fa-home',
+               url_name=f'household_dashboard:listboard_url'))
+
+bcpp.append_item(
+    NavbarItem(name='enumeration',
+               title='Enumeration',
+               label='enumeration',
+               fa_icon='fa-sitemap',
+               url_name=f'enumeration:listboard_url'))
+
+bcpp.append_item(
+    NavbarItem(name='members',
+               title='Members',
+               label='members',
+               fa_icon='fa-users',
+               url_name=f'member_dashboard:listboard_url'))
+
+bcpp.append_item(
+    NavbarItem(name='subjects',
+               title='Subjects',
+               label='subjects',
+               fa_icon='fa-user-circle-o',
+               url_name=f'bcpp_subject_dashboard:listboard_url'))
+
+bcpp.append_item(
+    NavbarItem(name='follow',
+               title='Follow',
+               label='follow',
+               fa_icon='fa-comments-o',
+               url_name=f'bcpp_follow:listboard_url'))
+
+bcpp.append_item(
+    NavbarItem(name='plots',
+               title='Plots',
+               label='plots',
+               fa_icon='fa-building',
+               url_name=f'edc_lab_dashboard:home_url'))
+
+
+anonymous = Navbar(name='anonymous')
+anonymous.append_item(
+    NavbarItem(name='anonymous_subjects',
+               title='Anonymous Subjects',
+               label='anonymous_subjects',
+               fa_icon='fa-user-secret',
+               url_name=f'bcpp_subject_dashboard:anonymous_listboard_url'))
+
+site_navbars.register(bcpp)
+site_navbars.register(anonymous)

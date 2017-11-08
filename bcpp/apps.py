@@ -12,7 +12,7 @@ from django.apps import AppConfig as DjangoAppConfig
 from django.conf import settings
 from django.core.management.color import color_style
 from edc_appointment.apps import AppConfig as BaseEdcAppointmentAppConfig
-from edc_appointment.facility import Facility
+from edc_facility.facility import Facility
 from edc_base.address import Address
 from edc_base.apps import AppConfig as BaseEdcBaseAppConfig
 from edc_base.utils import get_utcnow
@@ -42,8 +42,6 @@ from plot.apps import AppConfig as BasePlotAppConfig
 from plot_dashboard.apps import AppConfig as BasePlotDashboardAppConfig
 from survey import S
 from survey.apps import AppConfig as BaseSurveyAppConfig
-
-from .navbars import navbars
 
 
 style = color_style()
@@ -162,8 +160,6 @@ class EdcBaseAppConfig(BaseEdcBaseAppConfig):
         address='Private Bag BO 320',
         city='Bontleng',
         country='Botswana')
-
-    navbars = navbars
 
 
 class EdcDeviceAppConfig(BaseEdcDeviceAppConfig):

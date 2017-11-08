@@ -1,3 +1,4 @@
+*.ipynb
 media
 fabfile/hosts.conf
 fabfile/secrets.conf

@@ -13,7 +13,7 @@ import sys
 from django.core.management.color import color_style
 from pathlib import PurePath
 
-from .logging import LOGGING
+from bcpp.logging import LOGGING
 
 style = color_style()
 
@@ -62,6 +62,9 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     # 'debug_toolbar',
+    'django_extensions',
+    'edc_export.apps.AppConfig',
+    'edc_pdutils.apps.AppConfig',
     'django_js_reverse',
     'django_crypto_fields.apps.AppConfig',
     'django_revision.apps.AppConfig',
@@ -107,6 +110,7 @@ INSTALLED_APPS = [
     'bcpp.apps.EdcSyncFilesAppConfig',
     'bcpp.apps.SurveyAppConfig',
     'bcpp.apps.AppConfig',
+    'edc_navbar.apps.AppConfig',
 ]
 
 MIDDLEWARE = [
@@ -147,6 +151,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = f'{APP_NAME}.wsgi.application'
 
+# ssh -f django@bhp066.bhp.org.bw -L5002:localhost:3306 -N
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -229,7 +234,8 @@ CURRENT_MAP_AREA = config['edc_map'].get('map_area', 'test_community')
 DEVICE_ID = config['edc_device'].get('device_id', '99')
 DEVICE_ROLE = config['edc_device'].get('role')
 
-LABEL_PRINTER = config['edc_label'].get('label_printer', 'label_printer')
+# config['edc_label'].get('label_printer', 'label_printer')
+LABEL_PRINTER = 'home_label_printer'
 SURVEY_GROUP_NAME = config['survey'].get('group_name')
 SURVEY_SCHEDULE_NAME = config['survey'].get('schedule_name')
 DEVICE_IDS = config['edc_map'].get('device_ids')
@@ -239,6 +245,10 @@ ANONYMOUS_ENABLED = config['bcpp'].get('anonymous_enabled')
 EDC_MAP_DEVICE_IDS = config['edc_map'].get('device_ids')
 EDC_LAB_REQUISITION_MODEL = 'bcpp_subject.SubjectRequisition'
 VISIT_SCHEDULE_APP_LABEL = 'bcpp_subject'
+
+COUNTRY = 'botswana'
+HOLIDAY_FILE = None
+DEFAULT_APPOINTMENT_MODEL = 'bcpp_subject.appointment'
 
 if 'test' in sys.argv:
 
