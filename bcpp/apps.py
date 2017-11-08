@@ -1,18 +1,15 @@
-import configparser
-from datetime import datetime
 import os
 
 from bcpp_follow.apps import AppConfig as BaseBcppFollowAppConfig
 from bcpp_subject.apps import AppConfig as BaseBcppSubjectAppConfig
-from bcpp_subject.parsers import schedule_appt_date_parser
 from bcpp_subject_dashboard.apps import AppConfig as BaseBcppSubjectDashboardAppConfig
+from datetime import datetime
 from dateutil.relativedelta import MO, TU, WE, TH, FR, SA, SU
 from dateutil.tz import gettz
 from django.apps import AppConfig as DjangoAppConfig
 from django.conf import settings
 from django.core.management.color import color_style
 from edc_appointment.apps import AppConfig as BaseEdcAppointmentAppConfig
-from edc_facility.facility import Facility
 from edc_base.address import Address
 from edc_base.apps import AppConfig as BaseEdcBaseAppConfig
 from edc_base.utils import get_utcnow
@@ -20,6 +17,7 @@ from edc_constants.constants import FAILED_ELIGIBILITY
 from edc_device import DevicePermissions, DeviceAddPermission, DeviceChangePermission
 from edc_device.apps import AppConfig as BaseEdcDeviceAppConfig
 from edc_device.constants import CENTRAL_SERVER, CLIENT, NODE_SERVER
+from edc_facility.facility import Facility
 from edc_identifier.apps import AppConfig as BaseEdcIdentifierAppConfig
 from edc_lab.apps import AppConfig as BaseEdcLabAppConfig
 from edc_lab_dashboard.apps import AppConfig as BaseEdcLabDashboardAppConfig
@@ -45,11 +43,6 @@ from survey.apps import AppConfig as BaseSurveyAppConfig
 
 
 style = color_style()
-
-config = configparser.RawConfigParser()
-config.read(os.path.join(settings.ETC_DIR,
-                         settings.APP_NAME,
-                         settings.CONFIG_FILE))
 
 
 class AppConfig(DjangoAppConfig):
@@ -244,17 +237,7 @@ class EdcTimepointAppConfig(BaseEdcTimepointAppConfig):
 
 
 class EdcSyncAppConfig(BaseEdcSyncAppConfig):
-    edc_sync_files_using = True
-    server_ip = config['edc_sync'].get('server_ip')
     base_template_name = 'bcpp/base.html'
-    # custom_json_parsers = [schedule_appt_date_parser]
-
-
-class EdcSyncFilesAppConfig(BaseEdcSyncFilesAppConfig):
-    edc_sync_files_using = True
-    remote_host = config['edc_sync_files'].get('remote_host')
-    user = config['edc_sync_files'].get('sync_user')
-    usb_volume = config['edc_sync_files'].get('usb_volume')
 
 
 class EdcLabelAppConfig(BaseEdcLabelAppConfig):
