@@ -39,9 +39,9 @@ bcpp.append_item(
                url_name=f'bcpp_subject_dashboard:listboard_url'))
 
 bcpp.append_item(
-    NavbarItem(name='follow',
+    NavbarItem(name='follow-up',
                title='Follow',
-               label='follow',
+               label='follow-up',
                fa_icon='fa-comments-o',
                url_name=f'bcpp_follow:listboard_url'))
 

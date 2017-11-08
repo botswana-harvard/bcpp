@@ -249,6 +249,7 @@ VISIT_SCHEDULE_APP_LABEL = 'bcpp_subject'
 COUNTRY = 'botswana'
 HOLIDAY_FILE = None
 DEFAULT_APPOINTMENT_MODEL = 'bcpp_subject.appointment'
+MAIN_NAVBAR_NAME = 'bcpp'
 
 if 'test' in sys.argv:
 
