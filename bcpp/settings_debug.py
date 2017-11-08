@@ -138,14 +138,22 @@ TEMPLATES = [
 WSGI_APPLICATION = f'{APP_NAME}.wsgi.application'
 
 # ssh -f django@bhp066.bhp.org.bw -L5002:localhost:3306 -N
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'OPTIONS': {
+#             'read_default_file': os.path.join(ETC_DIR, MYSQL_CONF),
+#         },
+#     },
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'OPTIONS': {
-            'read_default_file': os.path.join(ETC_DIR, MYSQL_CONF),
-        },
-    },
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
 }
+
 
 CACHES = {
     'default': {
