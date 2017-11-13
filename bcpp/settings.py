@@ -72,6 +72,7 @@ INSTALLED_APPS = [
     'edc_metadata_rules.apps.AppConfig',
     'edc_sync_files.apps.AppConfig',
     'edc_visit_schedule.apps.AppConfig',
+    'edc_call_manager.apps.AppConfig',
     'member_dashboard.apps.AppConfig',
     'household_dashboard.apps.AppConfig',
     'plot_dashboard.apps.AppConfig',
@@ -255,6 +256,7 @@ MAIN_NAVBAR_NAME = 'bcpp'
 if 'test' in sys.argv:
 
     class DisableMigrations:
+
         def __contains__(self, item):
             return True
 
