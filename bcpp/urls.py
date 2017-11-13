@@ -13,6 +13,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from bcpp_follow.admin_site import bcpp_follow_admin
+from edc_call_manager.admin_site import edc_call_manager_admin
 from bcpp_report.admin_site import bcpp_report_admin
 from bcpp_subject.admin_site import bcpp_subject_admin
 from django.conf.urls import url, include
@@ -39,6 +40,7 @@ urlpatterns = [
     url(r'^admin/household/', household_admin.urls),
     url(r'^admin/plot/', plot_admin.urls),
     url(r'^admin/bcpp_follow/', bcpp_follow_admin.urls),
+    url(r'^admin/edc_call_manager/', edc_call_manager_admin.urls),
     url(r'^admin/member/', member_admin.urls),
     url(r'^admin/bcpp_subject/', bcpp_subject_admin.urls),
     url(r'^admin/edc_lab/', edc_lab_admin.urls),
@@ -58,6 +60,7 @@ urlpatterns = [
     url('subject/', include(
         'bcpp_subject_dashboard.urls')),
     url('follow/', include('bcpp_follow.urls')),
+    url('edc_call_manager/', include('edc_call_manager.urls')),
     url(r'^appointment/', include('edc_appointment.urls')),
     url(r'^bcpp_report/', include('bcpp_report.urls')),
     url(r'^edc/', include('edc_base.urls')),
