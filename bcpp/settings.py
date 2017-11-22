@@ -59,8 +59,6 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     # 'debug_toolbar',
     'django_extensions',
-    'edc_export.apps.AppConfig',
-    'edc_pdutils.apps.AppConfig',
     'django_js_reverse',
     'django_crypto_fields.apps.AppConfig',
     'django_revision.apps.AppConfig',
