@@ -105,7 +105,6 @@ INSTALLED_APPS = [
     'bcpp.apps.EdcSyncAppConfig',
     'bcpp.apps.SurveyAppConfig',
     'bcpp.apps.AppConfig',
-    'edc_navbar.apps.AppConfig',
 ]
 
 MIDDLEWARE = [
