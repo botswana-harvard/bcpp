@@ -1,11 +1,6 @@
 import os
 
-from fabric.api import env, put, sudo, cd, run, warn, prefix, lcd, task
-from fabric.contrib.files import exists
-from fabric.utils import abort
-
 from edc_device.constants import CENTRAL_SERVER
-
 from edc_fabric.fabfile import (
     update_fabric_env, create_venv,
     install_mysql, install_protocol_database)
@@ -22,6 +17,9 @@ from edc_fabric.fabfile.utils import (
     update_settings, rsync_deployment_root,
     bootstrap_env, put_bash_config, launch_webserver)
 from edc_fabric.fabfile.virtualenv import activate_venv
+from fabric.api import env, put, sudo, cd, run, warn, prefix, lcd, task
+from fabric.contrib.files import exists
+from fabric.utils import abort
 
 from ..utils import update_bcpp_conf
 
@@ -145,7 +143,7 @@ def deploy(requirements_list=None, conf_filename=None, bootstrap_path=None, rele
         if specific_tag:
             run(f'git checkout {release}')
         else:
-            run('git checkout master')
+            run('git checkout bcpp-apps')
             result = run(
                 'git diff --name-status master..{release}'.format(release=release))
             if result:
