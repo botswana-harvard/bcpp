@@ -146,7 +146,6 @@ def deploy(requirements_list=None, conf_filename=None, bootstrap_path=None, rele
             run('git checkout bcpp-apps')
             run('git stash save')
             run('git pull')
-            run('git stash pop')
             result = run(
                 'git diff --name-status bcpp-apps..{release}'.format(release=release))
             if result:
