@@ -144,8 +144,11 @@ def deploy(requirements_list=None, conf_filename=None, bootstrap_path=None, rele
             run(f'git checkout {release}')
         else:
             run('git checkout bcpp-apps')
+            run('git stash save')
+            run('git pull')
+            run('git stash pop)
             result = run(
-                'git diff --name-status master..{release}'.format(release=release))
+                'git diff --name-status bcpp-apps..{release}'.format(release=release))
             if result:
                 warn('master is not at {release}'.format(release=release))
 
