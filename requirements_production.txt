@@ -1,7 +1,7 @@
 git+https://github.com/botswana-harvard/bcpp-community.git@0.1.3#egg=bcpp_community
 git+https://github.com/botswana-harvard/bcpp-consent.git@0.1.2#egg=bcpp_consent
 git+https://github.com/botswana-harvard/bcpp-fabric.git@0.1.3#egg=bcpp_fabric
-git+https://github.com/botswana-harvard/bcpp-follow.git@0.1.5#egg=bcpp_follow
+git+https://github.com/botswana-harvard/bcpp-follow.git@0.1.6#egg=bcpp_follow
 git+https://github.com/botswana-harvard/bcpp-labs.git@0.1.7#egg=bcpp_labs
 git+https://github.com/botswana-harvard/bcpp-metadata-rules.git@0.1.9#egg=bcpp_metadata_rules
 git+https://github.com/botswana-harvard/bcpp-reference.git@0.1.8#egg=bcpp_reference
