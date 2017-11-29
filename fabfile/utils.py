@@ -1,3 +1,4 @@
+from distutils.util import execute
 import os
 from pathlib import PurePath
 
@@ -432,8 +433,8 @@ def add_missing_db_column(**kwargs):
     """
     prepare_env(**kwargs)
 
-    run("mysql -uroot -p edc -Bse \"alter table edc_lab_result"
-        " add column device_created varchar(10) NULL;\"")
+    run("mysql -uroot -p edc -Bse \"alter table bcpp_subject_ceaopd"
+        " add column procedure varchar(25) NULL;\"")
 
     run("mysql -uroot -p edc -Bse \"alter table edc_lab_result"
         " add column device_modified varchar(10) NULL;\"")
@@ -478,12 +479,9 @@ def member_data_edit_mgt_command(map_area=None, **kwargs):
 
     """
     prepare_env(**kwargs)
-
     with cd(os.path.join(env.project_repo_root)):
-        run(f'source {activate_venv()} && python manage.py delete_wrong_members'
-            f' {map_area} bcpp-survey.bcpp-year-3.{map_area} 5', warn_only=True)
-        run(f'source {activate_venv()} && python manage.py re_save_reference_data')
-        run(f'source {activate_venv()} && python manage.py re_save_status_history')
+        run("mysql -uroot -p edc -Bse \"use edc; delete from edc_sync_outgoingtransaction;\"")
+        run(f'source {activate_venv()} && python manage.py populate_worklist {map_area}')
 
 
 @task
