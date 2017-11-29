@@ -70,7 +70,7 @@ urlpatterns = [
     url(r'^edc_label/', include('edc_label.urls')),
     url(r'^edc_map/', include('edc_map.urls')),
     url(r'^edc_metadata/', include('edc_metadata.urls')),
-    url(r'^edc_call_mananger/', include('edc_call_mananger.urls')),
+    url(r'^edc_call_manager/', include('edc_call_manager.urls')),
     url(r'^edc_protocol/', include('edc_protocol.urls')),
     url(r'^edc_registration/',
         include('edc_registration.urls')),
