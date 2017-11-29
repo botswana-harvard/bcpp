@@ -23,6 +23,7 @@ from edc_identifier.admin_site import edc_identifier_admin
 from edc_lab.admin_site import edc_lab_admin
 from edc_map.admin_site import edc_map_admin
 from edc_metadata.admin_site import edc_metadata_admin
+from edc_call_manager.admin_site import edc_call_manager_admin
 from edc_registration.admin_site import edc_registration_admin
 from edc_sync.admin_site import edc_sync_admin
 from edc_sync_files.admin_site import edc_sync_files_admin
@@ -45,6 +46,7 @@ urlpatterns = [
     url(r'^admin/edc_identifier/', edc_identifier_admin.urls),
     url(r'^admin/edc_map/', edc_map_admin.urls),
     url(r'^admin/edc_metadata/', edc_metadata_admin.urls),
+    url(r'^admin/edc_call_manager/', edc_call_manager_admin.urls),
     url(r'^admin/edc_registration/', edc_registration_admin.urls),
     url(r'^admin/edc_sync/', edc_sync_admin.urls),
     url(r'^admin/edc_sync_files/', edc_sync_files_admin.urls),
@@ -68,6 +70,7 @@ urlpatterns = [
     url(r'^edc_label/', include('edc_label.urls')),
     url(r'^edc_map/', include('edc_map.urls')),
     url(r'^edc_metadata/', include('edc_metadata.urls')),
+    url(r'^edc_call_mananger/', include('edc_call_mananger.urls')),
     url(r'^edc_protocol/', include('edc_protocol.urls')),
     url(r'^edc_registration/',
         include('edc_registration.urls')),
