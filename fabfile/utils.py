@@ -357,7 +357,7 @@ def install_dependency_specific_tag(dependency=None, tag=None, account=None, **k
     prepare_env(**kwargs)
     with cd(env.project_repo_root):
         run(f'source {activate_venv()} && pip uninstall {dependency}', warn_only=True)
-        run(f'pip install git+https://github.com/{account}/'
+        run(f'source {activate_venv()} && pip install git+https://github.com/{account}/'
             f'{dependency}.git@{tag}#egg={egg}')
 
 
