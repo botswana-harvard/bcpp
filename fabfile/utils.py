@@ -480,6 +480,8 @@ def member_data_edit_mgt_command(map_area=None, **kwargs):
     """
     prepare_env(**kwargs)
     with cd(os.path.join(env.project_repo_root)):
+        run('git checkout bcpp-apps')
+        run('git pull')
         run("mysql -uroot -p edc -Bse \"use edc; delete from edc_sync_outgoingtransaction;\"")
         run(f'source {activate_venv()} && python manage.py populate_worklist {map_area}')
 
