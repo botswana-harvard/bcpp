@@ -168,7 +168,7 @@ def get_shakawe():
 
 
 def get_mmandunyane():
-    hosts = ['bcpp16', 'bcpp017', 'bcpp027', 'bcpp028', 'bcpp029',
+    hosts = ['bcpp016', 'bcpp017', 'bcpp027', 'bcpp028', 'bcpp029',
              'bcpp032', 'bcpp033', 'bcpp036', 'bcpp037', 'bcpp038', 'bcpp039']
     return hosts
 
