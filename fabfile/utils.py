@@ -472,7 +472,7 @@ def launch_webserver_bcpp_task(**kwargs):
 
 
 @task
-def member_data_edit_mgt_command(map_area=None, **kwargs):
+def data_fix(map_area=None, **kwargs):
     """Run management commands
 
     fab -P -R mmathethe utils.member_data_edit_mgt_command:bootstrap_path=/Users/imosweu/source/bcpp/fabfile/conf/,map_area=mmathethe --user=django
@@ -481,9 +481,9 @@ def member_data_edit_mgt_command(map_area=None, **kwargs):
     prepare_env(**kwargs)
     with cd(os.path.join(env.project_repo_root)):
         run('git checkout bcpp-apps')
-        run('git pull')
-        run("mysql -uroot -p edc -Bse \"use edc; delete from edc_sync_outgoingtransaction;\"")
+        run(f'source {activate_venv()} && python manage.py create_missing_appointments {map_area}')
         run(f'source {activate_venv()} && python manage.py populate_worklist {map_area}')
+        run(f'source {activate_venv()} && python manage.py delete_wrong_members {map_area} bcpp-survey.bcpp-year-3.{map_area} 5')
 
 
 @task
