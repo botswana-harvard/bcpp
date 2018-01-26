@@ -35,7 +35,7 @@ list_data = {
         (NOT_APPLICABLE, ' NOT APPLICABLE'),
         ('Condoms, in-consistent use (male or female)',
          'Condoms, in-consistent use (male or female)')],
-    'bcpp_subject.medication_prescribed':[
+    'bcpp_subject.medicationprescribed':[
         ('Antiretroviral medications', 'Antiretroviral medications'),
         ('Antituberculosis treatment', 'Antituberculosis treatment'),
         ('Isoniazid preventive therapy', 'Isoniazid preventive therapy'),
