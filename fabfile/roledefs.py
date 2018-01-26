@@ -124,6 +124,17 @@ def get_tati_siding():
     hosts.append('bcpp019')
     return hosts
 
+def get_gweta():
+    hosts = ['bcpp035', 'bcpp041', 'bcpp042', 'bcpp068', 'bcpp050',
+             'bcpp051', 'bcpp055', 'bcpp058', 'bcpp059', 'bcpp064', 'bcpp069']
+    return hosts
+
+def get_rakops():
+    hosts = ['bcpp016', 'bcpp017', 'bcpp027', 'bcpp028', 'bcpp029',
+             'bcpp033', 'bcpp036', 'bcpp037', 'bcpp038', 'bcpp039']
+    return hosts
+
+
 
 roledefs = {
     'deployment_hosts': ['localhost'],
