@@ -146,7 +146,7 @@ def get_shakawe():
     hosts.pop(hosts.index('bcpp041'))
     hosts.pop(hosts.index('bcpp042'))
     hosts.append('bcpp026')
-return hosts
+    return hosts
 
 def get_gweta():
     hosts = ['bcpp035', 'bcpp041', 'bcpp042', 'bcpp068', 'bcpp050',
