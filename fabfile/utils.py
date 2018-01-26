@@ -511,4 +511,4 @@ def update_subject_migrations_and_db(fake_tag=None, migrate_tag=None, repo=None,
     with cd(os.path.join(env.project_repo_root)):
         run(f'source {activate_venv()} && python manage.py migrate {repo} {fake_tag} --fake')
         run(f'source {activate_venv()} && python manage.py migrate {repo} {migrate_tag}')
-        run(f'source {activate_venv()} && python manage.py load_fixtures')
+        run(f'source {activate_venv()} && python manage.py load_data')
