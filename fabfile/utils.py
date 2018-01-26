@@ -502,7 +502,7 @@ def update_registration_identifier_mgt_command(map_area=None, **kwargs):
 def update_subject_migrations_and_db(fake_tag=None, migrate_tag=None, repo=None, **kwargs):
     """Run management commands
 
-    fab localhost utils.update_subject_migrations_and_db:bootstrap_path=/Users/django/source/bcpp/fabfile/conf/,fake_tag=0042,migrate_tag=0043,repo=bcpp_subject --user=django
+    fab -H localhost utils.update_subject_migrations_and_db:bootstrap_path=/Users/django/source/bcpp/fabfile/conf/,fake_tag=0042,migrate_tag=0043,repo=bcpp_subject --user=django
 
     """
     
@@ -511,3 +511,4 @@ def update_subject_migrations_and_db(fake_tag=None, migrate_tag=None, repo=None,
     with cd(os.path.join(env.project_repo_root)):
         run(f'source {activate_venv()} && python manage.py migrate {repo} {fake_tag} --fake')
         run(f'source {activate_venv()} && python manage.py migrate {repo} {migrate_tag}')
+        run(f'source {activate_venv()} && python manage.py load_fixtures')
