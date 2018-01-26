@@ -125,6 +125,41 @@ def get_tati_siding():
     return hosts
 
 
+def get_gumare():
+    hosts = ['bcpp0{}'.format(i + 10) for i in range(0, 18)]
+    hosts.pop(hosts.index('bcpp016'))
+    hosts.pop(hosts.index('bcpp017'))
+    hosts.pop(hosts.index('bcpp026'))
+    hosts.pop(hosts.index('bcpp027'))
+    hosts.append('bcpp030')
+    hosts.append('bcpp031')
+    hosts.append('bcpp057')
+    return hosts
+
+
+def get_shakawe():
+    hosts = ['bcpp0{}'.format(i + 40) for i in range(0, 18)]
+    hosts.pop(hosts.index('bcpp057'))
+    hosts.pop(hosts.index('bcpp050'))
+    hosts.pop(hosts.index('bcpp051'))
+    hosts.pop(hosts.index('bcpp055'))
+    hosts.pop(hosts.index('bcpp041'))
+    hosts.pop(hosts.index('bcpp042'))
+    hosts.append('bcpp026')
+    return hosts
+
+def get_gweta():
+    hosts = ['bcpp035', 'bcpp041', 'bcpp042', 'bcpp068', 'bcpp050',
+             'bcpp051', 'bcpp055', 'bcpp058', 'bcpp059', 'bcpp064', 'bcpp069']
+    return hosts
+
+def get_rakops():
+    hosts = ['bcpp016', 'bcpp017', 'bcpp027', 'bcpp028', 'bcpp029',
+             'bcpp033', 'bcpp036', 'bcpp037', 'bcpp038', 'bcpp039']
+    return hosts
+
+
+
 roledefs = {
     'deployment_hosts': ['localhost'],
     'mmankgodi': get_mmankgodi(),
@@ -141,5 +176,9 @@ roledefs = {
     'mmadinare': get_mmadinare(),
     'metsimotlhabe': get_metsimotlhabe(),
     'tati_siding': get_tati_siding(),
+    'rakops': get_rakops(),
+    'gweta': get_gweta(),
+    'gumare': get_gumare(),
+    'shakawe': get_shakawe(),
     'testhosts': ['bcpp075', 'bcpp076', 'bcpp077', 'bcpp078', 'bcpp080', 'bcpp081'],
 }
