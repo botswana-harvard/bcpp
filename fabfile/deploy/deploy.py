@@ -164,6 +164,9 @@ def deploy(requirements_list=None, conf_filename=None, bootstrap_path=None, rele
             with prefix(f'source {activate_venv()}'.format(venv_name=env.venv_name)):
                 run('python manage.py collectstatic')
                 run('python manage.py collectstatic_js_reverse')
+                run('pip install django==1.11.7 --upgrade')
+                run('pip install python3-memcached')
+                
 
     launch_webserver()
 
