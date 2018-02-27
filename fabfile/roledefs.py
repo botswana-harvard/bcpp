@@ -148,16 +148,30 @@ def get_shakawe():
     hosts.append('bcpp026')
     return hosts
 
+
 def get_gweta():
     hosts = ['bcpp035', 'bcpp041', 'bcpp042', 'bcpp068', 'bcpp050',
              'bcpp051', 'bcpp055', 'bcpp058', 'bcpp059', 'bcpp064', 'bcpp069']
     return hosts
+
 
 def get_rakops():
     hosts = ['bcpp016', 'bcpp017', 'bcpp027', 'bcpp028', 'bcpp029',
              'bcpp033', 'bcpp036', 'bcpp037', 'bcpp038', 'bcpp039']
     return hosts
 
+
+def get_tsetsebjwe():
+    hosts = ['bcpp017', 'bcpp019', 'bcpp025', 'bcpp027', 'bcpp028',
+             'bcpp029', 'bcpp033', 'bcpp036', 'bcpp037', 'bcpp038', 'bcpp039']
+    return hosts
+
+
+def get_sefhare():
+    hosts = ['bcpp035', 'bcpp041', 'bcpp042', 'bcpp068', 'bcpp050', 'bcpp043',
+             'bcpp049', 'bcpp051', 'bcpp055', 'bcpp058', 'bcpp059', 'bcpp064',
+             'bcpp069']
+    return hosts
 
 
 roledefs = {
@@ -180,5 +194,8 @@ roledefs = {
     'gweta': get_gweta(),
     'gumare': get_gumare(),
     'shakawe': get_shakawe(),
-    'testhosts': ['bcpp075', 'bcpp076', 'bcpp077', 'bcpp078', 'bcpp080', 'bcpp081'],
+    'tsetsebjwe': get_tsetsebjwe(),
+    'sefhare': get_sefhare(),
+    'testhosts': ['bcpp075', 'bcpp076', 'bcpp077', 'bcpp078', 'bcpp080',
+                  'bcpp081'],
 }
