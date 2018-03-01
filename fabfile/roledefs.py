@@ -33,6 +33,7 @@ def get_masunga():
     hosts.append('bcpp062')
     hosts.append('bcpp063')
     hosts.append('bcpp070')
+    return hosts
 
 
 def get_mmathethe():
