@@ -174,6 +174,13 @@ def get_sefhare():
     return hosts
 
 
+def get_nata():
+    hosts = ['bcpp010', 'bcpp011', 'bcpp012', 'bcpp013', 'bcpp014', 'bcpp015',
+             'bcpp018', 'bcpp020', 'bcpp022', 'bcpp023', 'bcpp024', 'bcpp030',
+             'bcpp057']
+    return hosts
+
+
 roledefs = {
     'deployment_hosts': ['localhost'],
     'mmankgodi': get_mmankgodi(),
