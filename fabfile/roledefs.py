@@ -22,6 +22,19 @@ def get_lentsweletau():
     return hosts
 
 
+def get_masunga():
+    hosts = ['bcpp0{}'.format(i + 44) for i in range(0, 5)]
+    hosts.append('bcpp026')
+    hosts.append('bcpp040')
+    hosts.append('bcpp052')
+    hosts.append('bcpp053')
+    hosts.append('bcpp059')
+    hosts.append('bcpp061')
+    hosts.append('bcpp062')
+    hosts.append('bcpp063')
+    hosts.append('bcpp070')
+
+
 def get_mmathethe():
     hosts = ['bcpp0{}'.format(i + 40) for i in range(0, 15)]
     hosts.append('bcpp026')
@@ -187,6 +200,7 @@ roledefs = {
     'lerala': get_lerala(),
     'sefophe': get_sefophe(),
     'shoshong': get_shoshong(),
+    'masunga': get_masunga(),
     'mmadinare': get_mmadinare(),
     'metsimotlhabe': get_metsimotlhabe(),
     'tati_siding': get_tati_siding(),
