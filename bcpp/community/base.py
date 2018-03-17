@@ -210,11 +210,8 @@ else:
         'media_root', os.path.join(BASE_DIR, APP_NAME, 'media'))
 MEDIA_URL = '/media/'
 
-# etc ini file attributes
-if DEBUG:
-    KEY_PATH = config['django_crypto_fields'].get('key_path')
-else:
-    KEY_PATH = config['django_crypto_fields'].get('key_path')
+KEY_PATH = '/etc/bcpp/keys'
+
 GIT_DIR = BASE_DIR
 
 # config['edc_label'].get('label_printer', 'label_printer')
