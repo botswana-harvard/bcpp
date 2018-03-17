@@ -12,8 +12,9 @@ import sys
 
 from django.core.management.color import color_style
 from pathlib import PurePath
+from bcpp.logging import LOGGING
 
-from .logging import LOGGING
+
 
 style = color_style()
 
@@ -25,7 +26,7 @@ sys.stdout.write(style.SUCCESS(f'Logging to {logging_handler}\n'))
 
 DEBUG = True
 
-CONFIG_FILE = 'lentsweletau.conf'
+CONFIG_FILE = f'{APP_NAME}.conf'
 MYSQL_CONF = 'mysql.conf'
 ETC_DIR = '/etc'
 
@@ -105,7 +106,6 @@ INSTALLED_APPS = [
     'bcpp.apps.EdcSyncAppConfig',
     'bcpp.apps.SurveyAppConfig',
     'bcpp.apps.AppConfig',
-    'edc_navbar.apps.AppConfig',
 ]
 
 MIDDLEWARE = [
@@ -145,16 +145,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = f'{APP_NAME}.wsgi.application'
-
-# ssh -f django@bhp066.bhp.org.bw -L5002:localhost:3306 -N
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'OPTIONS': {
-            'read_default_file': os.path.join(ETC_DIR, APP_NAME, MYSQL_CONF),
-        },
-    },
-}
 
 CACHES = {
     'default': {
@@ -224,10 +214,6 @@ if DEBUG:
 else:
     KEY_PATH = config['django_crypto_fields'].get('key_path')
 GIT_DIR = BASE_DIR
-CURRENT_MAP_AREA = config['edc_map'].get('map_area', 'test_community')
-
-DEVICE_ID = config['edc_device'].get('device_id', '99')
-DEVICE_ROLE = config['edc_device'].get('role')
 
 # config['edc_label'].get('label_printer', 'label_printer')
 LABEL_PRINTER = 'home_label_printer'
