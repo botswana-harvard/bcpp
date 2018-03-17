@@ -30,6 +30,8 @@ CONFIG_FILE = f'{APP_NAME}.conf'
 MYSQL_CONF = 'mysql.conf'
 ETC_DIR = '/etc'
 
+MYSQL_CONF_FILES = 'mysql_conf_files'
+
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 INTERNAL_IPS = ['127.0.0.1']
 

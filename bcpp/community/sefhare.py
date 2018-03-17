@@ -1,12 +1,12 @@
 from .base import *
 
-MYSQL_CONF = 'nkange.conf'
+MYSQL_CONF = 'sefhare.conf'
 ETC_DIR = '/etc'
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 INTERNAL_IPS = ['127.0.0.1']
 
-CURRENT_MAP_AREA = 'nkange'
+CURRENT_MAP_AREA = 'sefhare'
 
 DATABASES = {
     'default': {

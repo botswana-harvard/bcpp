@@ -6,13 +6,13 @@ ETC_DIR = '/etc'
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 INTERNAL_IPS = ['127.0.0.1']
 
-CURRENT_MAP_AREA = 'bokaa'
+CURRENT_MAP_AREA = 'oodi'
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'OPTIONS': {
-            'read_default_file': os.path.join(ETC_DIR, APP_NAME, CURRENT_MAP_AREA, MYSQL_CONF),
+            'read_default_file': os.path.join(ETC_DIR, APP_NAME, MYSQL_CONF_FILES, MYSQL_CONF),
         },
     },
 }

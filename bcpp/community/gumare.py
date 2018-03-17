@@ -1,12 +1,13 @@
+
 from .base import *
 
-MYSQL_CONF = 'nkange.conf'
+MYSQL_CONF = 'bokaa.conf'
 ETC_DIR = '/etc'
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 INTERNAL_IPS = ['127.0.0.1']
 
-CURRENT_MAP_AREA = 'nkange'
+CURRENT_MAP_AREA = 'gumare'
 
 DATABASES = {
     'default': {
