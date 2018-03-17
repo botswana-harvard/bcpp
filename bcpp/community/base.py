@@ -32,7 +32,7 @@ ETC_DIR = '/etc'
 
 MYSQL_CONF_FILES = 'mysql_conf_files'
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'bcpp-communities.bhp.org.bw']
 INTERNAL_IPS = ['127.0.0.1']
 
 CONFIG_PATH = os.path.join(ETC_DIR, APP_NAME, CONFIG_FILE)
