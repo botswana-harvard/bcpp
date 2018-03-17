@@ -12,13 +12,14 @@ import sys
 
 from django.core.management.color import color_style
 from pathlib import PurePath
+from pathlib import Path
 from bcpp.logging import LOGGING
 
 
 
 style = color_style()
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = str(Path(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))).parent)
 APP_NAME = 'bcpp'
 
 logging_handler = LOGGING.get('handlers').get('file').get('filename')
