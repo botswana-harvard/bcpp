@@ -154,7 +154,7 @@ def list_tags_from(pip_file=None):
 def query_tx_task(**kwargs):
     """Check for any host with pending transactions.
 
-    fab -P -R mmankgodi utils.query_tx_task:bootstrap_path=/Users/erikvw/source/bcpp/fabfile/conf/  --user=django
+    fab -P -R rakops utils.query_tx_task:bootstrap_path=/Users/django/source/bcpp/fabfile/conf/  --user=django
 
     """
     prepare_env(**kwargs)
@@ -347,7 +347,7 @@ def load_keys_bcpp(device_role=None, **kwargs):
 def install_dependency_specific_tag(dependency=None, tag=None, account=None, **kwargs):
     """Install a dependency with a specific tag.
 
-    fab -H bcpp010 utils.install_dependency_specific_tag:bootstrap_path=/Users/imosweu/source/bcpp/fabfile/conf/,dependency=bcpp-subject,tag=0.1.22  --user=django
+    fab -P -R rakops utils.install_dependency_specific_tag:bootstrap_path=/Users/django/source/bcpp/fabfile/conf/,dependency=bcpp-subject,tag=0.1.37  --user=django
 
     """
     if not account:
@@ -498,3 +498,37 @@ def update_registration_identifier_mgt_command(map_area=None, **kwargs):
     with cd(os.path.join(env.project_repo_root)):
         run(f'source {activate_venv()} && python manage.py update_registration_identifier {map_area}')
 
+@task
+def update_subject_migrations_and_db(fake_tag=None, migrate_tag=None, repo=None, **kwargs):
+    """Run management commands
+
+    fab -H localhost utils.update_subject_migrations_and_db:bootstrap_path=/Users/django/source/bcpp/fabfile/conf/,fake_tag=0042,migrate_tag=0043,repo=bcpp_subject --user=django
+
+    """
+    
+    prepare_env(**kwargs)
+
+    with cd(os.path.join(env.project_repo_root)):
+        run(f'source {activate_venv()} && python manage.py migrate {repo} {fake_tag} --fake')
+        run(f'source {activate_venv()} && python manage.py migrate {repo} {migrate_tag}')
+        run(f'source {activate_venv()} && python manage.py load_data')
+
+@task
+def mysql_commands_update(**kwargs):
+    """Run management commands
+
+    fab -P -R mmathethe utils.mysql_commands_update:bootstrap_path=/Users/django/source/bcpp/fabfile/conf/ --user=django
+
+    """
+    prepare_env(**kwargs)
+
+    with cd(os.path.join(env.project_repo_root)):
+        run(f"mysql -uroot -pcc3721b edc -Bse \"alter table bcpp_subject_ceaopd add column tb_care int(11) NULL;\"")
+        run(f"mysql -uroot -pcc3721b edc -Bse \"alter table bcpp_subject_ceaopd add column hiv_related int(11) NULL;\"")
+        run(f"mysql -uroot -pcc3721b edc -Bse \"alter table bcpp_subject_ceaopd add column hiv_related_none_tb int(11) NULL;\"")
+        run(f"mysql -uroot -pcc3721b edc -Bse \"alter table bcpp_subject_ceaopd add column pregnancy_related int(11) NULL;\"")
+        run(f"mysql -uroot -pcc3721b edc -Bse \"alter table bcpp_subject_ceaopd add column injury_accident int(11) NULL;\"")
+        run(f"mysql -uroot -pcc3721b edc -Bse \"alter table bcpp_subject_ceaopd add column chronic_disease int(11) NULL;\"")
+        run(f"mysql -uroot -pcc3721b edc -Bse \"alter table bcpp_subject_ceaopd add column cancer_care int(11) NULL;\"")
+        run(f"mysql -uroot -pcc3721b edc -Bse \"alter table bcpp_subject_ceaopd add column other_care varchar(15) NULL;\"")
+        run(f"mysql -uroot -pcc3721b edc -Bse \"alter table bcpp_subject_ceaopd add column other_care_count varchar(15) NULL;\"")
