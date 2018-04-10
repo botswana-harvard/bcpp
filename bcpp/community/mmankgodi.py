@@ -1,6 +1,6 @@
-from .base import *
+from ..settings import *
 
-MYSQL_CONF = 'mmankgodi.conf'
+MYSQL_CONF = 'mysql.conf'
 
 CURRENT_MAP_AREA = 'mmankgodi'
 
@@ -8,7 +8,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'OPTIONS': {
-            'read_default_file': os.path.join(ETC_DIR, APP_NAME, MYSQL_CONF_FILES, MYSQL_CONF),
+            'read_default_file': os.path.join(ETC_DIR, APP_NAME, MYSQL_CONF),
         },
     },
 }
