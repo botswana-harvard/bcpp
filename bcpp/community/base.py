@@ -211,7 +211,7 @@ else:
         'media_root', os.path.join(BASE_DIR, APP_NAME, 'media'))
 MEDIA_URL = '/media/'
 
-KEY_PATH = '/etc/bcpp/keys'
+KEY_PATH = '//Volumes/crypto_keys'
 
 GIT_DIR = BASE_DIR
 

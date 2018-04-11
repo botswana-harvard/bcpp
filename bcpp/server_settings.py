@@ -153,19 +153,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'OPTIONS': {
-            'read_default_file': os.path.join(ETC_DIR, APP_NAME, MYSQL_CONF),
-        },
-    },
-    'bhp066': {
-        'ENGINE': 'django.db.backends.mysql',
-        'OPTIONS': {
             'read_default_file': os.path.join(ETC_DIR, APP_NAME, 'bhp066.conf'),
-        },
-    },
-    'mmankgodi': {
-        'ENGINE': 'django.db.backends.mysql',
-        'OPTIONS': {
-            'read_default_file': os.path.join(ETC_DIR, APP_NAME, 'mmankgodi.conf'),
         },
     },
 }
