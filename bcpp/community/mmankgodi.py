@@ -1,4 +1,4 @@
-from ..settings import *
+from .base import *
 
 MYSQL_CONF = 'mysql.conf'
 
@@ -13,5 +13,5 @@ DATABASES = {
     },
 }
 
-DEVICE_ID = '98'
-DEVICE_ROLE = 'NodeServer'
+DEVICE_ID = config['edc_device'].get('device_id')
+DEVICE_ROLE = 'Client'
