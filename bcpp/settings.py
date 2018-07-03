@@ -77,6 +77,7 @@ INSTALLED_APPS = [
     'member_dashboard.apps.AppConfig',
     'household_dashboard.apps.AppConfig',
     'plot_dashboard.apps.AppConfig',
+    'correct_consent.apps.AppConfig',
     'bcpp_community.apps.AppConfig',
     'bcpp_consent.apps.AppConfig',
     'bcpp_labs.apps.AppConfig',
@@ -162,10 +163,10 @@ DATABASES = {
             'read_default_file': os.path.join(ETC_DIR, APP_NAME, 'bhp066.conf'),
         },
     },
-    'mmankgodi': {
+    'gumare': {
         'ENGINE': 'django.db.backends.mysql',
         'OPTIONS': {
-            'read_default_file': os.path.join(ETC_DIR, APP_NAME, 'mmankgodi.conf'),
+            'read_default_file': os.path.join(ETC_DIR, APP_NAME, 'gumare.conf'),
         },
     },
 }
