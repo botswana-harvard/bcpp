@@ -54,6 +54,7 @@ urlpatterns = [
     url(r'^admininistration/', AdministrationView.as_view(),
         name='administration_url'),
     url('plot/', include('plot_dashboard.urls')),
+    url(r'^correct_consent/', include('correct_consent.urls')),
     url('household/', include('household_dashboard.urls')),
     url('member/', include('member_dashboard.urls')),
     url('enumeration/', include('enumeration.urls')),
