@@ -5,3 +5,5 @@ CURRENT_MAP_AREA = 'bokaa'
 
 DEVICE_ID = '98'
 DEVICE_ROLE = 'NodeServer'
+
+WSGI_APPLICATION = 'bcpp.wsgi.bokaa-live.application'
