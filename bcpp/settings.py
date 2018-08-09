@@ -148,7 +148,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = f'{APP_NAME}.wsgi.central-server'
+WSGI_APPLICATION = f'{APP_NAME}.wsgi.application'
 
 DATABASES = {
     'default': {

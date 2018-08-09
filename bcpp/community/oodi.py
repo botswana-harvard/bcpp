@@ -4,3 +4,6 @@ CURRENT_MAP_AREA = 'oodi'
 
 DEVICE_ID = '98'
 DEVICE_ROLE = 'NodeServer'
+
+
+WSGI_APPLICATION = 'bcpp.wsgi.oodi-live.application'
