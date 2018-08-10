@@ -20,5 +20,6 @@ class HomeView(EdcBaseViewMixin, AppConfigViewMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         context.update(
             navbar_item_selected='home',
+            map_area=settings.CURRENT_MAP_AREA,
             ANONYMOUS_ENABLED=settings.ANONYMOUS_ENABLED)
         return context

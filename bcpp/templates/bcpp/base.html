@@ -23,7 +23,7 @@ $(document).ready(function(){
 {% endblock %}
 
 {% block topbar_title %}
-  <span class="navbar-brand">{% if protocol %}{{ protocol }}: {% endif %}{{ protocol_name |default:project_name }} {{ device_role }} {{ device_id }}</span>
+  <span class="navbar-brand">{% if protocol %}{{ protocol }}: {% endif %}{{ protocol_name |default:project_name }} {{ device_role }} {{ device_id }} {{ map_area }}</span>
 {% endblock topbar_title %}
 
 
